@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SI.Applicaton.SignalR\SI.Applicaton.SignalR.csproj" />
+    <ProjectReference Include="..\SI.Contract\SI.Contract.csproj" />
+    <ProjectReference Include="..\SI.Domain\SI.Domain.csproj" />
+    <ProjectReference Include="..\SI.Infrastructure\SI.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
