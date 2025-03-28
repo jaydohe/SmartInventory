@@ -1,7 +1,11 @@
 using SI.Domain.Entities;
-using SI.Domain.ValueObjeZLight.Location;
+using SI.Domain.ValueObjeSI.Location;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using SI.Domain.Entities.Orders;
+using SI.Domain.Entities.GoodsIssues;
+using SI.Domain.Entities.GoodsReceipts;
+using SI.Domain.Entities.ProductionCommands;
 
 namespace SI.Infrastructure.Persistence;
 
@@ -28,16 +32,32 @@ public class SIDbContext : DbContext
     {
     }
     
-    public DbSet<ZUnit> ZUnits { get; set; }
-    public DbSet<User> Users { get; set; }
+    public DbSet<Activity> Activities { get; set; }
+    public DbSet<Agency> Agencies { get; set; }
+    public DbSet<Department> Departments { get; set; }
+    public DbSet<Employee> Employees { get; set; }
+    public DbSet<Forecast> Forecasts { get; set; }
+    public DbSet<Inventory> Inventories { get; set; }
+    public DbSet<InventoryTransaction> InventoryTransactions { get; set; }
+    public DbSet<MaterialSupplier> MaterialSuppliers { get; set; }
+    public DbSet<Notification> Notifications { get; set; }
+    public DbSet<Product> Products { get; set; }
+    public DbSet<Setup> Setups { get; set; }
     public DbSet<TokenStore> TokenStores { get; set; }
+    public DbSet<User> Users { get; set; }
+    public DbSet<Warehouse> Warehouses { get; set; }
+    public DbSet<GoodsIssue> GoodsIssues { get; set; }
+    public DbSet<GoodsIssueDetail> GoodsIssueDetails { get; set; }
+    public DbSet<GoodsReceipt> GoodsReceipts { get; set; }
+    public DbSet<GoodsReceiptDetail> GoodsReceiptDetails { get; set; }
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<OrderDetail> OrderDetails { get; set; }
+    public DbSet<ProductionCommand> ProductionCommands { get; set; }
+    public DbSet<ProductionCommandDetail> ProductionCommandDetails { get; set; }
+    public DbSet<ProductionCommandProcess> ProductionCommandProcesses { get; set; }
     public DbSet<Province> Provinces { get; set; }
     public DbSet<District> Districts { get; set; }
     public DbSet<Ward> Wards { get; set; }
-    public DbSet<Activity> Activities { get; set; }
-    public DbSet<HttpCommand> HttpCommands { get; set; }
-    public DbSet<Notification> Notifications { get; set; }
-
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -51,7 +71,6 @@ public class SIDbContext : DbContext
       
         RemovePluralizingTableNameConvention(modelBuilder);
 
-        modelBuilder.ApplyConfiguration(new UnitConfiguration());
         modelBuilder.ApplyConfiguration(new UserConfiguration());
         modelBuilder.ApplyConfiguration(new ProvinceConfiguration());
         modelBuilder.ApplyConfiguration(new DistrictConfiguration());
@@ -63,7 +82,7 @@ public class SIDbContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         // dev
-        var connectionForMigration = "Server=localhost:3306;Database=si.dev;User=root;Password=Devbyjelly123;";
+        var connectionForMigration = "Server=localhost;Database=si.dev;User=root;Password=Devbyjelly123;";
 
         if (!optionsBuilder.IsConfigured)
         {

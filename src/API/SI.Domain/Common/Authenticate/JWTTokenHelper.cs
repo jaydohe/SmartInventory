@@ -8,9 +8,7 @@ using SI.Domain.Entities;
 
 namespace SI.Domain.Common.Authenticate;
 public record Tokens(string AccessToken, string RefreshToken, DateTime ExpireTime);
-public sealed class JWTTokenHelper(
-    // ILogger<JWTTokenHelper> logger,
-    IConfiguration iconfiguration)
+public sealed class JWTTokenHelper(IConfiguration iconfiguration)
 {
     public Tokens GenerateJWTTokens(User account, string tokenId)
     {
@@ -19,10 +17,11 @@ public sealed class JWTTokenHelper(
         var claims = new List<Claim>()
             {
                 new(JwtRegisteredClaimNames.Jti, tokenId),
-                new(JwtRegisteredClaimNames.Sub, "sub.tran98@com"),
-                new(JwtRegisteredClaimNames.Email, "htb.tran98@gmail.com"),
+                new(JwtRegisteredClaimNames.Sub, "sub.trang1753@com"),
+                new(JwtRegisteredClaimNames.Email, "thientrang.1753@gmail.com"),
                 new("userId", account.Id),
-                new("unitId", account.UnitId is null ? "null" : account.UnitId),
+                new("wareId", account.WarehouseId is null ? "null" : account.WarehouseId),
+                new("departId", account.DepartmentId is null ? "null" : account.DepartmentId),
                 new("name", account.Name),
                 new(ClaimTypes.Role,  account.Role.ToString())
             };

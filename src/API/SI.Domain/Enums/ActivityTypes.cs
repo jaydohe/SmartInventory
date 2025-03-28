@@ -3,7 +3,7 @@ namespace SI.Domain.Enums;
 public readonly struct ActivityEntityTypes
 {
     public const string USER= "USER";
-    public const string ZUNIT= "ZUNIT";
+    public const string SUNIT= "SUNIT";
 }
 
 public enum ActivityContentTypes
