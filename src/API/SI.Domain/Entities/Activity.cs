@@ -1,4 +1,4 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using CTCore.DynamicQuery.Core.Domain;
 using CTCore.DynamicQuery.OData.Core;
 using CTCore.DynamicQuery.OData.Definations;
@@ -12,19 +12,36 @@ namespace SI.Domain.Entities;
 
 [ODataRouting(nameof(Activity), RouteRefix = "private-api",
     IgnoredActions = [ApiActions.Create, ApiActions.Delete, ApiActions.Update])]
-[Authorize(Policy = APIPolicies.OPERATEFULL)]
+[Authorize(Policy = APIPolicies.SUPERFULL)]
 public class Activity : CTBaseEntity
 {
-    public ActivityContentTypes ContentType { get; set; }
-
+    // <summary>
+    // Nội dung đã thao tác
+    // </summary>
     [StringLength(1024)]
-    public string Content { get; set; } = string.Empty; 
+    public string Content { get; set; } = string.Empty;
 
+    // <summary>
+    // Tên của đối tượng đã thao tác
+    // </summary>
     public string TargetId { get; set; } = null!;
 
-    public string? UnitId { get; set; }
+    // <summary>
+    // Id kho của người đã thao tác
+    // </summary>
+    public string? WarehouseId { get; set; }
 
-    public string EntityType { get; set; } = ActivityEntityTypes.USER;
+    // <summary>
+    // Id phòng ban của người đã thao tác
+    // </summary>
+    public string? DepartmentId { get; set; }
+
+    // <summary>
+    // Thực thể đã thao tác
+    // </summary>
+    public string EntityType { get; set; } = string.Empty;
+
+    public ActivityContentTypes ContentType { get; set; }
 
     public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
 
@@ -37,7 +54,8 @@ public class Activity : CTBaseEntity
             ContentType = payLoad.ContentType,
             Content = payLoad.Content,
             EntityType = payLoad.EntityType,
-            UnitId = payLoad.UnitId
+            WarehouseId = payLoad.WarehouseId,
+            DepartmentId = payLoad.DepartmentId
         };
     }
 }

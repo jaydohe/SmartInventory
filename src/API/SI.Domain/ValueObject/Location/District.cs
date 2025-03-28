@@ -7,7 +7,7 @@ using CTCore.DynamicQuery.OData.Definations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace SI.Domain.ValueObjeZLight.Location;
+namespace SI.Domain.ValueObjeSI.Location;
 
 [ODataRouting(nameof(District), 
 RouteRefix = "public-api", 

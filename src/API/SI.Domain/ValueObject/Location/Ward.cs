@@ -7,7 +7,7 @@ using CTCore.DynamicQuery.Core.Domain;
 using CTCore.DynamicQuery.OData.Core;
 using CTCore.DynamicQuery.OData.Definations;
 
-namespace SI.Domain.ValueObjeZLight.Location
+namespace SI.Domain.ValueObjeSI.Location
 {
 [ODataRouting(nameof(Ward), 
 RouteRefix = "public-api", 

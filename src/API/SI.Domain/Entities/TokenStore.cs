@@ -1,4 +1,4 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using SI.Domain.Common.Abstractions;
 using Microsoft.EntityFrameworkCore;
@@ -17,18 +17,43 @@ public class TokenStore : CTBaseEntity, IAuditableEntity
 {
     [ForeignKey(nameof(User))]
     public required string UserId { get; set; }
+
+    // <summary>
+    // Token truy cập
+    // </summary>
     [StringLength(2048)]
-    public required string AccessToken { get; set; } 
+    public required string AccessToken { get; set; }
+
+    // <summary>
+    // Token làm mới
+    // </summary>
     [StringLength(1024)]
-    public required string RefreshToken { get; set; } 
-    public DateTimeOffset ExpiredAt { get; set; }
+    public required string RefreshToken { get; set; }
+
+    // <summary>
+    // Token đã bị chặn
+    // </summary>
     public bool IsBlocked { get; set; }
+
+    // <summary>
+    // Địa chỉ IP
+    // </summary>
     [StringLength(128)]
     public string? IpAddress { get; set; }
+
+    // <summary>
+    // Hệ điều hành
+    // </summary>
     [StringLength(1024)]
     public string? OSPlatform { get; set; }
+
+    // <summary>
+    // Trình duyệt
+    // </summary>
     [StringLength(1024)]
     public string? Browser{ get; set; }
+
+    public DateTimeOffset ExpiredAt { get; set; }
     public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
     public DateTimeOffset? ModifiedOn { get; set; }
 
@@ -49,13 +74,5 @@ public class TokenStore : CTBaseEntity, IAuditableEntity
     public void UpdateAccessTokenByRefreshToken(string accessToken)
     {
         this.AccessToken = accessToken;
-    }
-}
-
-public class TokenStoreConfiguration : IEntityTypeConfiguration<TokenStore>
-{
-    public void Configure(EntityTypeBuilder<TokenStore> builder)
-    {
-       
     }
 }

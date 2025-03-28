@@ -13,11 +13,13 @@ public sealed class WriteActivityEvent(params IEnumerable<Activity> payload): ID
 /// <param name="ContentType">ContentType</param>
 /// <param name="Content">Content</param>
 /// <param name="EntityType">EntityType</param>
-/// <!-- UnitId is optional -->-->
+/// <!-- WarehouseId is optional -->-->
+/// <!-- DepartmentId is optional -->-->
 public record WriteActiPayLoad(
     string Name,
     ActivityContentTypes ContentType,
     string Content,
     string EntityType,
-    string? UnitId
+    string? WarehouseId,
+    string? DepartmentId
 );

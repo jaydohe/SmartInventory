@@ -16,12 +16,47 @@ public static class JWTConfiguration
                 policy.RequireRole(
                     UserRoles.DEV.ToString());
             });
+            // Chủ sở hữu
+            options.AddPolicy(APIPolicies.OWNER, policy =>
+            {
+                policy.RequireRole(
+                    UserRoles.DEV.ToString(),
+                    UserRoles.OWNER.ToString());
+            });
             // Admin
             options.AddPolicy(APIPolicies.ADMIN, policy =>
             {
                 policy.RequireRole(
                     UserRoles.DEV.ToString(),
+                    UserRoles.OWNER.ToString(),
                     UserRoles.ADMIN.ToString());
+            });
+            // Giám sát viên
+            options.AddPolicy(APIPolicies.SUPERFULL, policy =>
+            {
+                policy.RequireRole(
+                    UserRoles.DEV.ToString(),
+                    UserRoles.OWNER.ToString(),
+                    UserRoles.ADMIN.ToString(),
+                    UserRoles.SUPERVISOR.ToString());
+            });
+            // Nhân viên kho
+            options.AddPolicy(APIPolicies.WAREHOUSEFULL, policy =>
+            {
+                policy.RequireRole(
+                    UserRoles.DEV.ToString(),
+                    UserRoles.OWNER.ToString(),
+                    UserRoles.ADMIN.ToString(),
+                    UserRoles.WAREHOUSE_STAFF.ToString());
+            });
+            // Nhân viên bán hàng
+            options.AddPolicy(APIPolicies.SALESFULL, policy =>
+            {
+                policy.RequireRole(
+                    UserRoles.DEV.ToString(),
+                    UserRoles.OWNER.ToString(),
+                    UserRoles.ADMIN.ToString(),
+                    UserRoles.SALESMAN.ToString());
             });
         });
         services.AddAuthentication(options =>
