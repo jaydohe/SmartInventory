@@ -8,10 +8,13 @@ namespace SI.Domain.Entities;
 public class Product : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
 {
     // <summary>
-    // Nếu có MaterialSupplierId thì là sản phẩm nhập từ nhà cung cấp
+    // Nếu có MaterialSupplierId thì là sản phẩm nhập từ nhà cung cấp nguyên vật liệu
     // </summary>
     [ForeignKey(nameof(MaterialSupplier))]
     public string? MaterialSupplierId { get; set; }
+
+    [ForeignKey(nameof(Warehouse))]
+    public string WarehouseId { get; set; } = null!;
 
     // <summary>
     // Tên sản phẩm
@@ -57,4 +60,5 @@ public class Product : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
     public DateTimeOffset? DeletedOn { get; set; }
 
     public virtual MaterialSupplier? MaterialSupplier { get; set; }
+    public virtual Warehouse? Warehouse { get; set; }
 }

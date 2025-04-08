@@ -12,8 +12,8 @@ using SI.Infrastructure.Persistence;
 namespace SI.Infrastructure.Migrations
 {
     [DbContext(typeof(SIDbContext))]
-    [Migration("20250328041705_Init")]
-    partial class Init
+    [Migration("20250408190040_SeedData_Warehouse_User_Employee_Department")]
+    partial class SeedData_Warehouse_User_Employee_Department
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -129,6 +129,72 @@ namespace SI.Infrastructure.Migrations
                     b.ToTable("AGENCY");
                 });
 
+            modelBuilder.Entity("SI.Domain.Entities.BOM.BillOfMaterial", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTimeOffset?>("DeletedOn")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTimeOffset?>("ModifiedOn")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("ProductId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("BILLOFMATERIAL");
+                });
+
+            modelBuilder.Entity("SI.Domain.Entities.BOM.BillOfMaterialDetail", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("BillOfMaterialId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTimeOffset?>("DeletedOn")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("MaterialId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<DateTimeOffset?>("ModifiedOn")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Unit")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("varchar(512)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BillOfMaterialId");
+
+                    b.HasIndex("MaterialId");
+
+                    b.ToTable("BILLOFMATERIALDETAIL");
+                });
+
             modelBuilder.Entity("SI.Domain.Entities.Department", b =>
                 {
                     b.Property<string>("Id")
@@ -149,14 +215,17 @@ namespace SI.Infrastructure.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("varchar(1024)");
 
-                    b.Property<string>("WarehouseId")
-                        .HasColumnType("varchar(255)");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("WarehouseId");
-
                     b.ToTable("DEPARTMENT");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "huhuhu",
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 4, 8, 19, 0, 40, 69, DateTimeKind.Unspecified).AddTicks(5013), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Bộ phận quản lý kho"
+                        });
                 });
 
             modelBuilder.Entity("SI.Domain.Entities.Employee", b =>
@@ -192,6 +261,9 @@ namespace SI.Infrastructure.Migrations
                         .HasMaxLength(512)
                         .HasColumnType("varchar(512)");
 
+                    b.Property<bool>("IsMale")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<DateTimeOffset?>("ModifiedOn")
                         .HasColumnType("datetime(6)");
 
@@ -218,6 +290,9 @@ namespace SI.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(255)");
 
+                    b.Property<string>("WarehouseId")
+                        .HasColumnType("varchar(255)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("DepartmentId");
@@ -228,7 +303,27 @@ namespace SI.Infrastructure.Migrations
 
                     b.HasIndex("WardId");
 
+                    b.HasIndex("WarehouseId");
+
                     b.ToTable("EMPLOYEE");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "hihihaha",
+                            Address = "Hà Nội",
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 4, 8, 19, 0, 40, 70, DateTimeKind.Unspecified).AddTicks(3594), new TimeSpan(0, 0, 0, 0, 0)),
+                            DateHired = new DateTime(2025, 4, 9, 2, 0, 40, 70, DateTimeKind.Local).AddTicks(4831),
+                            DepartmentId = "huhuhu",
+                            DistrictId = "1",
+                            Email = "VanA@gmail.com",
+                            IsMale = true,
+                            Name = "Nguyễn Văn A",
+                            PhoneNumber = "0123456789",
+                            Position = "Quản lý kho",
+                            ProvinceId = "1",
+                            WardId = "1"
+                        });
                 });
 
             modelBuilder.Entity("SI.Domain.Entities.Forecast", b =>
@@ -764,9 +859,15 @@ namespace SI.Infrastructure.Migrations
                         .HasMaxLength(512)
                         .HasColumnType("varchar(512)");
 
+                    b.Property<string>("WarehouseId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("MaterialSupplierId");
+
+                    b.HasIndex("WarehouseId");
 
                     b.ToTable("PRODUCT");
                 });
@@ -993,7 +1094,7 @@ namespace SI.Infrastructure.Migrations
                     b.Property<DateTimeOffset?>("DeletedOn")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("DepartmentId")
+                    b.Property<string>("EmployeeId")
                         .HasColumnType("varchar(255)");
 
                     b.Property<string>("HashPassword")
@@ -1017,10 +1118,6 @@ namespace SI.Infrastructure.Migrations
                         .HasMaxLength(512)
                         .HasColumnType("varchar(512)");
 
-                    b.Property<string>("PhoneNumber")
-                        .HasMaxLength(20)
-                        .HasColumnType("varchar(20)");
-
                     b.Property<int>("Role")
                         .HasColumnType("int");
 
@@ -1032,11 +1129,70 @@ namespace SI.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DepartmentId");
+                    b.HasIndex("EmployeeId");
 
                     b.HasIndex("WarehouseId");
 
                     b.ToTable("USER");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "0193e2ce-ee41-7fcb-9b52-5bba105dc0bd",
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 4, 8, 19, 0, 40, 70, DateTimeKind.Unspecified).AddTicks(9024), new TimeSpan(0, 0, 0, 0, 0)),
+                            HashPassword = "27dee27aa573be269f95143a213fe18e29a90e1124b371d280a6c4b88f85f749",
+                            IsLogin = true,
+                            LoginName = "dev0",
+                            Name = "Develop",
+                            Role = 0,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = "123456789",
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 4, 8, 19, 0, 40, 70, DateTimeKind.Unspecified).AddTicks(9755), new TimeSpan(0, 0, 0, 0, 0)),
+                            HashPassword = "7ced44abd56279573d3e9730f7845fd68bb5e1d1b09dee076b066f53ca8e8247",
+                            IsLogin = true,
+                            LoginName = "admin0",
+                            Name = "Admin",
+                            Role = 1,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = "987654321",
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 4, 8, 19, 0, 40, 70, DateTimeKind.Unspecified).AddTicks(9758), new TimeSpan(0, 0, 0, 0, 0)),
+                            HashPassword = "cfbff703c63d47180b95190dac7b4ca5e04e20af5b3c5ec515e4136710815d84",
+                            IsLogin = true,
+                            LoginName = "staff1",
+                            Name = "Staff test",
+                            Role = 2,
+                            Status = 1,
+                            WarehouseId = "choi-da-time"
+                        },
+                        new
+                        {
+                            Id = "789456123",
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 4, 8, 19, 0, 40, 70, DateTimeKind.Unspecified).AddTicks(9906), new TimeSpan(0, 0, 0, 0, 0)),
+                            HashPassword = "cfbff703c63d47180b95190dac7b4ca5e04e20af5b3c5ec515e4136710815d84",
+                            IsLogin = true,
+                            LoginName = "producer1",
+                            Name = "Producer test",
+                            Role = 3,
+                            Status = 1,
+                            WarehouseId = "choi-da-time"
+                        },
+                        new
+                        {
+                            Id = "147894561230",
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 4, 8, 19, 0, 40, 70, DateTimeKind.Unspecified).AddTicks(9908), new TimeSpan(0, 0, 0, 0, 0)),
+                            HashPassword = "cfbff703c63d47180b95190dac7b4ca5e04e20af5b3c5ec515e4136710815d84",
+                            IsLogin = true,
+                            LoginName = "salesman1",
+                            Name = "Salesman test",
+                            Role = 4,
+                            Status = 1
+                        });
                 });
 
             modelBuilder.Entity("SI.Domain.Entities.Warehouse", b =>
@@ -1063,7 +1219,7 @@ namespace SI.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(255)");
 
-                    b.Property<string>("EmployeeId")
+                    b.Property<string>("ManagerId")
                         .HasColumnType("varchar(255)");
 
                     b.Property<DateTimeOffset?>("ModifiedOn")
@@ -1089,7 +1245,7 @@ namespace SI.Infrastructure.Migrations
 
                     b.HasIndex("DistrictId");
 
-                    b.HasIndex("EmployeeId");
+                    b.HasIndex("ManagerId");
 
                     b.HasIndex("ProvinceId");
 
@@ -1098,6 +1254,20 @@ namespace SI.Infrastructure.Migrations
                     b.HasIndex("WarehouseId");
 
                     b.ToTable("WAREHOUSE");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "choi-da-time",
+                            Address = "123 ham tu",
+                            Capacity = 999,
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 4, 8, 19, 0, 40, 71, DateTimeKind.Unspecified).AddTicks(3294), new TimeSpan(0, 0, 0, 0, 0)),
+                            DistrictId = "1",
+                            ManagerId = "hihihaha",
+                            Name = "Jellyjellyjelly",
+                            ProvinceId = "1",
+                            WardId = "1"
+                        });
                 });
 
             modelBuilder.Entity("SI.Domain.ValueObjeSI.Location.District", b =>
@@ -1202,13 +1372,34 @@ namespace SI.Infrastructure.Migrations
                     b.Navigation("Ward");
                 });
 
-            modelBuilder.Entity("SI.Domain.Entities.Department", b =>
+            modelBuilder.Entity("SI.Domain.Entities.BOM.BillOfMaterial", b =>
                 {
-                    b.HasOne("SI.Domain.Entities.Warehouse", "Warehouse")
+                    b.HasOne("SI.Domain.Entities.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("WarehouseId");
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
-                    b.Navigation("Warehouse");
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("SI.Domain.Entities.BOM.BillOfMaterialDetail", b =>
+                {
+                    b.HasOne("SI.Domain.Entities.BOM.BillOfMaterial", "BillOfMaterial")
+                        .WithMany("BillOfMaterialDetails")
+                        .HasForeignKey("BillOfMaterialId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("SI.Domain.Entities.Product", "Material")
+                        .WithMany()
+                        .HasForeignKey("MaterialId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("BillOfMaterial");
+
+                    b.Navigation("Material");
                 });
 
             modelBuilder.Entity("SI.Domain.Entities.Employee", b =>
@@ -1236,6 +1427,10 @@ namespace SI.Infrastructure.Migrations
                         .HasForeignKey("WardId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("SI.Domain.Entities.Warehouse", null)
+                        .WithMany("Employees")
+                        .HasForeignKey("WarehouseId");
 
                     b.Navigation("Department");
 
@@ -1444,7 +1639,15 @@ namespace SI.Infrastructure.Migrations
                         .WithMany()
                         .HasForeignKey("MaterialSupplierId");
 
+                    b.HasOne("SI.Domain.Entities.Warehouse", "Warehouse")
+                        .WithMany()
+                        .HasForeignKey("WarehouseId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("MaterialSupplier");
+
+                    b.Navigation("Warehouse");
                 });
 
             modelBuilder.Entity("SI.Domain.Entities.ProductionCommands.ProductionCommand", b =>
@@ -1509,15 +1712,15 @@ namespace SI.Infrastructure.Migrations
 
             modelBuilder.Entity("SI.Domain.Entities.User", b =>
                 {
-                    b.HasOne("SI.Domain.Entities.Department", "Department")
-                        .WithMany("Users")
-                        .HasForeignKey("DepartmentId");
+                    b.HasOne("SI.Domain.Entities.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId");
 
                     b.HasOne("SI.Domain.Entities.Warehouse", "Warehouse")
-                        .WithMany("Users")
+                        .WithMany()
                         .HasForeignKey("WarehouseId");
 
-                    b.Navigation("Department");
+                    b.Navigation("Employee");
 
                     b.Navigation("Warehouse");
                 });
@@ -1530,9 +1733,9 @@ namespace SI.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("SI.Domain.Entities.Employee", "Employee")
+                    b.HasOne("SI.Domain.Entities.Employee", "Manager")
                         .WithMany()
-                        .HasForeignKey("EmployeeId");
+                        .HasForeignKey("ManagerId");
 
                     b.HasOne("SI.Domain.ValueObjeSI.Location.Province", "Province")
                         .WithMany()
@@ -1552,7 +1755,7 @@ namespace SI.Infrastructure.Migrations
 
                     b.Navigation("District");
 
-                    b.Navigation("Employee");
+                    b.Navigation("Manager");
 
                     b.Navigation("MasterWarehouse");
 
@@ -1583,11 +1786,14 @@ namespace SI.Infrastructure.Migrations
                     b.Navigation("District");
                 });
 
+            modelBuilder.Entity("SI.Domain.Entities.BOM.BillOfMaterial", b =>
+                {
+                    b.Navigation("BillOfMaterialDetails");
+                });
+
             modelBuilder.Entity("SI.Domain.Entities.Department", b =>
                 {
                     b.Navigation("Employees");
-
-                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("SI.Domain.Entities.GoodsIssues.GoodsIssue", b =>
@@ -1612,9 +1818,9 @@ namespace SI.Infrastructure.Migrations
 
             modelBuilder.Entity("SI.Domain.Entities.Warehouse", b =>
                 {
-                    b.Navigation("SlaveWarehouses");
+                    b.Navigation("Employees");
 
-                    b.Navigation("Users");
+                    b.Navigation("SlaveWarehouses");
                 });
 
             modelBuilder.Entity("SI.Domain.ValueObjeSI.Location.District", b =>

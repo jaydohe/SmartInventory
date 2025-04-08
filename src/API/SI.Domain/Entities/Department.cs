@@ -1,15 +1,13 @@
-﻿using SI.Domain.Common.Abstractions;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SI.Domain.Common.Abstractions;
 using SI.Domain.Common.Primitives;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SI.Domain.Entities;
 
 public class Department : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
 {
-    [ForeignKey(nameof(Warehouse))]
-    public string? WarehouseId { get; set; }
-
     // <summary>
     // Tên phòng ban
     // </summary>
@@ -20,7 +18,19 @@ public class Department : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
     public DateTimeOffset? ModifiedOn { get; set; }
     public DateTimeOffset? DeletedOn { get; set; }
 
-    public virtual Warehouse? Warehouse { get; set; }
     public virtual ICollection<Employee>? Employees { get; set; }
-    public virtual ICollection<User>? Users { get; set; }
+
+    public Department(string id) : base(id) { }
+    public Department() : base() { }
+}
+public class DepartmentConfiguration() : IEntityTypeConfiguration<Department>
+{
+    public void Configure(EntityTypeBuilder<Department> builder)
+    {
+        var newDepartment1 = new Department("huhuhu")
+        {
+            Name = "Bộ phận quản lý kho"
+        };
+        builder.HasData(newDepartment1);
+    }
 }

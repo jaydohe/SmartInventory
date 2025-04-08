@@ -1,4 +1,6 @@
-﻿using SI.Domain.Common.Abstractions;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore;
+using SI.Domain.Common.Abstractions;
 using SI.Domain.Common.Primitives;
 using SI.Domain.ValueObjeSI.Location;
 using System.ComponentModel.DataAnnotations;
@@ -14,8 +16,8 @@ public class Warehouse : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
     [ForeignKey(nameof(MasterWarehouse))]
     public string? WarehouseId { get; set; }
 
-    [ForeignKey(nameof(Employee))]
-    public string? EmployeeId { get; set; }
+    [ForeignKey(nameof(Manager))]
+    public string? ManagerId { get; set; }
 
     [ForeignKey(nameof(Ward))]
     public string WardId { get; set; } = null!;
@@ -48,10 +50,31 @@ public class Warehouse : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
     public DateTimeOffset? DeletedOn { get; set; }
 
     public virtual Warehouse? MasterWarehouse { get; set; }
-    public virtual Employee? Employee { get; set; }
+    public virtual Employee? Manager { get; set; }
     public virtual Ward? Ward { get; set; }
     public virtual District? District { get; set; }
     public virtual Province? Province { get; set; }
     public virtual ICollection<Warehouse>? SlaveWarehouses { get; set; }
-    public virtual ICollection<User>? Users { get; set; }
+    public virtual ICollection<Employee>? Employees { get; set; }
+
+    public Warehouse(string id) : base(id) { }
+    public Warehouse() : base() { }
+
+}
+public class WarehouseConfiguration() : IEntityTypeConfiguration<Warehouse>
+{
+    public void Configure(EntityTypeBuilder<Warehouse> builder)
+    {
+        var newWare = new Warehouse("choi-da-time")
+        {
+            ManagerId = "hihihaha",
+            WardId = "1",
+            DistrictId = "1",
+            ProvinceId = "1",
+            Name = "Jellyjellyjelly",
+            Address = "123 ham tu",
+            Capacity = 999
+        };
+        builder.HasData(newWare);
+    }
 }

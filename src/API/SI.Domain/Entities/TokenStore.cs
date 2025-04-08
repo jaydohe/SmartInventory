@@ -1,8 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using SI.Domain.Common.Abstractions;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using CTCore.DynamicQuery.Core.Domain;
 using CTCore.DynamicQuery.OData.Core;
 using CTCore.DynamicQuery.OData.Definations;
