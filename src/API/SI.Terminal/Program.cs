@@ -10,8 +10,9 @@ class Terminal
         //var genPass = pass.ToSHA256(",da1@Ban9**uong-nuoC@tr2n_c4yXanH");
         //Console.WriteLine(genPass);
         //Console.ReadLine();
-        // GenerateGuidsToFile(600, @"../../../../guids.txt");
-        // Console.WriteLine("600 GUIDs đã được tạo và lưu vào file 'guids.txt'.");
+        //GenerateGuidsToFile(100, @"../../../../guids.txt");
+        //Console.WriteLine("200 GUIDs đã được tạo và lưu vào file 'guids.txt'.");
+
         // var a = StringUtils.CreateDeviceCode(0, 10);
 
         // foreach (var item in a)

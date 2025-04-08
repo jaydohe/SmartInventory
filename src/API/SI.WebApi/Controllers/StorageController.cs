@@ -15,7 +15,7 @@ namespace SI.WebApi.Controllers
         [HttpPost("upload/res")]
         [Authorize]
         public async Task<IActionResult> UploadRes(
-            [FromForm] IFormFile file,
+            IFormFile file,
             [FromServices] IConfiguration configuration)
         {
             if (file == null || file.Length == 0)
@@ -40,7 +40,7 @@ namespace SI.WebApi.Controllers
         [HttpPost("upload/file")]
         [Authorize]
         public async Task<IActionResult> UploadFile(
-            [FromForm] IFormFile file,
+            IFormFile file,
             [FromServices] IConfiguration configuration)
         {
             if (file == null || file.Length == 0)
@@ -110,6 +110,5 @@ namespace SI.WebApi.Controllers
             var httpsUrl = url!.Replace("http://", "https://");
             return Created(httpsUrl, new { Url = httpsUrl });
         }
-
     }
 }

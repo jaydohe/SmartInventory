@@ -19,7 +19,7 @@ public class User : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
     public string? WarehouseId { get; set; }
 
     // <summary>
-    // Id nhân viên (admin không cần nhập)
+    // Id nhân viên
     // </summary>
     [ForeignKey(nameof(Employee))]
     public string? EmployeeId { get; set; }
@@ -195,6 +195,7 @@ public class UserConfiguration() : IEntityTypeConfiguration<User>
         // account staff
         var staff = new User("987654321")
         {
+            EmployeeId = "hihihaha",
             Name = "Staff test",
             LoginName = "staff1",
             //user@123
