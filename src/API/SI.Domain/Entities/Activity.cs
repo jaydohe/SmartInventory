@@ -12,7 +12,7 @@ namespace SI.Domain.Entities;
 
 [ODataRouting(nameof(Activity), RouteRefix = "private-api",
     IgnoredActions = [ApiActions.Create, ApiActions.Delete, ApiActions.Update])]
-[Authorize(Policy = APIPolicies.SUPERFULL)]
+[Authorize(Policy = APIPolicies.ADMIN)]
 public class Activity : CTBaseEntity
 {
     // <summary>

@@ -6,6 +6,7 @@ using SI.Domain.Entities.Orders;
 using SI.Domain.Entities.GoodsIssues;
 using SI.Domain.Entities.GoodsReceipts;
 using SI.Domain.Entities.ProductionCommands;
+using SI.Domain.Entities.BOM;
 
 namespace SI.Infrastructure.Persistence;
 
@@ -34,6 +35,8 @@ public class SIDbContext : DbContext
     
     public DbSet<Activity> Activities { get; set; }
     public DbSet<Agency> Agencies { get; set; }
+    public DbSet<BillOfMaterial> BillOfMaterials { get; set; }
+    public DbSet<BillOfMaterialDetail> BillOfMaterialDetails { get; set; }
     public DbSet<Department> Departments { get; set; }
     public DbSet<Employee> Employees { get; set; }
     public DbSet<Forecast> Forecasts { get; set; }
@@ -71,11 +74,14 @@ public class SIDbContext : DbContext
       
         RemovePluralizingTableNameConvention(modelBuilder);
 
-        modelBuilder.ApplyConfiguration(new UserConfiguration());
-        modelBuilder.ApplyConfiguration(new ProvinceConfiguration());
-        modelBuilder.ApplyConfiguration(new DistrictConfiguration());
-        modelBuilder.ApplyConfiguration(new WardConfiguration());
         modelBuilder.ApplyConfiguration(new ActivityConfiguration());
+        modelBuilder.ApplyConfiguration(new DepartmentConfiguration());
+        modelBuilder.ApplyConfiguration(new DistrictConfiguration());
+        modelBuilder.ApplyConfiguration(new EmployeeConfiguration());
+        modelBuilder.ApplyConfiguration(new ProvinceConfiguration());
+        modelBuilder.ApplyConfiguration(new UserConfiguration());
+        modelBuilder.ApplyConfiguration(new WardConfiguration());
+        modelBuilder.ApplyConfiguration(new WarehouseConfiguration());
 
         base.OnModelCreating(modelBuilder);
     }

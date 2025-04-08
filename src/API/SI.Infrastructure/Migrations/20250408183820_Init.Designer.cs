@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SI.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using SI.Infrastructure.Persistence;
 namespace SI.Infrastructure.Migrations
 {
     [DbContext(typeof(SIDbContext))]
-    partial class SIDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250408183820_Init")]
+    partial class Init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -215,14 +218,6 @@ namespace SI.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("DEPARTMENT");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "huhuhu",
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 4, 8, 19, 0, 40, 69, DateTimeKind.Unspecified).AddTicks(5013), new TimeSpan(0, 0, 0, 0, 0)),
-                            Name = "Bộ phận quản lý kho"
-                        });
                 });
 
             modelBuilder.Entity("SI.Domain.Entities.Employee", b =>
@@ -303,24 +298,6 @@ namespace SI.Infrastructure.Migrations
                     b.HasIndex("WarehouseId");
 
                     b.ToTable("EMPLOYEE");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "hihihaha",
-                            Address = "Hà Nội",
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 4, 8, 19, 0, 40, 70, DateTimeKind.Unspecified).AddTicks(3594), new TimeSpan(0, 0, 0, 0, 0)),
-                            DateHired = new DateTime(2025, 4, 9, 2, 0, 40, 70, DateTimeKind.Local).AddTicks(4831),
-                            DepartmentId = "huhuhu",
-                            DistrictId = "1",
-                            Email = "VanA@gmail.com",
-                            IsMale = true,
-                            Name = "Nguyễn Văn A",
-                            PhoneNumber = "0123456789",
-                            Position = "Quản lý kho",
-                            ProvinceId = "1",
-                            WardId = "1"
-                        });
                 });
 
             modelBuilder.Entity("SI.Domain.Entities.Forecast", b =>
@@ -1131,65 +1108,6 @@ namespace SI.Infrastructure.Migrations
                     b.HasIndex("WarehouseId");
 
                     b.ToTable("USER");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "0193e2ce-ee41-7fcb-9b52-5bba105dc0bd",
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 4, 8, 19, 0, 40, 70, DateTimeKind.Unspecified).AddTicks(9024), new TimeSpan(0, 0, 0, 0, 0)),
-                            HashPassword = "27dee27aa573be269f95143a213fe18e29a90e1124b371d280a6c4b88f85f749",
-                            IsLogin = true,
-                            LoginName = "dev0",
-                            Name = "Develop",
-                            Role = 0,
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = "123456789",
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 4, 8, 19, 0, 40, 70, DateTimeKind.Unspecified).AddTicks(9755), new TimeSpan(0, 0, 0, 0, 0)),
-                            HashPassword = "7ced44abd56279573d3e9730f7845fd68bb5e1d1b09dee076b066f53ca8e8247",
-                            IsLogin = true,
-                            LoginName = "admin0",
-                            Name = "Admin",
-                            Role = 1,
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = "987654321",
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 4, 8, 19, 0, 40, 70, DateTimeKind.Unspecified).AddTicks(9758), new TimeSpan(0, 0, 0, 0, 0)),
-                            HashPassword = "cfbff703c63d47180b95190dac7b4ca5e04e20af5b3c5ec515e4136710815d84",
-                            IsLogin = true,
-                            LoginName = "staff1",
-                            Name = "Staff test",
-                            Role = 2,
-                            Status = 1,
-                            WarehouseId = "choi-da-time"
-                        },
-                        new
-                        {
-                            Id = "789456123",
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 4, 8, 19, 0, 40, 70, DateTimeKind.Unspecified).AddTicks(9906), new TimeSpan(0, 0, 0, 0, 0)),
-                            HashPassword = "cfbff703c63d47180b95190dac7b4ca5e04e20af5b3c5ec515e4136710815d84",
-                            IsLogin = true,
-                            LoginName = "producer1",
-                            Name = "Producer test",
-                            Role = 3,
-                            Status = 1,
-                            WarehouseId = "choi-da-time"
-                        },
-                        new
-                        {
-                            Id = "147894561230",
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 4, 8, 19, 0, 40, 70, DateTimeKind.Unspecified).AddTicks(9908), new TimeSpan(0, 0, 0, 0, 0)),
-                            HashPassword = "cfbff703c63d47180b95190dac7b4ca5e04e20af5b3c5ec515e4136710815d84",
-                            IsLogin = true,
-                            LoginName = "salesman1",
-                            Name = "Salesman test",
-                            Role = 4,
-                            Status = 1
-                        });
                 });
 
             modelBuilder.Entity("SI.Domain.Entities.Warehouse", b =>
@@ -1251,20 +1169,6 @@ namespace SI.Infrastructure.Migrations
                     b.HasIndex("WarehouseId");
 
                     b.ToTable("WAREHOUSE");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "choi-da-time",
-                            Address = "123 ham tu",
-                            Capacity = 999,
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 4, 8, 19, 0, 40, 71, DateTimeKind.Unspecified).AddTicks(3294), new TimeSpan(0, 0, 0, 0, 0)),
-                            DistrictId = "1",
-                            ManagerId = "hihihaha",
-                            Name = "Jellyjellyjelly",
-                            ProvinceId = "1",
-                            WardId = "1"
-                        });
                 });
 
             modelBuilder.Entity("SI.Domain.ValueObjeSI.Location.District", b =>

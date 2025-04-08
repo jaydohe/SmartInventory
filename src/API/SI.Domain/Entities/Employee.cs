@@ -1,4 +1,6 @@
-﻿using SI.Domain.Common.Abstractions;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SI.Domain.Common.Abstractions;
 using SI.Domain.Common.Primitives;
 using SI.Domain.ValueObjeSI.Location;
 using System.ComponentModel.DataAnnotations;
@@ -25,6 +27,11 @@ public class Employee : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
     // </summary>
     [StringLength(1024)]
     public string Name { get; set; } = null!;
+
+    // <summary>
+    // Giới tính true = 1 = nam, false = 0 = nữ
+    // </summary>
+    public bool IsMale { get; set; } = true;
 
     // <summary>
     // Số điện thoại
@@ -63,4 +70,28 @@ public class Employee : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
     public virtual Ward? Ward { get; set; }
     public virtual District? District { get; set; }
     public virtual Province? Province { get; set; }
+
+    public Employee(string id) : base(id) { }
+    public Employee() : base() { }
+}
+public class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
+{
+    public void Configure(EntityTypeBuilder<Employee> builder)
+    {
+        var employee1 = new Employee("hihihaha")
+        {
+            DepartmentId = "huhuhu",
+            WardId = "1",
+            DistrictId = "1",
+            ProvinceId = "1",
+            Name = "Nguyễn Văn A",
+            IsMale = true,
+            PhoneNumber = "0123456789",
+            Email = "VanA@gmail.com",
+            Address = "Hà Nội",
+            Position = "Quản lý kho",
+            DateHired = DateTime.Now
+        };
+        builder.HasData(employee1);
+    }
 }
