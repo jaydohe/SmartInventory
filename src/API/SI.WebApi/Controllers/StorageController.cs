@@ -110,6 +110,5 @@ namespace SI.WebApi.Controllers
             var httpsUrl = url!.Replace("http://", "https://");
             return Created(httpsUrl, new { Url = httpsUrl });
         }
-
     }
 }

@@ -10,8 +10,11 @@ namespace SI.Domain.Entities;
 
 public class Employee : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
 {
+    // <summary>
+    // Mã phòng ban (admin không cần)
+    // </summary>
     [ForeignKey(nameof(Department))]
-    public string DepartmentId { get; set; } = null!;
+    public string? DepartmentId { get; set; }
 
     [ForeignKey(nameof(Ward))]
     public string WardId { get; set; } = null!;
