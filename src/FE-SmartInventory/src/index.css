@@ -1,0 +1,142 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import 'leaflet/dist/leaflet.css';
+@layer base {
+  button {
+    background-color: inherit;
+  }
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap%27');
+
+:root {
+  font-family: 'Montserrat', 'Inter', 'Avenir', 'Helvetica ', 'Arial', 'sans-serif';
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+  box-sizing: border-box;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:root::-webkit-scrollbar {
+  width: 0 !important;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+  transition: scroll-behavior 0.2s;
+  scrollbar-width: thin;
+  scrollbar-color: #c1c1c1 #f1f1f1;
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 12px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 5px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #c1c1c1;
+  border-radius: 14px;
+  border: 2px solid #f1f1f1;
+}
+
+.css-dev-only-do-not-override-quxx0i.ant-table-wrapper .ant-table-filter-trigger {
+  font-style: 20px !important;
+}
+/* menu style mobile */
+.menu-container {
+  width: 68vw;
+}
+
+
+
+@media (max-width: 1023px) {
+  .menu-container.hide {
+    display: none;
+  }
+
+  .menu-container.show {
+    display: block;
+    position: absolute;
+    z-index: 100000000;
+    top: 64px;
+    border-radius: 0.75rem; /* 4px */
+  }
+}
+
+.responsive-menu.mobile-menu {
+  width: 100%;
+  background-color: white !important;
+  /* filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.1)) drop-shadow(0 1px 1px rgb(0 0 0 / 0.06)); */
+  filter: drop-shadow(0 1px 1px rgb(0 0 0 / 0.05));
+}
+
+.mobile-menu-toggle {
+  padding: 8px !important;
+}
+
+.mobile-menu-toggle .anticon {
+  font-size: 20px;
+}
+
+.responsive-menu.mobile-menu .ant-menu-item,
+.responsive-menu.mobile-menu .ant-menu-submenu-title {
+  padding: 12px 16px !important;
+  height: auto !important;
+  line-height: 1.5 !important;
+}
+
+.responsive-menu.mobile-menu .ant-menu-submenu-arrow {
+  right: 16px !important;
+}
+
+.responsive-menu.mobile-menu .ant-menu-item-icon {
+  margin-right: 10px !important;
+}
+
+.responsive-menu.mobile-menu .ant-menu-submenu-expand-icon,
+.responsive-menu.mobile-menu .ant-menu-submenu-arrow {
+  color: rgba(0, 0, 0, 0.85) !important;
+}
+
+.responsive-menu.mobile-menu .ant-menu-item:hover,
+.responsive-menu.mobile-menu .ant-menu-submenu-title:hover {
+  background-color: #f5f5f5;
+}
+/*  */
+.qr-scanner-container img {
+  margin: 0 auto;
+}
+
+@media only screen and (max-width: 576px) {
+  :where(.css-dev-only-do-not-override-bjpumg).ant-pagination .ant-pagination-options {
+    display: inline-block !important;
+  }
+}
+@media only screen and (max-width: 576px) {
+  :where(.css-bjpumg).ant-pagination .ant-pagination-options {
+    display: inline-block !important;
+  }
+}
+@media only screen and (max-width: 576px) {
+  :where(.css-e13wk0).ant-pagination .ant-pagination-options {
+    display: inline-block !important;
+  }
+}
+@media only screen and (max-width: 576px) {
+  .ant-pagination .ant-pagination-options {
+    display: inline-block !important;
+  }
+}
