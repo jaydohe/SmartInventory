@@ -3,17 +3,16 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace SI.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class Entity_Config : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterDatabase()
-                .Annotation("MySql:CharSet", "utf8mb4");
-
             migrationBuilder.CreateTable(
                 name: "ACTIVITY",
                 columns: table => new
@@ -36,130 +35,6 @@ namespace SI.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ACTIVITY", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "DEPARTMENT",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Name = table.Column<string>(type: "varchar(1024)", maxLength: 1024, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false),
-                    ModifiedOn = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true),
-                    DeletedOn = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DEPARTMENT", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "NOTIFICATION",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    UserId = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    TargetId = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Type = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Content = table.Column<string>(type: "varchar(2048)", maxLength: 2048, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Title = table.Column<string>(type: "varchar(512)", maxLength: 512, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    IsMarked = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_NOTIFICATION", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "PROVINCE",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PROVINCE", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "SETUP",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ZScore = table.Column<double>(type: "double", nullable: false),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false),
-                    ModifiedOn = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true),
-                    DeletedOn = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SETUP", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "DISTRICT",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ProvinceId = table.Column<string>(type: "varchar(255)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DISTRICT", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_DISTRICT_PROVINCE_ProvinceId",
-                        column: x => x.ProvinceId,
-                        principalTable: "PROVINCE",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "WARD",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    DistrictId = table.Column<string>(type: "varchar(255)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_WARD", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_WARD_DISTRICT_DistrictId",
-                        column: x => x.DistrictId,
-                        principalTable: "DISTRICT",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -215,6 +90,24 @@ namespace SI.Infrastructure.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "DEPARTMENT",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Name = table.Column<string>(type: "varchar(1024)", maxLength: 1024, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false),
+                    ModifiedOn = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true),
+                    DeletedOn = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DEPARTMENT", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "MATERIALSUPPLIER",
                 columns: table => new
                 {
@@ -259,6 +152,48 @@ namespace SI.Infrastructure.Migrations
                         principalTable: "WARD",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "NOTIFICATION",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    UserId = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    TargetId = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Type = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Content = table.Column<string>(type: "varchar(2048)", maxLength: 2048, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Title = table.Column<string>(type: "varchar(512)", maxLength: 512, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    IsMarked = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NOTIFICATION", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "SETUP",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ZScore = table.Column<double>(type: "double", nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false),
+                    ModifiedOn = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true),
+                    DeletedOn = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SETUP", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -341,7 +276,7 @@ namespace SI.Infrastructure.Migrations
                 {
                     Id = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    DepartmentId = table.Column<string>(type: "varchar(255)", nullable: false)
+                    DepartmentId = table.Column<string>(type: "varchar(255)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     WardId = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -374,8 +309,7 @@ namespace SI.Infrastructure.Migrations
                         name: "FK_EMPLOYEE_DEPARTMENT_DepartmentId",
                         column: x => x.DepartmentId,
                         principalTable: "DEPARTMENT",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_EMPLOYEE_DISTRICT_DistrictId",
                         column: x => x.DistrictId,
@@ -975,6 +909,40 @@ namespace SI.Infrastructure.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
+            migrationBuilder.InsertData(
+                table: "DEPARTMENT",
+                columns: new[] { "Id", "CreatedAt", "DeletedOn", "ModifiedOn", "Name" },
+                values: new object[] { "huhuhu", new DateTimeOffset(new DateTime(2025, 4, 11, 21, 29, 45, 193, DateTimeKind.Unspecified).AddTicks(5207), new TimeSpan(0, 0, 0, 0, 0)), null, null, "Bộ phận quản lý kho" });
+
+            migrationBuilder.InsertData(
+                table: "USER",
+                columns: new[] { "Id", "CreatedAt", "DeletedOn", "EmployeeId", "HashPassword", "IsLogin", "LoginName", "ModifiedOn", "Name", "Role", "Status", "WarehouseId" },
+                values: new object[,]
+                {
+                    { "0193e2ce-ee41-7fcb-9b52-5bba105dc0bd", new DateTimeOffset(new DateTime(2025, 4, 11, 21, 29, 45, 195, DateTimeKind.Unspecified).AddTicks(848), new TimeSpan(0, 0, 0, 0, 0)), null, null, "27dee27aa573be269f95143a213fe18e29a90e1124b371d280a6c4b88f85f749", true, "dev0", null, "Develop", 0, 1, null },
+                    { "123456789", new DateTimeOffset(new DateTime(2025, 4, 11, 21, 29, 45, 195, DateTimeKind.Unspecified).AddTicks(1673), new TimeSpan(0, 0, 0, 0, 0)), null, null, "7ced44abd56279573d3e9730f7845fd68bb5e1d1b09dee076b066f53ca8e8247", true, "admin0", null, "Admin", 1, 1, null },
+                    { "147894561230", new DateTimeOffset(new DateTime(2025, 4, 11, 21, 29, 45, 195, DateTimeKind.Unspecified).AddTicks(2033), new TimeSpan(0, 0, 0, 0, 0)), null, null, "cfbff703c63d47180b95190dac7b4ca5e04e20af5b3c5ec515e4136710815d84", true, "salesman1", null, "Salesman test", 4, 1, null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "EMPLOYEE",
+                columns: new[] { "Id", "Address", "CreatedAt", "DateHired", "DeletedOn", "DepartmentId", "DistrictId", "Email", "IsMale", "ModifiedOn", "Name", "PhoneNumber", "Position", "ProvinceId", "WardId", "WarehouseId" },
+                values: new object[] { "hihihaha", "Hà Nội", new DateTimeOffset(new DateTime(2025, 4, 11, 21, 29, 45, 194, DateTimeKind.Unspecified).AddTicks(4642), new TimeSpan(0, 0, 0, 0, 0)), new DateTime(2025, 4, 12, 4, 29, 45, 194, DateTimeKind.Local).AddTicks(5986), null, "huhuhu", "1", "VanA@gmail.com", true, null, "Nguyễn Văn A", "0123456789", "Quản lý kho", "1", "1", null });
+
+            migrationBuilder.InsertData(
+                table: "WAREHOUSE",
+                columns: new[] { "Id", "Address", "Capacity", "CreatedAt", "DeletedOn", "DistrictId", "ManagerId", "ModifiedOn", "Name", "ProvinceId", "WardId", "WarehouseId" },
+                values: new object[] { "choi-da-time", "123 ham tu", 999, new DateTimeOffset(new DateTime(2025, 4, 11, 21, 29, 45, 195, DateTimeKind.Unspecified).AddTicks(5858), new TimeSpan(0, 0, 0, 0, 0)), null, "1", "hihihaha", null, "Jellyjellyjelly", "1", "1", null });
+
+            migrationBuilder.InsertData(
+                table: "USER",
+                columns: new[] { "Id", "CreatedAt", "DeletedOn", "EmployeeId", "HashPassword", "IsLogin", "LoginName", "ModifiedOn", "Name", "Role", "Status", "WarehouseId" },
+                values: new object[,]
+                {
+                    { "789456123", new DateTimeOffset(new DateTime(2025, 4, 11, 21, 29, 45, 195, DateTimeKind.Unspecified).AddTicks(2030), new TimeSpan(0, 0, 0, 0, 0)), null, null, "cfbff703c63d47180b95190dac7b4ca5e04e20af5b3c5ec515e4136710815d84", true, "producer1", null, "Producer test", 3, 1, "choi-da-time" },
+                    { "987654321", new DateTimeOffset(new DateTime(2025, 4, 11, 21, 29, 45, 195, DateTimeKind.Unspecified).AddTicks(1677), new TimeSpan(0, 0, 0, 0, 0)), null, "hihihaha", "cfbff703c63d47180b95190dac7b4ca5e04e20af5b3c5ec515e4136710815d84", true, "staff1", null, "Staff test", 2, 1, "choi-da-time" }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_ACTIVITY_TargetId",
                 table: "ACTIVITY",
@@ -1009,16 +977,6 @@ namespace SI.Infrastructure.Migrations
                 name: "IX_BILLOFMATERIALDETAIL_MaterialId",
                 table: "BILLOFMATERIALDETAIL",
                 column: "MaterialId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_DISTRICT_Name",
-                table: "DISTRICT",
-                column: "Name");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_DISTRICT_ProvinceId",
-                table: "DISTRICT",
-                column: "ProvinceId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_EMPLOYEE_DepartmentId",
@@ -1186,11 +1144,6 @@ namespace SI.Infrastructure.Migrations
                 column: "ProductionCommandId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PROVINCE_Name",
-                table: "PROVINCE",
-                column: "Name");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_TOKENSTORE_UserId",
                 table: "TOKENSTORE",
                 column: "UserId");
@@ -1204,16 +1157,6 @@ namespace SI.Infrastructure.Migrations
                 name: "IX_USER_WarehouseId",
                 table: "USER",
                 column: "WarehouseId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_WARD_DistrictId",
-                table: "WARD",
-                column: "DistrictId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_WARD_Name",
-                table: "WARD",
-                column: "Name");
 
             migrationBuilder.CreateIndex(
                 name: "IX_WAREHOUSE_DistrictId",
@@ -1267,34 +1210,6 @@ namespace SI.Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_EMPLOYEE_DISTRICT_DistrictId",
-                table: "EMPLOYEE");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_WARD_DISTRICT_DistrictId",
-                table: "WARD");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_WAREHOUSE_DISTRICT_DistrictId",
-                table: "WAREHOUSE");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_EMPLOYEE_PROVINCE_ProvinceId",
-                table: "EMPLOYEE");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_WAREHOUSE_PROVINCE_ProvinceId",
-                table: "WAREHOUSE");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_EMPLOYEE_WARD_WardId",
-                table: "EMPLOYEE");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_WAREHOUSE_WARD_WardId",
-                table: "WAREHOUSE");
-
             migrationBuilder.DropForeignKey(
                 name: "FK_EMPLOYEE_DEPARTMENT_DepartmentId",
                 table: "EMPLOYEE");
@@ -1368,15 +1283,6 @@ namespace SI.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "USER");
-
-            migrationBuilder.DropTable(
-                name: "DISTRICT");
-
-            migrationBuilder.DropTable(
-                name: "PROVINCE");
-
-            migrationBuilder.DropTable(
-                name: "WARD");
 
             migrationBuilder.DropTable(
                 name: "DEPARTMENT");

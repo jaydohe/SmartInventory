@@ -220,7 +220,7 @@ namespace SI.Infrastructure.Migrations
                         new
                         {
                             Id = "huhuhu",
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 4, 8, 19, 59, 25, 310, DateTimeKind.Unspecified).AddTicks(1244), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 4, 11, 21, 29, 45, 193, DateTimeKind.Unspecified).AddTicks(5207), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "Bộ phận quản lý kho"
                         });
                 });
@@ -308,8 +308,8 @@ namespace SI.Infrastructure.Migrations
                         {
                             Id = "hihihaha",
                             Address = "Hà Nội",
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 4, 8, 19, 59, 25, 311, DateTimeKind.Unspecified).AddTicks(852), new TimeSpan(0, 0, 0, 0, 0)),
-                            DateHired = new DateTime(2025, 4, 9, 2, 59, 25, 311, DateTimeKind.Local).AddTicks(2117),
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 4, 11, 21, 29, 45, 194, DateTimeKind.Unspecified).AddTicks(4642), new TimeSpan(0, 0, 0, 0, 0)),
+                            DateHired = new DateTime(2025, 4, 12, 4, 29, 45, 194, DateTimeKind.Local).AddTicks(5986),
                             DepartmentId = "huhuhu",
                             DistrictId = "1",
                             Email = "VanA@gmail.com",
@@ -1135,7 +1135,7 @@ namespace SI.Infrastructure.Migrations
                         new
                         {
                             Id = "0193e2ce-ee41-7fcb-9b52-5bba105dc0bd",
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 4, 8, 19, 59, 25, 311, DateTimeKind.Unspecified).AddTicks(6393), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 4, 11, 21, 29, 45, 195, DateTimeKind.Unspecified).AddTicks(848), new TimeSpan(0, 0, 0, 0, 0)),
                             HashPassword = "27dee27aa573be269f95143a213fe18e29a90e1124b371d280a6c4b88f85f749",
                             IsLogin = true,
                             LoginName = "dev0",
@@ -1146,7 +1146,7 @@ namespace SI.Infrastructure.Migrations
                         new
                         {
                             Id = "123456789",
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 4, 8, 19, 59, 25, 311, DateTimeKind.Unspecified).AddTicks(7009), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 4, 11, 21, 29, 45, 195, DateTimeKind.Unspecified).AddTicks(1673), new TimeSpan(0, 0, 0, 0, 0)),
                             HashPassword = "7ced44abd56279573d3e9730f7845fd68bb5e1d1b09dee076b066f53ca8e8247",
                             IsLogin = true,
                             LoginName = "admin0",
@@ -1157,7 +1157,7 @@ namespace SI.Infrastructure.Migrations
                         new
                         {
                             Id = "987654321",
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 4, 8, 19, 59, 25, 311, DateTimeKind.Unspecified).AddTicks(7011), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 4, 11, 21, 29, 45, 195, DateTimeKind.Unspecified).AddTicks(1677), new TimeSpan(0, 0, 0, 0, 0)),
                             EmployeeId = "hihihaha",
                             HashPassword = "cfbff703c63d47180b95190dac7b4ca5e04e20af5b3c5ec515e4136710815d84",
                             IsLogin = true,
@@ -1170,7 +1170,7 @@ namespace SI.Infrastructure.Migrations
                         new
                         {
                             Id = "789456123",
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 4, 8, 19, 59, 25, 311, DateTimeKind.Unspecified).AddTicks(7275), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 4, 11, 21, 29, 45, 195, DateTimeKind.Unspecified).AddTicks(2030), new TimeSpan(0, 0, 0, 0, 0)),
                             HashPassword = "cfbff703c63d47180b95190dac7b4ca5e04e20af5b3c5ec515e4136710815d84",
                             IsLogin = true,
                             LoginName = "producer1",
@@ -1182,7 +1182,7 @@ namespace SI.Infrastructure.Migrations
                         new
                         {
                             Id = "147894561230",
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 4, 8, 19, 59, 25, 311, DateTimeKind.Unspecified).AddTicks(7277), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 4, 11, 21, 29, 45, 195, DateTimeKind.Unspecified).AddTicks(2033), new TimeSpan(0, 0, 0, 0, 0)),
                             HashPassword = "cfbff703c63d47180b95190dac7b4ca5e04e20af5b3c5ec515e4136710815d84",
                             IsLogin = true,
                             LoginName = "salesman1",
@@ -1258,7 +1258,7 @@ namespace SI.Infrastructure.Migrations
                             Id = "choi-da-time",
                             Address = "123 ham tu",
                             Capacity = 999,
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 4, 8, 19, 59, 25, 312, DateTimeKind.Unspecified).AddTicks(904), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 4, 11, 21, 29, 45, 195, DateTimeKind.Unspecified).AddTicks(5858), new TimeSpan(0, 0, 0, 0, 0)),
                             DistrictId = "1",
                             ManagerId = "hihihaha",
                             Name = "Jellyjellyjelly",

@@ -32,7 +32,7 @@ public class SIDbContext : DbContext
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
     {
     }
-    
+
     public DbSet<Activity> Activities { get; set; }
     public DbSet<Agency> Agencies { get; set; }
     public DbSet<BillOfMaterial> BillOfMaterials { get; set; }
