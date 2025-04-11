@@ -12,9 +12,9 @@ public enum UserRoles
 
 public struct APIPolicies
 {
-    public const string DEV = "DEV";
-    public const string ADMIN = "ADMIN";
-    public const string STAFFFULL = "STAFFFULL";
-    public const string PRODUCERFULL = "PRODUCERFULL";
-    public const string SALESFULL = "SALESFULL";
+    public const string DEV = "DEV"; //just DEV
+    public const string ADMIN = "ADMIN"; // DEV and ADMIN
+    public const string STAFFFULL = "STAFFFULL"; // DEV, ADMIN and WAREHOUSE_STAFF
+    public const string PRODUCERFULL = "PRODUCERFULL"; // DEV, ADMIN and WAREHOUSE_PRODUCER
+    public const string SALESFULL = "SALESFULL"; // DEV, ADMIN and SALESMAN
 }

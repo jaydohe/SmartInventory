@@ -51,9 +51,7 @@ public class UpdateMeInfoCommandHandler(
             return CTBaseResult.NotFound("Employee");
 
         checkUser.LoginName = request?.Arg.LoginName ?? checkUser.LoginName;
-        checkUser.Name = request?.Arg.Name ?? checkUser.Name;
         checkUser.ModifiedOn = DateTimeOffset.UtcNow;
-        checkEmployee.Name = checkUser.Name;
         checkEmployee.PhoneNumber = request?.Arg.PhoneNumber ?? checkEmployee.PhoneNumber;
         checkEmployee.Email = request?.Arg.Email ?? checkEmployee.Email;
         checkEmployee.Address = request?.Arg.Address ?? checkEmployee.Address;
@@ -71,9 +69,6 @@ public class UpdateAccountInForCommandValidator : AbstractValidator<UpdateMeInfo
 {
     public UpdateAccountInForCommandValidator()
     {
-        RuleFor(e => e.Arg.Name)
-            .MaximumLength(512)
-            .WithMessage("Name maximum 512 characters.");
         RuleFor(e => e.Arg.LoginName)
             .MaximumLength(512)
             .WithMessage("Login name maximum 512 characters.")
@@ -81,9 +76,7 @@ public class UpdateAccountInForCommandValidator : AbstractValidator<UpdateMeInfo
             .WithMessage("Login name can only contain letters, digits, dashes and underscores.");
         RuleFor(e => e.Arg.PhoneNumber)
             .MaximumLength(20)
-            .WithMessage("Phone number maximum 20 characters.")
-            .Matches(@"^(\+84|0)[0-9]{9}$")
-            .WithMessage("Phone number is not valid.");
+            .WithMessage("Phone number maximum 20 characters.");
         RuleFor(e => e.Arg.Email)
             .MaximumLength(512)
             .WithMessage("Email maximum 512 characters.");

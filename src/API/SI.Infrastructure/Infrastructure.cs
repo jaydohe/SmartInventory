@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SI.Infrastructure.Persistence;
-using SI.Infrastructure.Core.Mapping;
+using SI.Infrastructure.Common.Mapping;
 using SI.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 using SI.Infrastructure.Integrations;
