@@ -2,7 +2,6 @@
 using CTCore.DynamicQuery;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using SI.Application.Features.Authenticate.Commands;
 using SI.Application.Features.AuthenticateFeatures.Commands;
 using SI.Application.Features.AuthenticateFeatures.Queries;
 using SI.Contract.AuthenticateContract;

@@ -10,9 +10,8 @@ using SI.Contract.AuthenticateContract;
 using SI.Domain.Common.Authenticate;
 using SI.Domain.Common.Utils;
 using SI.Domain.Entities;
-using static SI.Application.Features.Authenticate.Commands.LoginCommandHandler;
 
-namespace SI.Application.Features.Authenticate.Commands;
+namespace SI.Application.Features.AuthenticateFeatures.Commands;
 
 public class LoginCommand(LoginArg arg) : ICommand<OkDynamicResponse>
 {
@@ -80,27 +79,26 @@ public class LoginCommandHandler(
             genToken.ExpireTime
         );
         return CTBaseResult.Success(result);
-
     }
+}
 
-    public class LoginCommandValidator : AbstractValidator<LoginCommand>
+public class LoginCommandValidator : AbstractValidator<LoginCommand>
+{
+    public LoginCommandValidator()
     {
-        public LoginCommandValidator()
-        {
-            RuleFor(e => e.Arg.LoginName)
-                .NotEmpty()
-                .WithMessage("Login name is required.")
-                .MaximumLength(512)
-                .WithMessage("Login name maximum  characters.")
-                .Must(LoginName => LoginName != null && LoginName.All(c => char.IsLetterOrDigit(c) || c == '-' || c == '_'))
-                .WithMessage("Login name can only contain letters, digits, dashes and underscores.");
-            RuleFor(e => e.Arg.Password)
-                .NotEmpty()
-                .WithMessage("Password is required.")
-                .Length(4, 32)
-                .WithMessage("Password length must be between 4 and 32 characters.")
-                .Must(pass => pass != null && pass.All(c => char.IsLetterOrDigit(c) || char.IsPunctuation(c)))
-                .WithMessage("Password must contain only letters, digits, and punctuation.");
-        }
+        RuleFor(e => e.Arg.LoginName)
+            .NotEmpty()
+            .WithMessage("Login name is required.")
+            .MaximumLength(512)
+            .WithMessage("Login name maximum  characters.")
+            .Must(LoginName => LoginName != null && LoginName.All(c => char.IsLetterOrDigit(c) || c == '-' || c == '_'))
+            .WithMessage("Login name can only contain letters, digits, dashes and underscores.");
+        RuleFor(e => e.Arg.Password)
+            .NotEmpty()
+            .WithMessage("Password is required.")
+            .Length(4, 32)
+            .WithMessage("Password length must be between 4 and 32 characters.")
+            .Must(pass => pass != null && pass.All(c => char.IsLetterOrDigit(c) || char.IsPunctuation(c)))
+            .WithMessage("Password must contain only letters, digits, and punctuation.");
     }
 }

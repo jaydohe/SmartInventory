@@ -25,6 +25,9 @@ public class Employee : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
     [ForeignKey(nameof(Province))]
     public string ProvinceId { get; set; } = null!;
 
+    [ForeignKey(nameof(Warehouse))]
+    public string? WarehouseId { get; set; }
+
     // <summary>
     // Tên nhân viên
     // </summary>
@@ -73,6 +76,7 @@ public class Employee : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
     public virtual Ward? Ward { get; set; }
     public virtual District? District { get; set; }
     public virtual Province? Province { get; set; }
+    public virtual Warehouse? Warehouse { get; set; }
 
     public Employee(string id) : base(id) { }
     public Employee() : base() { }
@@ -81,7 +85,7 @@ public class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
 {
     public void Configure(EntityTypeBuilder<Employee> builder)
     {
-        var employee1 = new Employee("hihihaha")
+        var manager1 = new Employee("hihihaha")
         {
             DepartmentId = "huhuhu",
             WardId = "1",
@@ -93,8 +97,26 @@ public class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
             Email = "VanA@gmail.com",
             Address = "Hà Nội",
             Position = "Quản lý kho",
-            DateHired = DateTime.Now
+            DateHired = DateTime.Now,
+            WarehouseId = "choi-da-time"
         };
-        builder.HasData(employee1);
+
+        var employee2 = new Employee("hihihaharamram")
+        {
+            DepartmentId = "huhuhu",
+            WardId = "1",
+            DistrictId = "1",
+            ProvinceId = "1",
+            Name = "Nguyễn Văn B",
+            IsMale = true,
+            PhoneNumber = "0123456987",
+            Email = "VanB@gmail.com",
+            Address = "Hà Nội",
+            Position = "Nhân viên kho",
+            DateHired = DateTime.Now,
+            WarehouseId = "choi-da-time"
+        };
+
+        builder.HasData([manager1, employee2]);
     }
 }
