@@ -85,7 +85,20 @@ public class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
 {
     public void Configure(EntityTypeBuilder<Employee> builder)
     {
-        var manager1 = new Employee("hihihaha")
+        var admin1 = new Employee("bonk")
+        {
+            WardId = "1",
+            DistrictId = "1",
+            ProvinceId = "1",
+            Name = "Nguyễn Văn C",
+            IsMale = true,
+            PhoneNumber = "7894561230",
+            Email = "VanC@gmail.com",
+            Address = "Hà Nội",
+            Position = "Giám đốc công ty",
+            DateHired = DateTime.Now
+        };
+        var manager2 = new Employee("hihihaha")
         {
             DepartmentId = "huhuhu",
             WardId = "1",
@@ -100,8 +113,7 @@ public class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
             DateHired = DateTime.Now,
             WarehouseId = "choi-da-time"
         };
-
-        var employee2 = new Employee("hihihaharamram")
+        var employee3 = new Employee("hihihaharamram")
         {
             DepartmentId = "huhuhu",
             WardId = "1",
@@ -116,7 +128,35 @@ public class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
             DateHired = DateTime.Now,
             WarehouseId = "choi-da-time"
         };
-
-        builder.HasData([manager1, employee2]);
+        var employee4 = new Employee("bankmiramram")
+        {
+            DepartmentId = "sugar-town",
+            WardId = "1",
+            DistrictId = "1",
+            ProvinceId = "1",
+            Name = "Nguyễn Văn D",
+            IsMale = true,
+            PhoneNumber = "0123457953",
+            Email = "VanD@gmail.com",
+            Address = "Hà Nội",
+            Position = "Quản lý sản xuất",
+            DateHired = DateTime.Now,
+            WarehouseId = "choi-da-time"
+        };
+        var employee5 = new Employee("dainam")
+        {
+            DepartmentId = "parrot-smell",
+            WardId = "1",
+            DistrictId = "1",
+            ProvinceId = "1",
+            Name = "Nguyễn Văn E",
+            IsMale = true,
+            PhoneNumber = "012548756",
+            Email = "VanE@gmail.com",
+            Address = "Hà Nội",
+            Position = "Nhân viên bán hàng",
+            DateHired = DateTime.Now
+        };
+        builder.HasData([admin1, manager2, employee3, employee4, employee5]);
     }
 }

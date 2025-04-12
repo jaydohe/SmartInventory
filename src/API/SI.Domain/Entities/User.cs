@@ -186,6 +186,7 @@ public class UserConfiguration() : IEntityTypeConfiguration<User>
         // account admin
         var admin = new User("123456789")
         {
+            EmployeeId = "bonk",
             Name = "Admin",
             LoginName = "admin0",
             //admin@123
@@ -206,6 +207,7 @@ public class UserConfiguration() : IEntityTypeConfiguration<User>
         // account producer
         var producer = new User("789456123")
         {
+            EmployeeId = "bankmiramram",
             Name = "Producer test",
             LoginName = "producer1",
             //user@123
@@ -216,6 +218,7 @@ public class UserConfiguration() : IEntityTypeConfiguration<User>
         // account salesman
         var salesman = new User("147894561230")
         {
+            EmployeeId = "dainam",
             Name = "Salesman test",
             LoginName = "salesman1",
             //user@123

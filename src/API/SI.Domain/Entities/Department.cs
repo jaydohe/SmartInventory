@@ -31,6 +31,14 @@ public class DepartmentConfiguration() : IEntityTypeConfiguration<Department>
         {
             Name = "Bộ phận quản lý kho"
         };
-        builder.HasData(newDepartment1);
+        var newDepartment2 = new Department("sugar-town")
+        {
+            Name = "Bộ phận quản lý sản xuất"
+        };
+        var newDepartment3 = new Department("parrot-smell")
+        {
+            Name = "Bộ phận quản lý bán hàng"
+        };
+        builder.HasData([newDepartment1, newDepartment2, newDepartment3]);
     }
 }
