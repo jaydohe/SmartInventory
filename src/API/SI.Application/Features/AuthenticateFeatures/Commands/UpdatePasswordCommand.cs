@@ -53,6 +53,7 @@ public class UpdatePasswordCommandHandler(
             return CTBaseResult.UnProcess("New password must be different from old password.");
 
         checkUser.HashPassword = hashNewPassword;
+        checkUser.ModifiedOn = DateTimeOffset.UtcNow;
 
         var ret = await unitOfWork.SaveChangeAsync(cancellationToken);
         if (ret <= 0)

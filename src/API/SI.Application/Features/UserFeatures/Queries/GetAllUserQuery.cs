@@ -6,43 +6,47 @@ using CTCore.DynamicQuery.Core.Mediators.Interfaces;
 using CTCore.DynamicQuery.Core.Primitives;
 using CTCore.DynamicQuery.Population;
 using Microsoft.EntityFrameworkCore;
-using SI.Contract.EmployeeContract;
+using SI.Contract.UserContract;
 using SI.Domain.Common.Authenticate;
 using SI.Domain.Entities;
+using SI.Domain.Enums;
 
-namespace SI.Application.Features.EmployeeFeatures.Queries;
+namespace SI.Application.Features.UserFeatures.Queries;
 
-public class GetAllEmployeeQuery(QueryPageRequestV3 query)
+public class GetAllUserQuery(QueryPageRequestV3 query)
     : CTBaseQuery<QueryPageRequestV3, OkDynamicPageResponse>(query)
-{ }
-
-public class GetAllEmployeeQueryHandler(
-    IRepository<Employee> employeeRepos,
-    IMapper mapper,
-    IUserIdentifierProvider identifierProvider) : IQueryHandler<GetAllEmployeeQuery, OkDynamicPageResponse>
 {
-    public async Task<CTBaseResult<OkDynamicPageResponse>> Handle(GetAllEmployeeQuery request, CancellationToken cancellationToken)
+}
+
+public class GetAllUserQueryHandler(
+    IRepository<User> userRepos,
+    IMapper mapper,
+    IUserIdentifierProvider identifierProvider) : IQueryHandler<GetAllUserQuery, OkDynamicPageResponse>
+{
+    public async Task<CTBaseResult<OkDynamicPageResponse>> Handle(GetAllUserQuery request, CancellationToken cancellationToken)
     {
         var wareId = identifierProvider.WareId;
         var role = identifierProvider.Role;
 
         var queryContext = request.QueryContext;
-        var employeeQuery = employeeRepos.HandleLinqQueryRequestV2(request.QueryContext);
-        if (role is "WAREHOUSE_STAFF")
+        var userQuery = userRepos.HandleLinqQueryRequestV2(request.QueryContext);
+        if (role is "ADMIN")
         {
-            employeeQuery = employeeQuery.Where(x => x.WarehouseId == wareId);
+            userQuery = userQuery
+                .Where(x => x.Role != UserRoles.DEV)
+                .Where(x => x.DeletedOn == null);
         }
 
         var (executeQuery, totalRecords, totalPages) =
-            employeeQuery.HandleLinqQueryPageRequestV2(
+            userQuery.HandleLinqQueryPageRequestV2(
             queryContext,
             queryContext.IsAscending,
             queryContext.OrderBy);
 
         if (queryContext.Populate.Any(e => e.Count(s => s == '.') >= 3))
-            executeQuery = employeeQuery.AsSplitQuery();
+            executeQuery = userQuery.AsSplitQuery();
 
-        var data = await executeQuery.ProjectDynamic<EmployeeDTO>
+        var data = await executeQuery.ProjectDynamic<UserDTO>
             (mapper, new(request.QueryContext.Populate), request.QueryContext.ToCacheKey())
             .ToArrayAsync(cancellationToken);
 

@@ -55,6 +55,7 @@ public class UpdateEmployeeCommandHandler(
         checkEmp.Email = request.Arg.Email ?? checkEmp.Email;
         checkEmp.Address = request.Arg.Address ?? checkEmp.Address;
         checkEmp.Position = request.Arg.Position ?? checkEmp.Position;
+        checkEmp.ModifiedOn = DateTimeOffset.UtcNow;
 
         var ret = await unitOfWork.SaveChangeAsync(cancellationToken);
         if (ret <= 0)

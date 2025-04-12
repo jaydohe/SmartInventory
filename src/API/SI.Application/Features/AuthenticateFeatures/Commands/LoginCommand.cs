@@ -90,7 +90,7 @@ public class LoginCommandValidator : AbstractValidator<LoginCommand>
             .NotEmpty()
             .WithMessage("Login name is required.")
             .MaximumLength(512)
-            .WithMessage("Login name maximum  characters.")
+            .WithMessage("Login Name is too long. Only up to 512 characters.")
             .Must(LoginName => LoginName != null && LoginName.All(c => char.IsLetterOrDigit(c) || c == '-' || c == '_'))
             .WithMessage("Login name can only contain letters, digits, dashes and underscores.");
         RuleFor(e => e.Arg.Password)

@@ -5,6 +5,7 @@ using SI.Domain.Common.Primitives;
 using SI.Domain.ValueObjeSI.Location;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using SI.Domain.Enums;
 
 namespace SI.Domain.Entities;
 
@@ -44,6 +45,8 @@ public class Warehouse : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
     // Sức chứa
     // </summary>
     public int Capacity { get; set; }
+
+    public CommonStatus Status { get; set; } = CommonStatus.ACTIVE;
 
     public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
     public DateTimeOffset? ModifiedOn { get; set; }
