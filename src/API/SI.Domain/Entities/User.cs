@@ -47,7 +47,6 @@ public class User : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
     // </summary>
     public bool IsLogin { get; set; } = true;
 
-    public CommonStatus Status { get; set; } = CommonStatus.ACTIVE;
     public UserRoles Role { get; set; } = UserRoles.WAREHOUSE_STAFF;
 
     public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;

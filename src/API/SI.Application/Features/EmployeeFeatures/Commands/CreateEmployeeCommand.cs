@@ -5,7 +5,6 @@ using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
 using SI.Contract.EmployeeContract;
-using SI.Domain.Common.Authenticate;
 using SI.Domain.Entities;
 
 namespace SI.Application.Features.EmployeeFeatures.Commands;
