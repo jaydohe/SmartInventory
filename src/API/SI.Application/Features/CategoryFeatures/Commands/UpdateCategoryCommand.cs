@@ -31,6 +31,9 @@ public class UpdateCategoryCommandHandler(
         if (!checkValid.IsValid)
             return CTBaseResult.BadRequest(checkValid.Errors);
 
+        if (request.Arg.Name != null && request.Arg.Name.Trim() == "")
+            return CTBaseResult.UnProcess("Name cannot consist only of whitespace.");
+
         var checkCategory = await categoryRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Id == request.Id && x.DeletedOn == null, cancellationToken);
         if (checkCategory is null)
@@ -61,6 +64,6 @@ public class UpdateCategoryCommandValidator : AbstractValidator<UpdateCategoryCo
     {
         RuleFor(e => e.Arg.Name)
             .MaximumLength(512)
-            .WithMessage("Name maximum 512 characters.");
+            .WithMessage("Name is too long. Only up to 512 characters.");
     }
 }

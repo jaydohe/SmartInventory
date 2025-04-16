@@ -6,6 +6,7 @@ using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
 using SI.Contract.EmployeeContract;
 using SI.Domain.Entities;
+using SI.Domain.Enums;
 
 namespace SI.Application.Features.EmployeeFeatures.Commands;
 
@@ -30,6 +31,11 @@ public class CreateEmployeeCommandHandler(
         var checkValid = await request.ValidateAsync(cancellationToken);
         if (!checkValid.IsValid)
             return CTBaseResult.BadRequest(checkValid.Errors);
+
+        if (request.Arg.Gender != GenderTypes.FEMALE &&
+            request.Arg.Gender != GenderTypes.MALE &&
+            request.Arg.Gender != GenderTypes.OTHER)
+            return CTBaseResult.NotFound("Gender Type");
 
         var checkEmp = await employeeRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Name == request.Arg.Name && x.PhoneNumber == request.Arg.PhoneNumber && x.DeletedOn == null, cancellationToken);

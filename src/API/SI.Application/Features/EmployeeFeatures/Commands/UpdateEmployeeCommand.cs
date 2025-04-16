@@ -6,6 +6,7 @@ using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
 using SI.Contract.EmployeeContract;
 using SI.Domain.Entities;
+using SI.Domain.Enums;
 
 namespace SI.Application.Features.EmployeeFeatures.Commands;
 
@@ -30,6 +31,20 @@ public class UpdateEmployeeCommandHandler(
         var checkValid = await request.ValidateAsync(cancellationToken);
         if (!checkValid.IsValid)
             return CTBaseResult.BadRequest(checkValid.Errors);
+
+        if (request.Arg.Name != null && request.Arg.Name.Trim() == "")
+            return CTBaseResult.UnProcess("Name cannot consist only of whitespace.");
+        if (request.Arg.PhoneNumber != null && request.Arg.PhoneNumber.Trim() == "")
+            return CTBaseResult.UnProcess("Phone Number cannot consist only of whitespace.");
+        if (request.Arg.Email != null && request.Arg.Email.Trim() == "")
+            return CTBaseResult.UnProcess("Email cannot consist only of whitespace.");
+        if (request.Arg.Address != null && request.Arg.Address.Trim() == "")
+            return CTBaseResult.UnProcess("Address cannot consist only of whitespace.");
+
+        if (request.Arg.Gender != null && request.Arg.Gender != GenderTypes.FEMALE &&
+            request.Arg.Gender != GenderTypes.MALE &&
+            request.Arg.Gender != GenderTypes.OTHER)
+            return CTBaseResult.NotFound("Gender Type");
 
         var checkEmp = await employeeRepos.BuildQuery
             .Include(e => e.Department)

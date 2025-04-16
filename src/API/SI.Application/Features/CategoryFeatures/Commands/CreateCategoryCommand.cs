@@ -38,7 +38,7 @@ public class CreateCategoryCommandHandler(
 
         var checkCategory = await categoryRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Name == request.Arg.Name && x.CategoryEntityType == request.Arg.CategoryEntityType && x.DeletedOn == null, cancellationToken);
-        if (checkCategory?.Code != null)
+        if (checkCategory != null)
             return CTBaseResult.UnProcess($"Category in {request.Arg.CategoryEntityType} is existed.");
 
         var newCategory = new Category
@@ -65,7 +65,7 @@ public class CreateCategoryCommandValidator : AbstractValidator<CreateCategoryCo
             .NotEmpty()
             .WithMessage("Name is required.")
             .MaximumLength(512)
-            .WithMessage("Name maximum 512 characters.");
+            .WithMessage("Name is too long. Only up to 512 characters.");
         RuleFor(e => e.Arg.CategoryEntityType)
             .NotEmpty()
             .WithMessage("CategoryEntityType is required.");
