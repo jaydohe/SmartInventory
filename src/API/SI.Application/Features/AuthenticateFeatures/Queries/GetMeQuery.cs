@@ -43,11 +43,13 @@ public class GetMeQueryHandler(
         {
             PositionName = getEmployee?.Position?.Name ?? "null",
             UserId = userId,
+            Code = getEmployee?.Code ?? "null",
             Name = getUserId.Name,
             LoginName = getUserId.LoginName,
             WareName = getWareName ?? "null",
             DepartmentName = getEmployee?.Department?.Name ?? "null",
             Gender = getEmployee?.GenderType ?? "null",
+            IsManager = getEmployee?.IsManager,
             PhoneNumber = getEmployee?.PhoneNumber ?? "null",
             Email = getEmployee?.Email ?? "null",
             Address = getEmployee?.Address ?? "null",

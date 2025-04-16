@@ -56,6 +56,7 @@ public class CreateEmployeeCommandHandler(
             Code = request.Arg.Code,
             Name = request.Arg.Name,
             GenderType = request.Arg.Gender,
+            IsManager = request.Arg.IsManager,
             PhoneNumber = request.Arg.PhoneNumber,
             Email = request.Arg.Email,
             Address = request.Arg.Address,

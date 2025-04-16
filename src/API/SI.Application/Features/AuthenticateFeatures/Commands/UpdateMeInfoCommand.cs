@@ -52,9 +52,9 @@ public class UpdateMeInfoCommandHandler(
 
         checkUser.LoginName = request?.Arg.LoginName ?? checkUser.LoginName;
         checkUser.ModifiedOn = DateTimeOffset.UtcNow;
+        checkEmployee.GenderType = request?.Arg.Gender ?? checkEmployee.GenderType;
         checkEmployee.PhoneNumber = request?.Arg.PhoneNumber ?? checkEmployee.PhoneNumber;
         checkEmployee.Email = request?.Arg.Email ?? checkEmployee.Email;
-        checkEmployee.Address = request?.Arg.Address ?? checkEmployee.Address;
         checkEmployee.ModifiedOn = DateTimeOffset.UtcNow;
 
         var ret = await unitOfWork.SaveChangeAsync(cancellationToken);
@@ -80,8 +80,5 @@ public class UpdateAccountInForCommandValidator : AbstractValidator<UpdateMeInfo
         RuleFor(e => e.Arg.Email)
             .MaximumLength(512)
             .WithMessage("Email maximum 512 characters.");
-        RuleFor(e => e.Arg.Address)
-            .MaximumLength(1024)
-            .WithMessage("Address maximum 1024 characters.");
     }
 }
