@@ -167,58 +167,58 @@ public class UserConfiguration() : IEntityTypeConfiguration<User>
     public void Configure(EntityTypeBuilder<User> builder)
     {
         // Seed data
-        //var users = new List<User>
-        //{
-        //    // account dev
-        //    new User("0193e2ce-ee41-7fcb-9b52-5bba105dc0bd")
-        //    {
-        //        Name = "Develop",
-        //        LoginName = "dev0",
-        //        //dev@123
-        //        HashPassword = "27dee27aa573be269f95143a213fe18e29a90e1124b371d280a6c4b88f85f749",
-        //        Role = UserRoles.DEV
-        //    },
-        //    // account admin
-        //    new User("123456789")
-        //    {
-        //        EmployeeId = "bonk",
-        //        Name = "Admin",
-        //        LoginName = "admin0",
-        //        //admin@123
-        //        HashPassword = "7ced44abd56279573d3e9730f7845fd68bb5e1d1b09dee076b066f53ca8e8247",
-        //        Role = UserRoles.ADMIN
-        //    },
-        //    // account staff
-        //    new User("987654321")
-        //    {
-        //        EmployeeId = "hihihaha",
-        //        Name = "Staff test",
-        //        LoginName = "staff1",
-        //        //user@123
-        //        HashPassword = "cfbff703c63d47180b95190dac7b4ca5e04e20af5b3c5ec515e4136710815d84",
-        //        Role = UserRoles.WAREHOUSE_STAFF
-        //    },
-        //    // account producer
-        //    new User("789456123")
-        //    {
-        //        EmployeeId = "bankmiramram",
-        //        Name = "Producer test",
-        //        LoginName = "producer1",
-        //        //user@123
-        //        HashPassword = "cfbff703c63d47180b95190dac7b4ca5e04e20af5b3c5ec515e4136710815d84",
-        //        Role = UserRoles.WAREHOUSE_PRODUCER
-        //    },
-        //    // account salesman
-        //    new User("147894561230")
-        //    {
-        //        EmployeeId = "dainam",
-        //        Name = "Salesman test",
-        //        LoginName = "salesman1",
-        //        //user@123
-        //        HashPassword = "cfbff703c63d47180b95190dac7b4ca5e04e20af5b3c5ec515e4136710815d84",
-        //        Role = UserRoles.SALESMAN
-        //    }
-        //};
-        //builder.HasData(users);
+        var users = new List<User>
+        {
+            // account dev
+            new User("0193e2ce-ee41-7fcb-9b52-5bba105dc0bd")
+            {
+                Name = "Develop",
+                LoginName = "dev0",
+                //dev@123
+                HashPassword = "27dee27aa573be269f95143a213fe18e29a90e1124b371d280a6c4b88f85f749",
+                Role = UserRoles.DEV
+            },
+            // account admin
+            new User("123456789")
+            {
+                EmployeeId = "bonk",
+                Name = "Admin",
+                LoginName = "admin0",
+                //admin@123
+                HashPassword = "7ced44abd56279573d3e9730f7845fd68bb5e1d1b09dee076b066f53ca8e8247",
+                Role = UserRoles.ADMIN
+            },
+            // account staff
+            new User("987654321")
+            {
+                EmployeeId = "hihihaha",
+                Name = "Staff test",
+                LoginName = "staff1",
+                //user@123
+                HashPassword = "cfbff703c63d47180b95190dac7b4ca5e04e20af5b3c5ec515e4136710815d84",
+                Role = UserRoles.WAREHOUSE_STAFF
+            },
+            // account producer
+            new User("789456123")
+            {
+                EmployeeId = "bankmiramram",
+                Name = "Producer test",
+                LoginName = "producer1",
+                //user@123
+                HashPassword = "cfbff703c63d47180b95190dac7b4ca5e04e20af5b3c5ec515e4136710815d84",
+                Role = UserRoles.WAREHOUSE_PRODUCER
+            },
+            // account salesman
+            new User("147894561230")
+            {
+                EmployeeId = "dainam",
+                Name = "Salesman test",
+                LoginName = "salesman1",
+                //user@123
+                HashPassword = "cfbff703c63d47180b95190dac7b4ca5e04e20af5b3c5ec515e4136710815d84",
+                Role = UserRoles.SALESMAN
+            }
+        };
+        builder.HasData(users);
     }
 }

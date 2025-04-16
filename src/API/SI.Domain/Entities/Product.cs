@@ -84,36 +84,36 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.HasIndex(e => e.Code);
 
         // Seed data
-        //var products = new List<Product>
-        //{
-        //    new Product("1") 
-        //    { 
-        //        CategoryId = "2",
-        //        WarehouseId = "choi-da-time",
-        //        Code = "PROD001", 
-        //        Name = "Sản phẩm 1", 
-        //        Description = "Mô tả sản phẩm 1", 
-        //        Unit = "Cái", 
-        //        ProductType = ProductTypes.FINISHED_PRODUCT, 
-        //        PurchasePrice = 1000, 
-        //        SellingPrice = 1200, 
-        //        HoldingCost = 50 
-        //    },
-        //    new Product("2") 
-        //    {
-        //        CategoryId = "2",
-        //        MaterialSupplierId = "bare",
-        //        WarehouseId = "basket",
-        //        Code = "PROD002", 
-        //        Name = "Sản phẩm 2", 
-        //        Description = "Mô tả sản phẩm 2", 
-        //        Unit = "Cái", 
-        //        ProductType = ProductTypes.RAW_MATERIAL, 
-        //        PurchasePrice = 2000, 
-        //        SellingPrice = 2500, 
-        //        HoldingCost = 100 
-        //    }
-        //};
-        //builder.HasData(products);
+        var products = new List<Product>
+        {
+            new Product("1")
+            {
+                CategoryId = "2",
+                WarehouseId = "choi-da-time",
+                Code = "PROD001",
+                Name = "Sản phẩm 1",
+                Description = "Mô tả sản phẩm 1",
+                Unit = "Cái",
+                ProductType = ProductTypes.FINISHED_PRODUCT,
+                PurchasePrice = 1000,
+                SellingPrice = 1200,
+                HoldingCost = 50
+            },
+            new Product("2")
+            {
+                CategoryId = "2",
+                MaterialSupplierId = "bare",
+                WarehouseId = "basket",
+                Code = "PROD002",
+                Name = "Sản phẩm 2",
+                Description = "Mô tả sản phẩm 2",
+                Unit = "Cái",
+                ProductType = ProductTypes.RAW_MATERIAL,
+                PurchasePrice = 2000,
+                SellingPrice = 2500,
+                HoldingCost = 100
+            }
+        };
+        builder.HasData(products);
     }
 }
