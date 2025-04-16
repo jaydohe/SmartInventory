@@ -52,6 +52,7 @@ public class UpdateEmployeeCommandHandler(
         checkEmp.PositionId = request.Arg.PositionId ?? checkEmp.PositionId;
         checkEmp.Name = request.Arg.Name ?? checkEmp.Name;
         checkEmp.GenderType = request.Arg.Gender ?? checkEmp.GenderType;
+        checkEmp.IsManager = request.Arg.IsManager ?? checkEmp.IsManager;
         checkEmp.PhoneNumber = request.Arg.PhoneNumber ?? checkEmp.PhoneNumber;
         checkEmp.Email = request.Arg.Email ?? checkEmp.Email;
         checkEmp.Address = request.Arg.Address ?? checkEmp.Address;
@@ -81,8 +82,5 @@ public class UpdateEmployeeCommandValidator : AbstractValidator<UpdateEmployeeCo
         RuleFor(x => x.Arg.Address)
             .MaximumLength(1024)
             .WithMessage("Address is too long. Only up to 1024 characters.");
-        RuleFor(x => x.Arg.Position)
-            .MaximumLength(512)
-            .WithMessage("Position is too long. Only up to 512 characters.");
     }
 }

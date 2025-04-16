@@ -6,7 +6,6 @@ using CTCore.DynamicQuery.Core.Mediators.Interfaces;
 using CTCore.DynamicQuery.Core.Primitives;
 using CTCore.DynamicQuery.Population;
 using Microsoft.EntityFrameworkCore;
-using SI.Contract.EmployeeContract;
 using SI.Domain.Common.Authenticate;
 using SI.Domain.Entities;
 
@@ -29,9 +28,7 @@ public class GetAllEmployeeQueryHandler(
         var queryContext = request.QueryContext;
         var employeeQuery = employeeRepos.HandleLinqQueryRequestV2(request.QueryContext);
         if (role is "WAREHOUSE_STAFF")
-        {
             employeeQuery = employeeQuery.Where(x => x.WarehouseId == wareId);
-        }
 
         var (executeQuery, totalRecords, totalPages) =
             employeeQuery.HandleLinqQueryPageRequestV2(
@@ -42,7 +39,7 @@ public class GetAllEmployeeQueryHandler(
         if (queryContext.Populate.Any(e => e.Count(s => s == '.') >= 3))
             executeQuery = employeeQuery.AsSplitQuery();
 
-        var data = await executeQuery.ProjectDynamic<EmployeeDTO>
+        var data = await executeQuery.ProjectDynamic<Employee>
             (mapper, new(request.QueryContext.Populate), request.QueryContext.ToCacheKey())
             .ToArrayAsync(cancellationToken);
 

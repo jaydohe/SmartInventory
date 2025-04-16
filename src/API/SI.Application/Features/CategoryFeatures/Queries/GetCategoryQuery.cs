@@ -9,28 +9,28 @@ using CTCore.DynamicQuery.Population.Public.Descriptors;
 using Microsoft.EntityFrameworkCore;
 using SI.Domain.Entities;
 
-namespace SI.Application.Features.EmployeeFeatures.Queries;
+namespace SI.Application.Features.CategoryFeatures.Queries;
 
-public class GetEmployeeQuery(string id, QueryRequestV3 query)
+public class GetCategoryQuery(string id, QueryRequestV3 query)
     : CTBaseQuery<string, QueryRequestV3, OkDynamicResponse>(id, query)
 { }
 
-public class GetEmployeeQueryHandler(
-    IRepository<Employee> employeeRepos,
-    IMapper mapper) : IQueryHandler<GetEmployeeQuery, OkDynamicResponse>
+public class GetCategoryQueryHandler(
+    IRepository<Category> categoryRepos,
+    IMapper mapper) : IQueryHandler<GetCategoryQuery, OkDynamicResponse>
 {
-    public async Task<CTBaseResult<OkDynamicResponse>> Handle(GetEmployeeQuery request, CancellationToken cancellationToken)
+    public async Task<CTBaseResult<OkDynamicResponse>> Handle(GetCategoryQuery request, CancellationToken cancellationToken)
     {
         QueryRequestV3 queryContext = request.QueryContext;
-        var employee = await employeeRepos.HandleLinqQueryRequestV2(queryContext)
+        var category = await categoryRepos.HandleLinqQueryRequestV2(queryContext)
             .Where(e => e.Id == request.Id)
-            .ProjectDynamic<Employee>(mapper,
+            .ProjectDynamic<Category>(mapper,
                 new PopulateDescriptor(queryContext.Populate),
                 queryContext.ToCacheKey())
             .FirstOrDefaultAsync(cancellationToken);
-        if (employee is null)
-            return CTBaseResult.NotFound("Employee");
+        if (category is null)
+            return CTBaseResult.NotFound("Category");
 
-        return CTBaseResult.Success(employee);
+        return CTBaseResult.Success(category);
     }
 }

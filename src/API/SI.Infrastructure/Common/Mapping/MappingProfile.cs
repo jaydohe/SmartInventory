@@ -1,5 +1,4 @@
 using AutoMapper;
-using SI.Contract.EmployeeContract;
 using SI.Contract.UserContract;
 using SI.Domain.Entities;
 
@@ -11,7 +10,5 @@ public class MappingProfile : Profile
     {
         CreateMap<User, UserDTO>()
             .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role.ToString()));
-
-        CreateMap<Employee, EmployeeDTO>();
     }
 }
