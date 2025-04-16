@@ -1,5 +1,4 @@
-﻿using DocumentFormat.OpenXml.ExtendedProperties;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SI.Domain.Common.Abstractions;
 using SI.Domain.Common.Primitives;
@@ -32,13 +31,6 @@ public class Employee : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
 
     [ForeignKey(nameof(Position))]
     public string? PositionId { get; set; }
-
-    // <summary>
-    // Id của người quản lý (Quản lý kho không cần nhập))
-    // </summary>
-    [ForeignKey(nameof(Manager))]
-    public string? ManagerId { get; set; }
-
 
     // <summary>
     // Mã nhân viên
@@ -92,7 +84,6 @@ public class Employee : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
     public virtual Province? Province { get; set; }
     public virtual Warehouse? Warehouse { get; set; }
     public virtual Position? Position { get; set; }
-    public virtual Employee? Manager { get; set; }
 
     public Employee(string id) : base(id) { }
     public Employee() : base() { }
@@ -132,6 +123,7 @@ public class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
                 Code = "MANAGER01",
                 Name = "Nguyễn Văn A",
                 GenderType = GenderTypes.OTHER,
+                IsManager = true,
                 PhoneNumber = "0123456789",
                 Email = "VanA@gmail.com",
                 Address = "Hà Nội",
@@ -146,10 +138,10 @@ public class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
                 DistrictId = "1",
                 ProvinceId = "1",
                 PositionId = "5",
-                ManagerId = "hihihaha",
                 Code = "EMPLOYEE01",
                 Name = "Nguyễn Văn B",
                 GenderType = GenderTypes.MALE,
+                IsManager = false,
                 PhoneNumber = "0123456987",
                 Email = "VanB@gmail.com",
                 Address = "Hà Nội",
@@ -167,6 +159,7 @@ public class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
                 Code = "EMPLOYEE02",
                 Name = "Nguyễn Văn D",
                 GenderType = GenderTypes.OTHER,
+                IsManager = true,
                 PhoneNumber = "0123457953",
                 Email = "VanD@gmail.com",
                 Address = "Hà Nội",
@@ -184,6 +177,7 @@ public class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
                 Code = "EMPLOYEE03",
                 Name = "Nguyễn Văn E",
                 GenderType = GenderTypes.MALE,
+                IsManager = false,
                 PhoneNumber = "012548756",
                 Email = "VanE@gmail.com",
                 Address = "Hà Nội",
