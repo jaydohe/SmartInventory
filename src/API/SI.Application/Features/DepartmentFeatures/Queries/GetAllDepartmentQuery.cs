@@ -9,38 +9,39 @@ using Microsoft.EntityFrameworkCore;
 using SI.Domain.Common.Authenticate;
 using SI.Domain.Entities;
 
-namespace SI.Application.Features.CategoryFeatures.Queries;
+namespace SI.Application.Features.DepartmentFeatures.Queries;
 
-public class GetAllCategoryQuery(QueryPageRequestV3 query)
+public class GetAllDepartmentQuery(QueryPageRequestV3 query)
     : CTBaseQuery<QueryPageRequestV3, OkDynamicPageResponse>(query)
-{ }
-
-public class GetAllCategoryQueryHandler(
-    IRepository<Category> repository,
-    IMapper mapper,
-    IUserIdentifierProvider identifierProvider) : IQueryHandler<GetAllCategoryQuery, OkDynamicPageResponse>
 {
-    public async Task<CTBaseResult<OkDynamicPageResponse>> Handle(GetAllCategoryQuery request, CancellationToken cancellationToken)
+}
+
+public class GetAllDepartmentQueryHandler(
+    IRepository<Department> repository,
+    IMapper mapper,
+    IUserIdentifierProvider identifierProvider) : IQueryHandler<GetAllDepartmentQuery, OkDynamicPageResponse>
+{
+    public async Task<CTBaseResult<OkDynamicPageResponse>> Handle(GetAllDepartmentQuery request, CancellationToken cancellationToken)
     {
         var role = identifierProvider.Role;
 
         var queryContext = request.QueryContext;
-        var categoryQuery = repository.HandleLinqQueryRequestV2(request.QueryContext);
+        var departmentQuery = repository.HandleLinqQueryRequestV2(request.QueryContext);
         if (role is "WAREHOUSE_STAFF")
         {
-            categoryQuery = categoryQuery
+            departmentQuery = departmentQuery
                 .Where(x => x.DeletedOn == null);
         }
 
         var (executeQuery, totalRecords, totalPages) =
-            categoryQuery.HandleLinqQueryPageRequestV2(
+            departmentQuery.HandleLinqQueryPageRequestV2(
             queryContext,
             queryContext.IsAscending,
             queryContext.OrderBy);
         if (queryContext.Populate.Any(e => e.Count(s => s == '.') >= 3))
-            executeQuery = categoryQuery.AsSplitQuery();
+            executeQuery = departmentQuery.AsSplitQuery();
 
-        var data = await executeQuery.ProjectDynamic<Category>
+        var data = await executeQuery.ProjectDynamic<Department>
             (mapper, new(request.QueryContext.Populate), request.QueryContext.ToCacheKey())
             .ToArrayAsync(cancellationToken);
 
