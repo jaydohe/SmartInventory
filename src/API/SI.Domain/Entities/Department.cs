@@ -9,6 +9,12 @@ namespace SI.Domain.Entities;
 public class Department : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
 {
     // <summary>
+    // Mã phòng ban
+    // </summary>
+    [StringLength(100)]
+    public string Code { get; set; } = null!;
+
+    // <summary>
     // Tên phòng ban
     // </summary>
     [StringLength(1024)]
@@ -27,18 +33,27 @@ public class DepartmentConfiguration() : IEntityTypeConfiguration<Department>
 {
     public void Configure(EntityTypeBuilder<Department> builder)
     {
-        var newDepartment1 = new Department("huhuhu")
+        builder.HasIndex(e => e.Code);
+
+        // Seed data
+        var departments = new List<Department>
         {
-            Name = "Bộ phận quản lý kho"
+            new Department("huhuhu")
+            {
+                Code = "DEPART001",
+                Name = "Bộ phận quản lý kho"
+            },
+            new Department("sugar-town")
+            {
+                Code = "DEPART002",
+                Name = "Bộ phận quản lý sản xuất"
+            },
+            new Department("parrot-smell")
+            {
+                Code = "DEPART003",
+                Name = "Bộ phận quản lý bán hàng"
+            }
         };
-        var newDepartment2 = new Department("sugar-town")
-        {
-            Name = "Bộ phận quản lý sản xuất"
-        };
-        var newDepartment3 = new Department("parrot-smell")
-        {
-            Name = "Bộ phận quản lý bán hàng"
-        };
-        builder.HasData([newDepartment1, newDepartment2, newDepartment3]);
+        builder.HasData(departments);
     }
 }

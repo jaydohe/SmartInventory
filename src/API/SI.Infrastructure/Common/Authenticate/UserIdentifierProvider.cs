@@ -26,6 +26,11 @@ public class UserIdentitfierProvider(IHttpContextAccessor httpContextAccessor) :
                 .Select(c => c.Value)
                 .First()!;
 
+    public string PositionId => httpContextAccessor.HttpContext?.User.Claims
+                ?.Where(c => c.Type == "positionId")
+                .Select(c => c.Value)
+                .First()!;
+
 
     // public bool IsClerical => bool.Parse(httpContextAccessor.HttpContext?.User.Claims
     //             ?.Where(c => c.Type == "IsClerical")

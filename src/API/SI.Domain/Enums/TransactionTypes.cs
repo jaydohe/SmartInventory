@@ -1,19 +1,19 @@
 ﻿namespace SI.Domain.Enums;
 
-public enum TransactionTypes
+public readonly struct TransactionTypes
 {
     // <summary>
     // Nhập kho
     // </summary>
-    IMPORT = 0,
+    public const string IMPORT = "IMPORT";
 
     // <summary>
     // Xuất kho
     // </summary>
-    EXPORT = 1,
+    public const string EXPORT = "IMPORT";
 
     // <summary>
     // Điều chỉnh số lượng tồn kho
     // </summary>
-    ADJUST = 2
+    public const string ADJUST = "IMPORT";
 }

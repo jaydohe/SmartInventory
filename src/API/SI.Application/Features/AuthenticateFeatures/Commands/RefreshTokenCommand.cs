@@ -25,7 +25,6 @@ public class RefreshTokenCommand(RefreshArg arg) : ICommand<OkDynamicResponse>
 public class RefreshTokenCommandHandler(
     IUnitOfWork unitOfWork,
     JWTTokenHelper jWTTokenHelper,
-    IEnumerable<IUnitOfWork> unitOfWorks,
     IHttpContextAccessor httpContext,
     IRepository<User> userRepos,
     IRepository<TokenStore> tokenRepos) : ICommandHandler<RefreshTokenCommand, OkDynamicResponse>

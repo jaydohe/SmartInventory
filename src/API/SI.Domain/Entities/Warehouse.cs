@@ -29,6 +29,14 @@ public class Warehouse : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
     [ForeignKey(nameof(Province))]
     public string ProvinceId { get; set; } = null!;
 
+    [ForeignKey(nameof(Category))]
+    public string? CategoryId { get; set; }
+
+    // <summary>
+    // Mã kho
+    // </summary>
+    public string Code { get; set; } = null!;
+
     // <summary>
     // Tên kho
     // </summary>
@@ -57,6 +65,7 @@ public class Warehouse : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
     public virtual Ward? Ward { get; set; }
     public virtual District? District { get; set; }
     public virtual Province? Province { get; set; }
+    public virtual Category? Category { get; set; }
     public virtual ICollection<Warehouse>? SlaveWarehouses { get; set; }
     public virtual ICollection<Employee>? Employees { get; set; }
 
@@ -68,39 +77,12 @@ public class WarehouseConfiguration() : IEntityTypeConfiguration<Warehouse>
 {
     public void Configure(EntityTypeBuilder<Warehouse> builder)
     {
-        // Configure primary key and table
-        builder.HasKey(w => w.Id);
-        builder.ToTable("Warehouse");
-
         // Configure relationship with Manager (Employee)
         builder.HasOne(w => w.Manager)
                .WithMany()
                .HasForeignKey(w => w.ManagerId)
                .IsRequired(false)  // ManagerId can be null
                .OnDelete(DeleteBehavior.SetNull);
-
-        // Configure relationship with master warehouse
-        builder.HasOne(w => w.MasterWarehouse)
-               .WithMany(w => w.SlaveWarehouses)
-               .HasForeignKey(w => w.WarehouseId)
-               .IsRequired(false)  // WarehouseId can be null
-               .OnDelete(DeleteBehavior.Restrict);
-
-        // Configure relationships with location entities
-        builder.HasOne(w => w.Ward)
-               .WithMany()
-               .HasForeignKey(w => w.WardId)
-               .IsRequired();
-
-        builder.HasOne(w => w.District)
-               .WithMany()
-               .HasForeignKey(w => w.DistrictId)
-               .IsRequired();
-
-        builder.HasOne(w => w.Province)
-               .WithMany()
-               .HasForeignKey(w => w.ProvinceId)
-               .IsRequired();
 
         // Configure relationship with employees
         builder.HasMany(w => w.Employees)
@@ -109,16 +91,32 @@ public class WarehouseConfiguration() : IEntityTypeConfiguration<Warehouse>
                .IsRequired(false);
 
         // Seed data
-        var newWare = new Warehouse("choi-da-time")
+        var warehouses = new List<Warehouse>
         {
-            ManagerId = "hihihaha",
-            WardId = "1",
-            DistrictId = "1",
-            ProvinceId = "1",
-            Name = "Jellyjellyjelly",
-            Address = "123 ham tu",
-            Capacity = 999
+            new Warehouse("choi-da-time")
+            {
+                CategoryId = "1",
+                //ManagerId = "hihihaha",
+                Code = "CDT001",
+                WardId = "1",
+                DistrictId = "1",
+                ProvinceId = "1",
+                Name = "Jellyjellyjelly",
+                Address = "123 ham tu",
+                Capacity = 999
+            },
+            new Warehouse("basket")
+            {
+                CategoryId = "3",
+                WardId = "1",
+                DistrictId = "1",
+                ProvinceId = "1",
+                Code = "BASKET001",
+                Name = "Basket",
+                Address = "123 ham tu",
+                Capacity = 999
+            }
         };
-        builder.HasData(newWare);
+        builder.HasData(warehouses);
     }
 }

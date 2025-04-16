@@ -1,4 +1,6 @@
-﻿using SI.Domain.Common.Abstractions;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SI.Domain.Common.Abstractions;
 using SI.Domain.Common.Primitives;
 using SI.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
@@ -56,4 +58,12 @@ public class GoodsIssue : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
     public virtual Warehouse? Warehouse { get; set; }
     public virtual Agency? Agency { get; set; }
     public virtual ICollection<GoodsIssueDetail>? GoodsIssueDetails { get; set; }
+}
+
+public class GoodsIssueConfiguration : IEntityTypeConfiguration<GoodsIssue>
+{
+    public void Configure(EntityTypeBuilder<GoodsIssue> builder)
+    {
+        builder.HasIndex(x => x.Code);
+    }
 }

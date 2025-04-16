@@ -42,12 +42,6 @@ public class CreateUserCommandHandler(
         if (userRole == UserRoles.DEV || userRole == UserRoles.ADMIN)
             return CTBaseResult.UnProcess("User Role is not allowed.");
 
-        if (userRole == UserRoles.WAREHOUSE_STAFF || userRole == UserRoles.WAREHOUSE_PRODUCER)
-        {
-            if (request.Arg.WarehouseId == null)
-                return CTBaseResult.UnProcess("WarehouseId is required.");
-        }
-
         if (request.Arg.LoginName == null)
             return CTBaseResult.UnProcess("Login Name is required.");
 
@@ -72,7 +66,6 @@ public class CreateUserCommandHandler(
 
         var newUser = new User
         {
-            WarehouseId = request.Arg.WarehouseId,
             EmployeeId = request.Arg.EmployeeId,
             Name = checkEmp.Name,
             LoginName = request.Arg.LoginName,

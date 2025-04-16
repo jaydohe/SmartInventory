@@ -6,4 +6,5 @@ public interface IUserIdentifierProvider
     public string WareId { get; }
     public string Role {  get; }
     public string Name { get; }
+    public string PositionId { get; }
 }

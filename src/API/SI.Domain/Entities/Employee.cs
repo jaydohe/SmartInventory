@@ -1,7 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DocumentFormat.OpenXml.ExtendedProperties;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SI.Domain.Common.Abstractions;
 using SI.Domain.Common.Primitives;
+using SI.Domain.Enums;
 using SI.Domain.ValueObjeSI.Location;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -28,6 +30,22 @@ public class Employee : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
     [ForeignKey(nameof(Warehouse))]
     public string? WarehouseId { get; set; }
 
+    [ForeignKey(nameof(Position))]
+    public string? PositionId { get; set; }
+
+    // <summary>
+    // Id của người quản lý (Quản lý kho không cần nhập))
+    // </summary>
+    [ForeignKey(nameof(Manager))]
+    public string? ManagerId { get; set; }
+
+
+    // <summary>
+    // Mã nhân viên
+    // </summary>
+    [StringLength(100)]
+    public string Code { get; set; } = null!;
+
     // <summary>
     // Tên nhân viên
     // </summary>
@@ -35,9 +53,11 @@ public class Employee : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
     public string Name { get; set; } = null!;
 
     // <summary>
-    // Giới tính true = 1 = nam, false = 0 = nữ
+    // Giới tính
     // </summary>
-    public bool IsMale { get; set; } = true;
+    public string GenderType { get; set; } = string.Empty;
+
+    public bool? IsManager { get; set; }
 
     // <summary>
     // Số điện thoại
@@ -58,12 +78,6 @@ public class Employee : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
     public string Address { get; set; } = null!;
 
     // <summary>
-    // Chức vụ
-    // </summary>
-    [StringLength(512)]
-    public string Position { get; set; } = null!;
-
-    // <summary>
     // Ngày vào làm
     // </summary>
     public DateTime DateHired { get; set; }
@@ -77,6 +91,8 @@ public class Employee : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
     public virtual District? District { get; set; }
     public virtual Province? Province { get; set; }
     public virtual Warehouse? Warehouse { get; set; }
+    public virtual Position? Position { get; set; }
+    public virtual Employee? Manager { get; set; }
 
     public Employee(string id) : base(id) { }
     public Employee() : base() { }
@@ -85,78 +101,95 @@ public class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
 {
     public void Configure(EntityTypeBuilder<Employee> builder)
     {
-        var admin1 = new Employee("bonk")
+        builder.HasIndex(e => e.Code);
+
+        // Seed data
+        var employees = new List<Employee>
         {
-            WardId = "1",
-            DistrictId = "1",
-            ProvinceId = "1",
-            Name = "Nguyễn Văn C",
-            IsMale = true,
-            PhoneNumber = "7894561230",
-            Email = "VanC@gmail.com",
-            Address = "Hà Nội",
-            Position = "Giám đốc công ty",
-            DateHired = DateTime.Now
+            // Giám đốc
+            new Employee("bonk")
+            {
+                WardId = "1",
+                DistrictId = "1",
+                ProvinceId = "1",
+                PositionId = "1",
+                Code = "ADMIN01",
+                Name = "Nguyễn Văn C",
+                GenderType = GenderTypes.FEMALE,
+                PhoneNumber = "7894561230",
+                Email = "VanC@gmail.com",
+                Address = "Hà Nội",
+                DateHired = DateTime.Now
+            },
+            // Quản lý kho
+            new Employee("hihihaha")
+            {
+                DepartmentId = "huhuhu",
+                WardId = "1",
+                DistrictId = "1",
+                ProvinceId = "1",
+                PositionId = "4",
+                Code = "MANAGER01",
+                Name = "Nguyễn Văn A",
+                GenderType = GenderTypes.OTHER,
+                PhoneNumber = "0123456789",
+                Email = "VanA@gmail.com",
+                Address = "Hà Nội",
+                DateHired = DateTime.Now,
+                WarehouseId = "choi-da-time"
+            },
+            // Nhân viên kho
+            new Employee("hihihaharamram")
+            {
+                DepartmentId = "huhuhu",
+                WardId = "1",
+                DistrictId = "1",
+                ProvinceId = "1",
+                PositionId = "5",
+                ManagerId = "hihihaha",
+                Code = "EMPLOYEE01",
+                Name = "Nguyễn Văn B",
+                GenderType = GenderTypes.MALE,
+                PhoneNumber = "0123456987",
+                Email = "VanB@gmail.com",
+                Address = "Hà Nội",
+                DateHired = DateTime.Now,
+                WarehouseId = "choi-da-time"
+            },
+            // Quản lý sản xuất
+            new Employee("bankmiramram")
+            {
+                DepartmentId = "sugar-town",
+                WardId = "1",
+                DistrictId = "1",
+                ProvinceId = "1",
+                PositionId = "6",
+                Code = "EMPLOYEE02",
+                Name = "Nguyễn Văn D",
+                GenderType = GenderTypes.OTHER,
+                PhoneNumber = "0123457953",
+                Email = "VanD@gmail.com",
+                Address = "Hà Nội",
+                DateHired = DateTime.Now,
+                WarehouseId = "choi-da-time"
+            },
+            // Nhân viên bán hàng
+            new Employee("dainam")
+            {
+                DepartmentId = "parrot-smell",
+                WardId = "1",
+                DistrictId = "1",
+                ProvinceId = "1",
+                PositionId = "7",
+                Code = "EMPLOYEE03",
+                Name = "Nguyễn Văn E",
+                GenderType = GenderTypes.MALE,
+                PhoneNumber = "012548756",
+                Email = "VanE@gmail.com",
+                Address = "Hà Nội",
+                DateHired = DateTime.Now
+            }
         };
-        var manager2 = new Employee("hihihaha")
-        {
-            DepartmentId = "huhuhu",
-            WardId = "1",
-            DistrictId = "1",
-            ProvinceId = "1",
-            Name = "Nguyễn Văn A",
-            IsMale = true,
-            PhoneNumber = "0123456789",
-            Email = "VanA@gmail.com",
-            Address = "Hà Nội",
-            Position = "Quản lý kho",
-            DateHired = DateTime.Now,
-            WarehouseId = "choi-da-time"
-        };
-        var employee3 = new Employee("hihihaharamram")
-        {
-            DepartmentId = "huhuhu",
-            WardId = "1",
-            DistrictId = "1",
-            ProvinceId = "1",
-            Name = "Nguyễn Văn B",
-            IsMale = true,
-            PhoneNumber = "0123456987",
-            Email = "VanB@gmail.com",
-            Address = "Hà Nội",
-            Position = "Nhân viên kho",
-            DateHired = DateTime.Now,
-            WarehouseId = "choi-da-time"
-        };
-        var employee4 = new Employee("bankmiramram")
-        {
-            DepartmentId = "sugar-town",
-            WardId = "1",
-            DistrictId = "1",
-            ProvinceId = "1",
-            Name = "Nguyễn Văn D",
-            IsMale = true,
-            PhoneNumber = "0123457953",
-            Email = "VanD@gmail.com",
-            Address = "Hà Nội",
-            Position = "Quản lý sản xuất",
-            DateHired = DateTime.Now,
-            WarehouseId = "choi-da-time"
-        };
-        var employee5 = new Employee("dainam")
-        {
-            DepartmentId = "parrot-smell",
-            WardId = "1",
-            DistrictId = "1",
-            ProvinceId = "1",
-            Name = "Nguyễn Văn E",
-            IsMale = true,
-            PhoneNumber = "012548756",
-            Email = "VanE@gmail.com",
-            Address = "Hà Nội",
-            Position = "Nhân viên bán hàng",
-            DateHired = DateTime.Now
-        };
-        builder.HasData([admin1, manager2, employee3, employee4, employee5]);
+        builder.HasData(employees);
     }
 }

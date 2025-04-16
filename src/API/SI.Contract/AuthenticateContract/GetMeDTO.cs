@@ -2,6 +2,8 @@
 
 public class GetMeArg
 {
+    public string? PositionId { get; set; }
+    public string? PositionName { get; set; }
     public string UserId { get; set; } = null!;
     public string Name { get; set; } = null!;
     public string LoginName { get; set; } = null!;
@@ -13,6 +15,5 @@ public class GetMeArg
     public string? PhoneNumber { get; set; }
     public string? Email { get; set; }
     public string? Address { get; set; }
-    public string? Position { get; set; }
     public string? DateHired { get; set; }
 }

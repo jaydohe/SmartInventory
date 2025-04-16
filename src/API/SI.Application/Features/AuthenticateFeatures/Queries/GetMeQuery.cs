@@ -41,16 +41,16 @@ public class GetMeQueryHandler(
 
         var result = new GetMeArg
         {
+            PositionName = getEmployee?.Position?.Name ?? "null",
             UserId = userId,
             Name = getUserId.Name,
             LoginName = getUserId.LoginName,
             WareName = getWareName ?? "null",
             DepartmentName = getEmployee?.Department?.Name ?? "null",
-            Gender = getEmployee.IsMale ? "Male" : "Female",
+            Gender = getEmployee?.GenderType ?? "null",
             PhoneNumber = getEmployee?.PhoneNumber ?? "null",
             Email = getEmployee?.Email ?? "null",
             Address = getEmployee?.Address ?? "null",
-            Position = getEmployee?.Position ?? "null",
             DateHired = getEmployee?.DateHired.ToString() ?? "null"
         };
 

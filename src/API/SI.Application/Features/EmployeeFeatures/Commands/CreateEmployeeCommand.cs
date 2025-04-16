@@ -22,7 +22,8 @@ public class CreateEmployeeCommand(CreateEmployeeArg arg) : ICommand<OkResponse>
 public class CreateEmployeeCommandHandler(
     IUnitOfWork unitOfWork,
     IRepository<Employee> employeeRepos,
-    IRepository<Department> departmentRepos) : ICommandHandler<CreateEmployeeCommand, OkResponse>
+    IRepository<Department> departmentRepos,
+    IRepository<Position> positionRepos) : ICommandHandler<CreateEmployeeCommand, OkResponse>
 {
     public async Task<CTBaseResult<OkResponse>> Handle(CreateEmployeeCommand request, CancellationToken cancellationToken)
     {
@@ -40,18 +41,24 @@ public class CreateEmployeeCommandHandler(
         if (checkDepartment is null)
             return CTBaseResult.NotFound("Department");
 
+        var checkPosition = await positionRepos.BuildQuery
+            .FirstOrDefaultAsync(x => x.Id == request.Arg.PositionId && x.DeletedOn == null, cancellationToken);
+        if (checkPosition is null)
+            return CTBaseResult.NotFound("Position");
+
         var newEmp = new Employee
         {
+            PositionId = request.Arg.PositionId,
             DepartmentId = request.Arg.DepartmentId,
             WardId = request.Arg.WardId,
             DistrictId = request.Arg.DistrictId,
             ProvinceId = request.Arg.ProvinceId,
+            Code = request.Arg.Code,
             Name = request.Arg.Name,
-            IsMale = request.Arg.IsMale,
+            GenderType = request.Arg.Gender,
             PhoneNumber = request.Arg.PhoneNumber,
             Email = request.Arg.Email,
             Address = request.Arg.Address,
-            Position = request.Arg.Position,
             DateHired = request.Arg.DateHired
         };
         employeeRepos.Add(newEmp);
@@ -68,6 +75,11 @@ public class CreateEmployeeCommandValidator : AbstractValidator<CreateEmployeeCo
 {
     public CreateEmployeeCommandValidator()
     {
+        RuleFor(x => x.Arg.Code)
+            .NotEmpty()
+            .WithMessage("Code is required.")
+            .MaximumLength(100)
+            .WithMessage("Code is too long. Only up to 100 characters.");
         RuleFor(x => x.Arg.Name)
             .NotEmpty()
             .WithMessage("Name is required.")
@@ -88,10 +100,5 @@ public class CreateEmployeeCommandValidator : AbstractValidator<CreateEmployeeCo
             .WithMessage("Address is required.")
             .MaximumLength(1024)
             .WithMessage("Address is too long. Only up to 1024 characters.");
-        RuleFor(x => x.Arg.Position)
-            .NotEmpty()
-            .WithMessage("Position is required.")
-            .MaximumLength(512)
-            .WithMessage("Position is too long. Only up to 512 characters.");
     }
 }

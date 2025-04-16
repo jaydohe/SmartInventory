@@ -1,0 +1,39 @@
+services:
+  api-service:
+    build:
+      context: ./API
+      dockerfile: Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT:-Production}
+      - S3_ACCESS_KEY=${admin}
+      - S3_SECRET_KEY=${S3_SECRET_KEY:-yourStrongPassword}
+    networks:
+      - s-net
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    restart: always
+    ports:
+      - "127.0.0.1:7079:8080"
+
+  si-fe:
+    build:
+      context: ./FE-SmartInventory
+      dockerfile: Dockerfile
+      args:
+        - BUILD_COMMAND=${BUILD_COMMAND:-deploy}
+    networks:
+      - s-net
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    restart: always
+    ports:
+      - 127.0.0.1:7080:3000
+
+networks:
+  s-net:

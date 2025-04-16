@@ -49,12 +49,12 @@ public class UpdateEmployeeCommandHandler(
         checkEmp.WardId = request.Arg.WardId ?? checkEmp.WardId;
         checkEmp.DistrictId = request.Arg.DistrictId ?? checkEmp.DistrictId;
         checkEmp.ProvinceId = request.Arg.ProvinceId ?? checkEmp.ProvinceId;
+        checkEmp.PositionId = request.Arg.PositionId ?? checkEmp.PositionId;
         checkEmp.Name = request.Arg.Name ?? checkEmp.Name;
-        checkEmp.IsMale = request.Arg.IsMale ?? checkEmp.IsMale;
+        checkEmp.GenderType = request.Arg.Gender ?? checkEmp.GenderType;
         checkEmp.PhoneNumber = request.Arg.PhoneNumber ?? checkEmp.PhoneNumber;
         checkEmp.Email = request.Arg.Email ?? checkEmp.Email;
         checkEmp.Address = request.Arg.Address ?? checkEmp.Address;
-        checkEmp.Position = request.Arg.Position ?? checkEmp.Position;
         checkEmp.ModifiedOn = DateTimeOffset.UtcNow;
 
         var ret = await unitOfWork.SaveChangeAsync(cancellationToken);

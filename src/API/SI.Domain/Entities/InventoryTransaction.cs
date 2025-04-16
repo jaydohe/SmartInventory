@@ -20,7 +20,10 @@ public class InventoryTransaction : AggregateRoot, IAuditableEntity, ISoftDeleta
     // </summary>
     public int Quantity { get; set; }
 
-    public TransactionTypes Type { get; set; }
+    // <summary>
+    // Loại giao dịch
+    // </summary>
+    public string TransactionType { get; set; } = string.Empty;
 
     public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
     public DateTimeOffset? ModifiedOn { get; set; }

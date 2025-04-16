@@ -1,5 +1,8 @@
-﻿using SI.Domain.Common.Abstractions;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SI.Domain.Common.Abstractions;
 using SI.Domain.Common.Primitives;
+using SI.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -16,17 +19,19 @@ public class Product : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
     [ForeignKey(nameof(Warehouse))]
     public string WarehouseId { get; set; } = null!;
 
+    [ForeignKey(nameof(Category))]
+    public string CategoryId { get; set; } = null!;
+
+    // <summary>
+    // Mã sản phẩm
+    // </summary>
+    public string Code { get; set; } = null!;
+
     // <summary>
     // Tên sản phẩm
     // </summary>
     [StringLength(1024)]
     public string Name { get; set; } = null!;
-
-    // <summary>
-    // Mã sản phẩm
-    // </summary>
-    [StringLength(512)]
-    public string Code { get; set; } = null!;
 
     // <summary>
     // Mô tả sản phẩm
@@ -41,14 +46,19 @@ public class Product : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
     public string Unit { get; set; } = null!;
 
     // <summary>
-    // Giá sản phẩm
+    // Loại sản phẩm
     // </summary>
-    public decimal Price { get; set; }
+    public string ProductType { get; set; } = string.Empty;
 
     // <summary>
-    // Chi phí sản xuất / Giá nhập hàng
+    // Giá mua
     // </summary>
-    public decimal ProductionCost { get; set; }
+    public decimal PurchasePrice { get; set; }
+
+    // <summary>
+    // Giá bán
+    // </summary>
+    public decimal SellingPrice { get; set; }
 
     // <summary>
     // Chi phí lưu kho
@@ -61,4 +71,49 @@ public class Product : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
 
     public virtual MaterialSupplier? MaterialSupplier { get; set; }
     public virtual Warehouse? Warehouse { get; set; }
+    public virtual Category? Category { get; set; }
+
+    public Product(string id) : base(id) { }
+    public Product() : base() { }
+}
+
+public class ProductConfiguration : IEntityTypeConfiguration<Product>
+{
+    public void Configure(EntityTypeBuilder<Product> builder)
+    {
+        builder.HasIndex(e => e.Code);
+
+        // Seed data
+        //var products = new List<Product>
+        //{
+        //    new Product("1") 
+        //    { 
+        //        CategoryId = "2",
+        //        WarehouseId = "choi-da-time",
+        //        Code = "PROD001", 
+        //        Name = "Sản phẩm 1", 
+        //        Description = "Mô tả sản phẩm 1", 
+        //        Unit = "Cái", 
+        //        ProductType = ProductTypes.FINISHED_PRODUCT, 
+        //        PurchasePrice = 1000, 
+        //        SellingPrice = 1200, 
+        //        HoldingCost = 50 
+        //    },
+        //    new Product("2") 
+        //    {
+        //        CategoryId = "2",
+        //        MaterialSupplierId = "bare",
+        //        WarehouseId = "basket",
+        //        Code = "PROD002", 
+        //        Name = "Sản phẩm 2", 
+        //        Description = "Mô tả sản phẩm 2", 
+        //        Unit = "Cái", 
+        //        ProductType = ProductTypes.RAW_MATERIAL, 
+        //        PurchasePrice = 2000, 
+        //        SellingPrice = 2500, 
+        //        HoldingCost = 100 
+        //    }
+        //};
+        //builder.HasData(products);
+    }
 }

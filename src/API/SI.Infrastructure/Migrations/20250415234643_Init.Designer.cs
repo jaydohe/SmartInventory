@@ -11,7 +11,7 @@ using SI.Infrastructure.Persistence;
 namespace SI.Infrastructure.Migrations
 {
     [DbContext(typeof(SIDbContext))]
-    [Migration("20250411212624_Init")]
+    [Migration("20250415234643_Init")]
     partial class Init
     {
         /// <inheritdoc />

@@ -37,6 +37,7 @@ public class SIDbContext : DbContext
     public DbSet<Agency> Agencies { get; set; }
     public DbSet<BillOfMaterial> BillOfMaterials { get; set; }
     public DbSet<BillOfMaterialDetail> BillOfMaterialDetails { get; set; }
+    public DbSet<Category> Categories { get; set; }
     public DbSet<Department> Departments { get; set; }
     public DbSet<Employee> Employees { get; set; }
     public DbSet<Forecast> Forecasts { get; set; }
@@ -44,6 +45,7 @@ public class SIDbContext : DbContext
     public DbSet<InventoryTransaction> InventoryTransactions { get; set; }
     public DbSet<MaterialSupplier> MaterialSuppliers { get; set; }
     public DbSet<Notification> Notifications { get; set; }
+    public DbSet<Position> Positions { get; set; }
     public DbSet<Product> Products { get; set; }
     public DbSet<Setup> Setups { get; set; }
     public DbSet<TokenStore> TokenStores { get; set; }
@@ -75,13 +77,23 @@ public class SIDbContext : DbContext
         RemovePluralizingTableNameConvention(modelBuilder);
 
         modelBuilder.ApplyConfiguration(new ActivityConfiguration());
+        modelBuilder.ApplyConfiguration(new AgencyConfiguration());
+        modelBuilder.ApplyConfiguration(new BillOfMaterialConfiguration());
+        modelBuilder.ApplyConfiguration(new CategoryConfiguration());
         modelBuilder.ApplyConfiguration(new DepartmentConfiguration());
-        modelBuilder.ApplyConfiguration(new DistrictConfiguration());
         modelBuilder.ApplyConfiguration(new EmployeeConfiguration());
-        modelBuilder.ApplyConfiguration(new ProvinceConfiguration());
+        modelBuilder.ApplyConfiguration(new MaterialSupplierConfiguration());
+        modelBuilder.ApplyConfiguration(new PositionConfiguration());
+        modelBuilder.ApplyConfiguration(new ProductConfiguration());
         modelBuilder.ApplyConfiguration(new UserConfiguration());
-        modelBuilder.ApplyConfiguration(new WardConfiguration());
         modelBuilder.ApplyConfiguration(new WarehouseConfiguration());
+        modelBuilder.ApplyConfiguration(new GoodsIssueConfiguration());
+        modelBuilder.ApplyConfiguration(new GoodsReceiptConfiguration());
+        modelBuilder.ApplyConfiguration(new OrderConfiguration());
+        modelBuilder.ApplyConfiguration(new ProductionCommandConfiguration());
+        modelBuilder.ApplyConfiguration(new ProvinceConfiguration());
+        modelBuilder.ApplyConfiguration(new DistrictConfiguration());
+        modelBuilder.ApplyConfiguration(new WardConfiguration());
 
         base.OnModelCreating(modelBuilder);
     }

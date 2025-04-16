@@ -1,4 +1,6 @@
-﻿using SI.Domain.Common.Abstractions;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SI.Domain.Common.Abstractions;
 using SI.Domain.Common.Primitives;
 using SI.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
@@ -16,6 +18,12 @@ public class ProductionCommand : AggregateRoot, IAuditableEntity, ISoftDeletable
     // </summary>
     [ForeignKey(nameof(User))]
     public string UserId { get; set; } = null!;
+
+    // <summary>
+    // Mã lệnh sản xuất
+    // </summary>
+    [StringLength(512)]
+    public string Code { get; set; } = null!;
 
     // <summary>
     // Tổng tiền
@@ -53,4 +61,12 @@ public class ProductionCommand : AggregateRoot, IAuditableEntity, ISoftDeletable
     public virtual Agency? Agency { get; set; }
     public virtual User? User { get; set; }
     public virtual ICollection<ProductionCommandDetail>? ProductionCommandDetail { get; set; }
+}
+
+public class ProductionCommandConfiguration : IEntityTypeConfiguration<ProductionCommand>
+{
+    public void Configure(EntityTypeBuilder<ProductionCommand> builder)
+    {
+        builder.HasIndex(x => x.Code);
+    }
 }

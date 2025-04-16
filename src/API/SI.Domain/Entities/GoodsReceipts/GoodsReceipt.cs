@@ -1,4 +1,6 @@
-﻿using SI.Domain.Common.Abstractions;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SI.Domain.Common.Abstractions;
 using SI.Domain.Common.Primitives;
 using SI.Domain.Entities.ProductionCommands;
 using SI.Domain.Enums;
@@ -70,4 +72,12 @@ public class GoodsReceipt : AggregateRoot, IAuditableEntity, ISoftDeletableEntit
     public virtual User? User { get; set; }
     public virtual Warehouse? Warehouse { get; set; }
     public virtual ICollection<GoodsReceiptDetail>? GoodsReceiptDetail { get; set; }
+}
+
+public class GoodsReceiptConfiguration : IEntityTypeConfiguration<GoodsReceipt>
+{
+    public void Configure(EntityTypeBuilder<GoodsReceipt> builder)
+    {
+        builder.HasIndex(x => x.Code);
+    }
 }

@@ -8,8 +8,9 @@ public class EmployeeDTO
     public string DistrictId { get; set; } = null!;
     public string ProvinceId { get; set; } = null!;
     public string? WarehouseId { get; set; }
+    public string? PositionId { get; set; }
     public string Name { get; set; } = null!;
-    public bool IsMale { get; set; }
+    public string GenderType { get; set; } = null!;
     public string PhoneNumber { get; set; } = null!;
     public string Email { get; set; } = null!;
     public string Address { get; set; } = null!;

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SI.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class Entity_Config : Migration
+    public partial class EntityConfig : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -50,7 +50,13 @@ namespace SI.Infrastructure.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ProvinceId = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    Code = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Name = table.Column<string>(type: "varchar(1024)", maxLength: 1024, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Representative = table.Column<string>(type: "varchar(512)", maxLength: 512, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    TaxCode = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     PhoneNumber = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -58,9 +64,9 @@ namespace SI.Infrastructure.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Address = table.Column<string>(type: "varchar(1024)", maxLength: 1024, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    TaxCode = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
                     CurrentDebt = table.Column<decimal>(type: "decimal(65,30)", nullable: true),
+                    Note = table.Column<string>(type: "varchar(1024)", maxLength: 1024, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false),
                     ModifiedOn = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true),
                     DeletedOn = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true)
@@ -90,10 +96,34 @@ namespace SI.Infrastructure.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "CATEGORY",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Code = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Name = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CategoryEntityType = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false),
+                    ModifiedOn = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true),
+                    DeletedOn = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CATEGORY", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "DEPARTMENT",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Code = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Name = table.Column<string>(type: "varchar(1024)", maxLength: 1024, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -119,13 +149,24 @@ namespace SI.Infrastructure.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ProvinceId = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    Code = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Name = table.Column<string>(type: "varchar(1024)", maxLength: 1024, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    Representative = table.Column<string>(type: "varchar(512)", maxLength: 512, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    TaxCode = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     PhoneNumber = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    BusinessItem = table.Column<string>(type: "varchar(1024)", maxLength: 1024, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Email = table.Column<string>(type: "varchar(512)", maxLength: 512, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Address = table.Column<string>(type: "varchar(1024)", maxLength: 1024, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CurrentDebt = table.Column<decimal>(type: "decimal(65,30)", nullable: true),
+                    Note = table.Column<string>(type: "varchar(1024)", maxLength: 1024, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false),
                     ModifiedOn = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true),
@@ -205,6 +246,8 @@ namespace SI.Infrastructure.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     AgencyId = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    Code = table.Column<string>(type: "varchar(512)", maxLength: 512, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     TotalAmount = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
                     OrderStatus = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false),
@@ -224,12 +267,39 @@ namespace SI.Infrastructure.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "POSITION",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CategoryId = table.Column<string>(type: "varchar(255)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Name = table.Column<string>(type: "varchar(1024)", maxLength: 1024, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false),
+                    ModifiedOn = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true),
+                    DeletedOn = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_POSITION", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_POSITION_CATEGORY_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "CATEGORY",
+                        principalColumn: "Id");
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "BILLOFMATERIAL",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ProductId = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Code = table.Column<string>(type: "varchar(512)", maxLength: 512, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false),
                     ModifiedOn = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true),
@@ -284,23 +354,29 @@ namespace SI.Infrastructure.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ProvinceId = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    WarehouseId = table.Column<string>(type: "varchar(255)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    PositionId = table.Column<string>(type: "varchar(255)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ManagerId = table.Column<string>(type: "varchar(255)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Code = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Name = table.Column<string>(type: "varchar(1024)", maxLength: 1024, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    IsMale = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    GenderType = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    IsManager = table.Column<bool>(type: "tinyint(1)", nullable: true),
                     PhoneNumber = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Email = table.Column<string>(type: "varchar(512)", maxLength: 512, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Address = table.Column<string>(type: "varchar(1024)", maxLength: 1024, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Position = table.Column<string>(type: "varchar(512)", maxLength: 512, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
                     DateHired = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false),
                     ModifiedOn = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true),
-                    DeletedOn = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true),
-                    WarehouseId = table.Column<string>(type: "varchar(255)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                    DeletedOn = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -317,6 +393,16 @@ namespace SI.Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
+                        name: "FK_EMPLOYEE_EMPLOYEE_ManagerId",
+                        column: x => x.ManagerId,
+                        principalTable: "EMPLOYEE",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_EMPLOYEE_POSITION_PositionId",
+                        column: x => x.PositionId,
+                        principalTable: "POSITION",
+                        principalColumn: "Id");
+                    table.ForeignKey(
                         name: "FK_EMPLOYEE_PROVINCE_ProvinceId",
                         column: x => x.ProvinceId,
                         principalTable: "PROVINCE",
@@ -328,6 +414,37 @@ namespace SI.Infrastructure.Migrations
                         principalTable: "WARD",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "USER",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    EmployeeId = table.Column<string>(type: "varchar(255)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Name = table.Column<string>(type: "varchar(512)", maxLength: 512, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    LoginName = table.Column<string>(type: "varchar(512)", maxLength: 512, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    HashPassword = table.Column<string>(type: "varchar(512)", maxLength: 512, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    IsLogin = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    Role = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false),
+                    ModifiedOn = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true),
+                    DeletedOn = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_USER", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_USER_EMPLOYEE_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "EMPLOYEE",
+                        principalColumn: "Id");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -347,11 +464,16 @@ namespace SI.Infrastructure.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ProvinceId = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    CategoryId = table.Column<string>(type: "varchar(255)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Code = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Name = table.Column<string>(type: "varchar(1024)", maxLength: 1024, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Address = table.Column<string>(type: "varchar(1024)", maxLength: 1024, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Capacity = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false),
                     ModifiedOn = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true),
                     DeletedOn = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true)
@@ -359,6 +481,11 @@ namespace SI.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_WAREHOUSE", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_WAREHOUSE_CATEGORY_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "CATEGORY",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_WAREHOUSE_DISTRICT_DistrictId",
                         column: x => x.DistrictId,
@@ -369,7 +496,8 @@ namespace SI.Infrastructure.Migrations
                         name: "FK_WAREHOUSE_EMPLOYEE_ManagerId",
                         column: x => x.ManagerId,
                         principalTable: "EMPLOYEE",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_WAREHOUSE_PROVINCE_ProvinceId",
                         column: x => x.ProvinceId,
@@ -391,259 +519,6 @@ namespace SI.Infrastructure.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "PRODUCT",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    MaterialSupplierId = table.Column<string>(type: "varchar(255)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    WarehouseId = table.Column<string>(type: "varchar(255)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Name = table.Column<string>(type: "varchar(1024)", maxLength: 1024, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Code = table.Column<string>(type: "varchar(512)", maxLength: 512, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Description = table.Column<string>(type: "varchar(1024)", maxLength: 1024, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Unit = table.Column<string>(type: "varchar(512)", maxLength: 512, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Price = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    ProductionCost = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    HoldingCost = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false),
-                    ModifiedOn = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true),
-                    DeletedOn = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PRODUCT", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_PRODUCT_MATERIALSUPPLIER_MaterialSupplierId",
-                        column: x => x.MaterialSupplierId,
-                        principalTable: "MATERIALSUPPLIER",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_PRODUCT_WAREHOUSE_WarehouseId",
-                        column: x => x.WarehouseId,
-                        principalTable: "WAREHOUSE",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "USER",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    WarehouseId = table.Column<string>(type: "varchar(255)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    EmployeeId = table.Column<string>(type: "varchar(255)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Name = table.Column<string>(type: "varchar(512)", maxLength: 512, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    LoginName = table.Column<string>(type: "varchar(512)", maxLength: 512, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    HashPassword = table.Column<string>(type: "varchar(512)", maxLength: 512, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    IsLogin = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
-                    Role = table.Column<int>(type: "int", nullable: false),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false),
-                    ModifiedOn = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true),
-                    DeletedOn = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_USER", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_USER_EMPLOYEE_EmployeeId",
-                        column: x => x.EmployeeId,
-                        principalTable: "EMPLOYEE",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_USER_WAREHOUSE_WarehouseId",
-                        column: x => x.WarehouseId,
-                        principalTable: "WAREHOUSE",
-                        principalColumn: "Id");
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "FORECAST",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ProductId = table.Column<string>(type: "varchar(255)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    Method = table.Column<string>(type: "varchar(512)", maxLength: 512, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Period = table.Column<string>(type: "varchar(1024)", maxLength: 1024, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    EOQ = table.Column<double>(type: "double", nullable: false),
-                    SafetyStock = table.Column<double>(type: "double", nullable: false),
-                    OptimalInventory = table.Column<double>(type: "double", nullable: false),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_FORECAST", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_FORECAST_PRODUCT_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "PRODUCT",
-                        principalColumn: "Id");
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "INVENTORY",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ProductId = table.Column<string>(type: "varchar(255)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    WarehouseId = table.Column<string>(type: "varchar(255)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false),
-                    ModifiedOn = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true),
-                    DeletedOn = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_INVENTORY", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_INVENTORY_PRODUCT_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "PRODUCT",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_INVENTORY_WAREHOUSE_WarehouseId",
-                        column: x => x.WarehouseId,
-                        principalTable: "WAREHOUSE",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "INVENTORYTRANSACTION",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ReferenceId = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ProductId = table.Column<string>(type: "varchar(255)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    Type = table.Column<int>(type: "int", nullable: false),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false),
-                    ModifiedOn = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true),
-                    DeletedOn = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_INVENTORYTRANSACTION", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_INVENTORYTRANSACTION_PRODUCT_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "PRODUCT",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "ORDERDETAIL",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    OrderId = table.Column<string>(type: "varchar(255)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ProductId = table.Column<string>(type: "varchar(255)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    UnitPrice = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false),
-                    ModifiedOn = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true),
-                    DeletedOn = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ORDERDETAIL", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ORDERDETAIL_ORDER_OrderId",
-                        column: x => x.OrderId,
-                        principalTable: "ORDER",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ORDERDETAIL_PRODUCT_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "PRODUCT",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "GOODSISSUE",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    UserId = table.Column<string>(type: "varchar(255)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    WarehouseId = table.Column<string>(type: "varchar(255)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    AgencyId = table.Column<string>(type: "varchar(255)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Code = table.Column<string>(type: "varchar(512)", maxLength: 512, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    TotalAmount = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    TotalToText = table.Column<string>(type: "varchar(1024)", maxLength: 1024, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Note = table.Column<string>(type: "varchar(1024)", maxLength: 1024, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Status = table.Column<int>(type: "int", nullable: false),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false),
-                    ModifiedOn = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true),
-                    DeletedOn = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_GOODSISSUE", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_GOODSISSUE_AGENCY_AgencyId",
-                        column: x => x.AgencyId,
-                        principalTable: "AGENCY",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_GOODSISSUE_USER_UserId",
-                        column: x => x.UserId,
-                        principalTable: "USER",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_GOODSISSUE_WAREHOUSE_WarehouseId",
-                        column: x => x.WarehouseId,
-                        principalTable: "WAREHOUSE",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "PRODUCTIONCOMMAND",
                 columns: table => new
                 {
@@ -652,6 +527,8 @@ namespace SI.Infrastructure.Migrations
                     AgencyId = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     UserId = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Code = table.Column<string>(type: "varchar(512)", maxLength: 512, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     TotalAmount = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
                     TotalToText = table.Column<string>(type: "varchar(1024)", maxLength: 1024, nullable: false)
@@ -719,35 +596,100 @@ namespace SI.Infrastructure.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "GOODSISSUEDETAIL",
+                name: "GOODSISSUE",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    GoodsIssueId = table.Column<string>(type: "varchar(255)", nullable: false)
+                    UserId = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    ProductId = table.Column<string>(type: "varchar(255)", nullable: false)
+                    WarehouseId = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    QuantityRequested = table.Column<int>(type: "int", nullable: false),
-                    QuantityIssued = table.Column<int>(type: "int", nullable: false),
-                    TotalPrice = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    AgencyId = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Code = table.Column<string>(type: "varchar(512)", maxLength: 512, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    TotalAmount = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    TotalToText = table.Column<string>(type: "varchar(1024)", maxLength: 1024, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Note = table.Column<string>(type: "varchar(1024)", maxLength: 1024, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Status = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false),
                     ModifiedOn = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true),
                     DeletedOn = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_GOODSISSUEDETAIL", x => x.Id);
+                    table.PrimaryKey("PK_GOODSISSUE", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_GOODSISSUEDETAIL_GOODSISSUE_GoodsIssueId",
-                        column: x => x.GoodsIssueId,
-                        principalTable: "GOODSISSUE",
+                        name: "FK_GOODSISSUE_AGENCY_AgencyId",
+                        column: x => x.AgencyId,
+                        principalTable: "AGENCY",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_GOODSISSUEDETAIL_PRODUCT_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "PRODUCT",
+                        name: "FK_GOODSISSUE_USER_UserId",
+                        column: x => x.UserId,
+                        principalTable: "USER",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_GOODSISSUE_WAREHOUSE_WarehouseId",
+                        column: x => x.WarehouseId,
+                        principalTable: "WAREHOUSE",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "PRODUCT",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    MaterialSupplierId = table.Column<string>(type: "varchar(255)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    WarehouseId = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CategoryId = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Code = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Name = table.Column<string>(type: "varchar(1024)", maxLength: 1024, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Description = table.Column<string>(type: "varchar(1024)", maxLength: 1024, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Unit = table.Column<string>(type: "varchar(512)", maxLength: 512, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ProductType = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    PurchasePrice = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    SellingPrice = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    HoldingCost = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false),
+                    ModifiedOn = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true),
+                    DeletedOn = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PRODUCT", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PRODUCT_CATEGORY_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "CATEGORY",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_PRODUCT_MATERIALSUPPLIER_MaterialSupplierId",
+                        column: x => x.MaterialSupplierId,
+                        principalTable: "MATERIALSUPPLIER",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_PRODUCT_WAREHOUSE_WarehouseId",
+                        column: x => x.WarehouseId,
+                        principalTable: "WAREHOUSE",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 })
@@ -810,6 +752,196 @@ namespace SI.Infrastructure.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "PRODUCTIONCOMMANDPROCESS",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ProductionCommandId = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Percentage = table.Column<double>(type: "double", nullable: false),
+                    Note = table.Column<string>(type: "varchar(1024)", maxLength: 1024, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    ActualStart = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true),
+                    ActualEnd = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false),
+                    ModifiedOn = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true),
+                    DeletedOn = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PRODUCTIONCOMMANDPROCESS", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PRODUCTIONCOMMANDPROCESS_PRODUCTIONCOMMAND_ProductionCommand~",
+                        column: x => x.ProductionCommandId,
+                        principalTable: "PRODUCTIONCOMMAND",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "FORECAST",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ProductId = table.Column<string>(type: "varchar(255)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    Method = table.Column<string>(type: "varchar(512)", maxLength: 512, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Period = table.Column<string>(type: "varchar(1024)", maxLength: 1024, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    EOQ = table.Column<double>(type: "double", nullable: false),
+                    SafetyStock = table.Column<double>(type: "double", nullable: false),
+                    OptimalInventory = table.Column<double>(type: "double", nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FORECAST", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_FORECAST_PRODUCT_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "PRODUCT",
+                        principalColumn: "Id");
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "GOODSISSUEDETAIL",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    GoodsIssueId = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ProductId = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    QuantityRequested = table.Column<int>(type: "int", nullable: false),
+                    QuantityIssued = table.Column<int>(type: "int", nullable: false),
+                    TotalPrice = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false),
+                    ModifiedOn = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true),
+                    DeletedOn = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GOODSISSUEDETAIL", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_GOODSISSUEDETAIL_GOODSISSUE_GoodsIssueId",
+                        column: x => x.GoodsIssueId,
+                        principalTable: "GOODSISSUE",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_GOODSISSUEDETAIL_PRODUCT_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "PRODUCT",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "INVENTORY",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ProductId = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    WarehouseId = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false),
+                    ModifiedOn = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true),
+                    DeletedOn = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_INVENTORY", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_INVENTORY_PRODUCT_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "PRODUCT",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_INVENTORY_WAREHOUSE_WarehouseId",
+                        column: x => x.WarehouseId,
+                        principalTable: "WAREHOUSE",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "INVENTORYTRANSACTION",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ReferenceId = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ProductId = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    TransactionType = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false),
+                    ModifiedOn = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true),
+                    DeletedOn = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_INVENTORYTRANSACTION", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_INVENTORYTRANSACTION_PRODUCT_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "PRODUCT",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "ORDERDETAIL",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    OrderId = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ProductId = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    UnitPrice = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false),
+                    ModifiedOn = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true),
+                    DeletedOn = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ORDERDETAIL", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ORDERDETAIL_ORDER_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "ORDER",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ORDERDETAIL_PRODUCT_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "PRODUCT",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "PRODUCTIONCOMMANDDETAIL",
                 columns: table => new
                 {
@@ -839,36 +971,6 @@ namespace SI.Infrastructure.Migrations
                         name: "FK_PRODUCTIONCOMMANDDETAIL_PRODUCT_ProductId",
                         column: x => x.ProductId,
                         principalTable: "PRODUCT",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "PRODUCTIONCOMMANDPROCESS",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ProductionCommandId = table.Column<string>(type: "varchar(255)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Percentage = table.Column<double>(type: "double", nullable: false),
-                    Note = table.Column<string>(type: "varchar(1024)", maxLength: 1024, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Status = table.Column<int>(type: "int", nullable: false),
-                    ActualStart = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true),
-                    ActualEnd = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false),
-                    ModifiedOn = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true),
-                    DeletedOn = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PRODUCTIONCOMMANDPROCESS", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_PRODUCTIONCOMMANDPROCESS_PRODUCTIONCOMMAND_ProductionCommand~",
-                        column: x => x.ProductionCommandId,
-                        principalTable: "PRODUCTIONCOMMAND",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 })
@@ -910,43 +1012,68 @@ namespace SI.Infrastructure.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.InsertData(
-                table: "DEPARTMENT",
-                columns: new[] { "Id", "CreatedAt", "DeletedOn", "ModifiedOn", "Name" },
-                values: new object[] { "huhuhu", new DateTimeOffset(new DateTime(2025, 4, 11, 21, 29, 45, 193, DateTimeKind.Unspecified).AddTicks(5207), new TimeSpan(0, 0, 0, 0, 0)), null, null, "Bộ phận quản lý kho" });
-
-            migrationBuilder.InsertData(
-                table: "USER",
-                columns: new[] { "Id", "CreatedAt", "DeletedOn", "EmployeeId", "HashPassword", "IsLogin", "LoginName", "ModifiedOn", "Name", "Role", "Status", "WarehouseId" },
+                table: "AGENCY",
+                columns: new[] { "Id", "Address", "Code", "CreatedAt", "CurrentDebt", "DeletedOn", "DistrictId", "Email", "ModifiedOn", "Name", "Note", "PhoneNumber", "ProvinceId", "Representative", "TaxCode", "WardId" },
                 values: new object[,]
                 {
-                    { "0193e2ce-ee41-7fcb-9b52-5bba105dc0bd", new DateTimeOffset(new DateTime(2025, 4, 11, 21, 29, 45, 195, DateTimeKind.Unspecified).AddTicks(848), new TimeSpan(0, 0, 0, 0, 0)), null, null, "27dee27aa573be269f95143a213fe18e29a90e1124b371d280a6c4b88f85f749", true, "dev0", null, "Develop", 0, 1, null },
-                    { "123456789", new DateTimeOffset(new DateTime(2025, 4, 11, 21, 29, 45, 195, DateTimeKind.Unspecified).AddTicks(1673), new TimeSpan(0, 0, 0, 0, 0)), null, null, "7ced44abd56279573d3e9730f7845fd68bb5e1d1b09dee076b066f53ca8e8247", true, "admin0", null, "Admin", 1, 1, null },
-                    { "147894561230", new DateTimeOffset(new DateTime(2025, 4, 11, 21, 29, 45, 195, DateTimeKind.Unspecified).AddTicks(2033), new TimeSpan(0, 0, 0, 0, 0)), null, null, "cfbff703c63d47180b95190dac7b4ca5e04e20af5b3c5ec515e4136710815d84", true, "salesman1", null, "Salesman test", 4, 1, null }
+                    { "law", "Hà Nội", "AGC001", new DateTimeOffset(new DateTime(2025, 4, 16, 0, 7, 9, 890, DateTimeKind.Unspecified).AddTicks(7763), new TimeSpan(0, 0, 0, 0, 0)), 10000000m, null, "1", "abc@gmail.com", null, "Công ty TNHH ABC", null, "5887798511", "1", "Tuyến Quý Tuân Nguyen", "1234567890", "1" },
+                    { "sunshine", "Hà Nội", "AGC002", new DateTimeOffset(new DateTime(2025, 4, 16, 0, 7, 9, 891, DateTimeKind.Unspecified).AddTicks(358), new TimeSpan(0, 0, 0, 0, 0)), 20000000m, null, "1", "xyz@gmail.com", null, "Công ty TNHH XYZ", null, "4975549838", "1", "Sơn Nhung Ngải Phạm", "0987654321", "1" }
                 });
 
             migrationBuilder.InsertData(
-                table: "EMPLOYEE",
-                columns: new[] { "Id", "Address", "CreatedAt", "DateHired", "DeletedOn", "DepartmentId", "DistrictId", "Email", "IsMale", "ModifiedOn", "Name", "PhoneNumber", "Position", "ProvinceId", "WardId", "WarehouseId" },
-                values: new object[] { "hihihaha", "Hà Nội", new DateTimeOffset(new DateTime(2025, 4, 11, 21, 29, 45, 194, DateTimeKind.Unspecified).AddTicks(4642), new TimeSpan(0, 0, 0, 0, 0)), new DateTime(2025, 4, 12, 4, 29, 45, 194, DateTimeKind.Local).AddTicks(5986), null, "huhuhu", "1", "VanA@gmail.com", true, null, "Nguyễn Văn A", "0123456789", "Quản lý kho", "1", "1", null });
-
-            migrationBuilder.InsertData(
-                table: "WAREHOUSE",
-                columns: new[] { "Id", "Address", "Capacity", "CreatedAt", "DeletedOn", "DistrictId", "ManagerId", "ModifiedOn", "Name", "ProvinceId", "WardId", "WarehouseId" },
-                values: new object[] { "choi-da-time", "123 ham tu", 999, new DateTimeOffset(new DateTime(2025, 4, 11, 21, 29, 45, 195, DateTimeKind.Unspecified).AddTicks(5858), new TimeSpan(0, 0, 0, 0, 0)), null, "1", "hihihaha", null, "Jellyjellyjelly", "1", "1", null });
-
-            migrationBuilder.InsertData(
-                table: "USER",
-                columns: new[] { "Id", "CreatedAt", "DeletedOn", "EmployeeId", "HashPassword", "IsLogin", "LoginName", "ModifiedOn", "Name", "Role", "Status", "WarehouseId" },
+                table: "CATEGORY",
+                columns: new[] { "Id", "CategoryEntityType", "Code", "CreatedAt", "DeletedOn", "ModifiedOn", "Name" },
                 values: new object[,]
                 {
-                    { "789456123", new DateTimeOffset(new DateTime(2025, 4, 11, 21, 29, 45, 195, DateTimeKind.Unspecified).AddTicks(2030), new TimeSpan(0, 0, 0, 0, 0)), null, null, "cfbff703c63d47180b95190dac7b4ca5e04e20af5b3c5ec515e4136710815d84", true, "producer1", null, "Producer test", 3, 1, "choi-da-time" },
-                    { "987654321", new DateTimeOffset(new DateTime(2025, 4, 11, 21, 29, 45, 195, DateTimeKind.Unspecified).AddTicks(1677), new TimeSpan(0, 0, 0, 0, 0)), null, "hihihaha", "cfbff703c63d47180b95190dac7b4ca5e04e20af5b3c5ec515e4136710815d84", true, "staff1", null, "Staff test", 2, 1, "choi-da-time" }
+                    { "1", "WAREHOUSE", "CATW001", new DateTimeOffset(new DateTime(2025, 4, 16, 0, 7, 9, 891, DateTimeKind.Unspecified).AddTicks(9481), new TimeSpan(0, 0, 0, 0, 0)), null, null, "Danh mục 1" },
+                    { "2", "PRODUCT", "CATP002", new DateTimeOffset(new DateTime(2025, 4, 16, 0, 7, 9, 891, DateTimeKind.Unspecified).AddTicks(9938), new TimeSpan(0, 0, 0, 0, 0)), null, null, "Danh mục 2" },
+                    { "3", "WAREHOUSE", "CATW003", new DateTimeOffset(new DateTime(2025, 4, 16, 0, 7, 9, 891, DateTimeKind.Unspecified).AddTicks(9941), new TimeSpan(0, 0, 0, 0, 0)), null, null, "Danh mục 3" },
+                    { "4", "POSITION", "CATW004", new DateTimeOffset(new DateTime(2025, 4, 16, 0, 7, 9, 891, DateTimeKind.Unspecified).AddTicks(9942), new TimeSpan(0, 0, 0, 0, 0)), null, null, "Toàn thời gian" },
+                    { "5", "POSITION", "CATW005", new DateTimeOffset(new DateTime(2025, 4, 16, 0, 7, 9, 891, DateTimeKind.Unspecified).AddTicks(9943), new TimeSpan(0, 0, 0, 0, 0)), null, null, "Bán thời gian" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "DEPARTMENT",
+                columns: new[] { "Id", "Code", "CreatedAt", "DeletedOn", "ModifiedOn", "Name" },
+                values: new object[,]
+                {
+                    { "huhuhu", "DEPART001", new DateTimeOffset(new DateTime(2025, 4, 16, 0, 7, 9, 892, DateTimeKind.Unspecified).AddTicks(3298), new TimeSpan(0, 0, 0, 0, 0)), null, null, "Bộ phận quản lý kho" },
+                    { "parrot-smell", "DEPART003", new DateTimeOffset(new DateTime(2025, 4, 16, 0, 7, 9, 892, DateTimeKind.Unspecified).AddTicks(3628), new TimeSpan(0, 0, 0, 0, 0)), null, null, "Bộ phận quản lý bán hàng" },
+                    { "sugar-town", "DEPART002", new DateTimeOffset(new DateTime(2025, 4, 16, 0, 7, 9, 892, DateTimeKind.Unspecified).AddTicks(3626), new TimeSpan(0, 0, 0, 0, 0)), null, null, "Bộ phận quản lý sản xuất" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "MATERIALSUPPLIER",
+                columns: new[] { "Id", "Address", "BusinessItem", "Code", "CreatedAt", "CurrentDebt", "DeletedOn", "DistrictId", "Email", "ModifiedOn", "Name", "Note", "PhoneNumber", "ProvinceId", "Representative", "TaxCode", "WardId" },
+                values: new object[,]
+                {
+                    { "bare", "Hà Nội", "Vật liệu xây dựng", "SUPPLIER001", new DateTimeOffset(new DateTime(2025, 4, 16, 0, 7, 9, 892, DateTimeKind.Unspecified).AddTicks(9494), new TimeSpan(0, 0, 0, 0, 0)), 0m, null, "1", "A@gmail.com", null, "Nhà cung cấp 1", null, "0123456789", "1", "Nguyễn Văn A", "123456789", "1" },
+                    { "cower", "Hà Nội", "Vật liệu điện", "SUPPLIER002", new DateTimeOffset(new DateTime(2025, 4, 16, 0, 7, 9, 893, DateTimeKind.Unspecified).AddTicks(1060), new TimeSpan(0, 0, 0, 0, 0)), 0m, null, "1", "B@gmail.com", null, "Nhà cung cấp 2", null, "0987654321", "1", "Nguyễn Văn B", "8877955549", "1" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "POSITION",
+                columns: new[] { "Id", "CategoryId", "CreatedAt", "DeletedOn", "ModifiedOn", "Name" },
+                values: new object[,]
+                {
+                    { "1", "4", new DateTimeOffset(new DateTime(2025, 4, 16, 0, 7, 9, 893, DateTimeKind.Unspecified).AddTicks(3531), new TimeSpan(0, 0, 0, 0, 0)), null, null, "Giám đốc" },
+                    { "2", "4", new DateTimeOffset(new DateTime(2025, 4, 16, 0, 7, 9, 893, DateTimeKind.Unspecified).AddTicks(3847), new TimeSpan(0, 0, 0, 0, 0)), null, null, "Phó giám đốc" },
+                    { "3", "4", new DateTimeOffset(new DateTime(2025, 4, 16, 0, 7, 9, 893, DateTimeKind.Unspecified).AddTicks(3849), new TimeSpan(0, 0, 0, 0, 0)), null, null, "Trưởng phòng" },
+                    { "4", "4", new DateTimeOffset(new DateTime(2025, 4, 16, 0, 7, 9, 893, DateTimeKind.Unspecified).AddTicks(3850), new TimeSpan(0, 0, 0, 0, 0)), null, null, "Quản lý kho" },
+                    { "5", "4", new DateTimeOffset(new DateTime(2025, 4, 16, 0, 7, 9, 893, DateTimeKind.Unspecified).AddTicks(3851), new TimeSpan(0, 0, 0, 0, 0)), null, null, "Nhân viên kho" },
+                    { "6", "4", new DateTimeOffset(new DateTime(2025, 4, 16, 0, 7, 9, 893, DateTimeKind.Unspecified).AddTicks(3854), new TimeSpan(0, 0, 0, 0, 0)), null, null, "Quản lý sản xuất" },
+                    { "7", "5", new DateTimeOffset(new DateTime(2025, 4, 16, 0, 7, 9, 893, DateTimeKind.Unspecified).AddTicks(3855), new TimeSpan(0, 0, 0, 0, 0)), null, null, "Nhân viên bán hàng" }
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_ACTIVITY_TargetId",
                 table: "ACTIVITY",
                 column: "TargetId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AGENCY_Code",
+                table: "AGENCY",
+                column: "Code");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AGENCY_DistrictId",
@@ -964,6 +1091,11 @@ namespace SI.Infrastructure.Migrations
                 column: "WardId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_BILLOFMATERIAL_Code",
+                table: "BILLOFMATERIAL",
+                column: "Code");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_BILLOFMATERIAL_ProductId",
                 table: "BILLOFMATERIAL",
                 column: "ProductId");
@@ -979,6 +1111,21 @@ namespace SI.Infrastructure.Migrations
                 column: "MaterialId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CATEGORY_Code",
+                table: "CATEGORY",
+                column: "Code");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DEPARTMENT_Code",
+                table: "DEPARTMENT",
+                column: "Code");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EMPLOYEE_Code",
+                table: "EMPLOYEE",
+                column: "Code");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_EMPLOYEE_DepartmentId",
                 table: "EMPLOYEE",
                 column: "DepartmentId");
@@ -987,6 +1134,16 @@ namespace SI.Infrastructure.Migrations
                 name: "IX_EMPLOYEE_DistrictId",
                 table: "EMPLOYEE",
                 column: "DistrictId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EMPLOYEE_ManagerId",
+                table: "EMPLOYEE",
+                column: "ManagerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EMPLOYEE_PositionId",
+                table: "EMPLOYEE",
+                column: "PositionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_EMPLOYEE_ProvinceId",
@@ -1014,6 +1171,11 @@ namespace SI.Infrastructure.Migrations
                 column: "AgencyId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_GOODSISSUE_Code",
+                table: "GOODSISSUE",
+                column: "Code");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_GOODSISSUE_UserId",
                 table: "GOODSISSUE",
                 column: "UserId");
@@ -1032,6 +1194,11 @@ namespace SI.Infrastructure.Migrations
                 name: "IX_GOODSISSUEDETAIL_ProductId",
                 table: "GOODSISSUEDETAIL",
                 column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GOODSRECEIPT_Code",
+                table: "GOODSRECEIPT",
+                column: "Code");
 
             migrationBuilder.CreateIndex(
                 name: "IX_GOODSRECEIPT_MaterialSupplierId",
@@ -1079,6 +1246,11 @@ namespace SI.Infrastructure.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_MATERIALSUPPLIER_Code",
+                table: "MATERIALSUPPLIER",
+                column: "Code");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_MATERIALSUPPLIER_DistrictId",
                 table: "MATERIALSUPPLIER",
                 column: "DistrictId");
@@ -1099,6 +1271,11 @@ namespace SI.Infrastructure.Migrations
                 column: "AgencyId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ORDER_Code",
+                table: "ORDER",
+                column: "Code");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ORDERDETAIL_OrderId",
                 table: "ORDERDETAIL",
                 column: "OrderId");
@@ -1107,6 +1284,21 @@ namespace SI.Infrastructure.Migrations
                 name: "IX_ORDERDETAIL_ProductId",
                 table: "ORDERDETAIL",
                 column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_POSITION_CategoryId",
+                table: "POSITION",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PRODUCT_CategoryId",
+                table: "PRODUCT",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PRODUCT_Code",
+                table: "PRODUCT",
+                column: "Code");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PRODUCT_MaterialSupplierId",
@@ -1122,6 +1314,11 @@ namespace SI.Infrastructure.Migrations
                 name: "IX_PRODUCTIONCOMMAND_AgencyId",
                 table: "PRODUCTIONCOMMAND",
                 column: "AgencyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PRODUCTIONCOMMAND_Code",
+                table: "PRODUCTIONCOMMAND",
+                column: "Code");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PRODUCTIONCOMMAND_UserId",
@@ -1154,9 +1351,9 @@ namespace SI.Infrastructure.Migrations
                 column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_USER_WarehouseId",
-                table: "USER",
-                column: "WarehouseId");
+                name: "IX_WAREHOUSE_CategoryId",
+                table: "WAREHOUSE",
+                column: "CategoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_WAREHOUSE_DistrictId",
@@ -1212,6 +1409,10 @@ namespace SI.Infrastructure.Migrations
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_EMPLOYEE_DEPARTMENT_DepartmentId",
+                table: "EMPLOYEE");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_EMPLOYEE_POSITION_PositionId",
                 table: "EMPLOYEE");
 
             migrationBuilder.DropForeignKey(
@@ -1288,7 +1489,13 @@ namespace SI.Infrastructure.Migrations
                 name: "DEPARTMENT");
 
             migrationBuilder.DropTable(
+                name: "POSITION");
+
+            migrationBuilder.DropTable(
                 name: "WAREHOUSE");
+
+            migrationBuilder.DropTable(
+                name: "CATEGORY");
 
             migrationBuilder.DropTable(
                 name: "EMPLOYEE");
