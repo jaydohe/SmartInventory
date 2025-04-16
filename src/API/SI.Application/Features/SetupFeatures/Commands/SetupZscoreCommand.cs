@@ -6,9 +6,8 @@ using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
 using SI.Contract.SetupContract;
 using SI.Domain.Entities;
-using static SI.Application.Features.SetupFeatures.SetupZscoreCommandHandler;
 
-namespace SI.Application.Features.SetupFeatures;
+namespace SI.Application.Features.SetupFeatures.Commands;
 
 public class SetupZscoreCommand(SetupZscoreArg arg) : ICommand<OkResponse>
 {
