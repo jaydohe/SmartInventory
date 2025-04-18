@@ -33,14 +33,13 @@ public class CreateDepartmentCommandHandler(
         var checkDepartment = await departmentRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Name == request.Arg.Name && x.DeletedOn == null, cancellationToken);
         if (checkDepartment != null)
-            return CTBaseResult.UnProcess($"Department is existed.");
+            return CTBaseResult.UnProcess("Department is existed.");
 
         var newDepartment = new Department
         {
             Code = CodeGenerationUtils.GenerateCodeFromName(request.Arg.Name),
             Name = request.Arg.Name,
         };
-
         departmentRepos.Add(newDepartment);
 
         var ret = await unitOfWork.SaveChangeAsync(cancellationToken);

@@ -37,9 +37,9 @@ public class CreateEmployeeCommandHandler(
             request.Arg.Gender != GenderTypes.OTHER)
             return CTBaseResult.NotFound("Gender Type");
 
-        var checkEmp = await employeeRepos.BuildQuery
+        var checkExisted = await employeeRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Name == request.Arg.Name && x.PhoneNumber == request.Arg.PhoneNumber && x.DeletedOn == null, cancellationToken);
-        if (checkEmp?.Name != null)
+        if (checkExisted != null)
             return CTBaseResult.UnProcess("Employee is existed.");
 
         var checkDepartment = await departmentRepos.BuildQuery
@@ -107,5 +107,15 @@ public class CreateEmployeeCommandValidator : AbstractValidator<CreateEmployeeCo
             .WithMessage("Address is required.")
             .MaximumLength(1024)
             .WithMessage("Address is too long. Only up to 1024 characters.");
+        RuleFor(x => x.Arg.ProvinceId)
+            .NotEmpty()
+            .WithMessage("ProvinceId is required.");
+        RuleFor(x => x.Arg.DistrictId)
+            .NotEmpty()
+            .WithMessage("DistrictId is required.");
+        RuleFor(x => x.Arg.WardId)
+            .NotEmpty()
+            .WithMessage("WardId is required.");
+
     }
 }

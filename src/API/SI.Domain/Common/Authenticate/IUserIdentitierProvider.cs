@@ -7,4 +7,5 @@ public interface IUserIdentifierProvider
     public string Role {  get; }
     public string Name { get; }
     public string PositionId { get; }
+    public string EmployeeId { get; }
 }

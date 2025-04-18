@@ -7,6 +7,7 @@ public class CreateEmployeeArg
     public string WardId { get; set; } = null!;
     public string DistrictId { get; set; } = null!;
     public string ProvinceId { get; set; } = null!;
+    public string? WarehouseId { get; set; }
     public string Code { get; set; } = null!;
     public string Name { get; set; } = null!;
     public string Gender { get; set; } = null!;

@@ -14,7 +14,7 @@ public class UserIdentitfierProvider(IHttpContextAccessor httpContextAccessor) :
     public string WareId => httpContextAccessor.HttpContext?.User.Claims
                 ?.Where(c => c.Type == "wareId")
                 .Select(c => c.Value)
-                .First()!;
+                .FirstOrDefault()!;
 
     public string Role => httpContextAccessor.HttpContext?.User.Claims
                 ?.Where(c => c.Type == ClaimTypes.Role)
@@ -30,6 +30,11 @@ public class UserIdentitfierProvider(IHttpContextAccessor httpContextAccessor) :
                 ?.Where(c => c.Type == "positionId")
                 .Select(c => c.Value)
                 .First()!;
+
+    public string EmployeeId => httpContextAccessor.HttpContext?.User.Claims
+                ?.Where(c => c.Type == "employeeId")
+                .Select(c => c.Value)
+                .FirstOrDefault()!;
 
 
     // public bool IsClerical => bool.Parse(httpContextAccessor.HttpContext?.User.Claims

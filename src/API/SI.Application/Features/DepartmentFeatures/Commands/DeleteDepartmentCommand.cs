@@ -13,16 +13,22 @@ public class DeleteDepartmentCommand(string id) : ICommand<OkResponse>
 
 public class DeleteDepartmentCommandHandler(
     IUnitOfWork unitOfWork,
-    IRepository<Department> departmentRepos) : ICommandHandler<DeleteDepartmentCommand, OkResponse>
+    IRepository<Department> departmentRepos,
+    IRepository<Employee> employeeRepos) : ICommandHandler<DeleteDepartmentCommand, OkResponse>
 {
     public async Task<CTBaseResult<OkResponse>> Handle(DeleteDepartmentCommand request, CancellationToken cancellationToken)
     {
-        var checkCat = await departmentRepos.BuildQuery
+        var checkDepart = await departmentRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Id == request.Id && x.DeletedOn == null, cancellationToken);
-        if (checkCat is null)
+        if (checkDepart is null)
             return CTBaseResult.NotFound("Department");
 
-        checkCat.DeletedOn = DateTimeOffset.UtcNow;
+        var checkEmp = await employeeRepos.BuildQuery
+            .FirstOrDefaultAsync(x => x.DepartmentId == checkDepart.Id && x.DeletedOn == null, cancellationToken);
+        if (checkEmp != null)
+            return CTBaseResult.UnProcess("Department is used employees.");
+
+        checkDepart.DeletedOn = DateTimeOffset.UtcNow;
 
         var ret = await unitOfWork.SaveChangeAsync(cancellationToken);
         if (ret <= 0)

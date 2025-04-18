@@ -39,7 +39,7 @@ public class UpdateCategoryCommandHandler(
         if (checkCategory is null)
             return CTBaseResult.NotFound("Category");
         if (checkCategory.Name == request.Arg.Name)
-            return CTBaseResult.UnProcess("Category name is not changed.");
+            return CTBaseResult.UnProcess("Category name has not been changed.");
 
         var checkExisted = await categoryRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Name == request.Arg.Name && x.CategoryEntityType == checkCategory.CategoryEntityType && x.DeletedOn == null, cancellationToken);

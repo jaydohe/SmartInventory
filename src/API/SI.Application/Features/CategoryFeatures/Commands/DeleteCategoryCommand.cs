@@ -13,7 +13,10 @@ public class DeleteCategoryCommand(string id) : ICommand<OkResponse>
 
 public class DeleteCategoryCommandHandler(
     IUnitOfWork unitOfWork,
-    IRepository<Category> categoryRepos) : ICommandHandler<DeleteCategoryCommand, OkResponse>
+    IRepository<Category> categoryRepos,
+    IRepository<Warehouse> wareRepos,
+    IRepository<Product> prodRepos,
+    IRepository<Position> posiRepos) : ICommandHandler<DeleteCategoryCommand, OkResponse>
 {
     public async Task<CTBaseResult<OkResponse>> Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
     {
@@ -21,6 +24,21 @@ public class DeleteCategoryCommandHandler(
             .FirstOrDefaultAsync(x => x.Id == request.Id && x.DeletedOn == null, cancellationToken);
         if (checkCat is null)
             return CTBaseResult.NotFound("Category");
+
+        var checkWare = await wareRepos.BuildQuery
+            .FirstOrDefaultAsync(x => x.CategoryId == checkCat.Id && x.DeletedOn == null, cancellationToken);
+        if (checkWare != null)
+            return CTBaseResult.UnProcess("Category is used in Warehouse.");
+
+        var checkProd = await prodRepos.BuildQuery
+            .FirstOrDefaultAsync(x => x.CategoryId == checkCat.Id && x.DeletedOn == null, cancellationToken);
+        if (checkProd != null)
+            return CTBaseResult.UnProcess("Category is used in Product.");
+
+        var checkPosi = await posiRepos.BuildQuery
+            .FirstOrDefaultAsync(x => x.CategoryId == checkCat.Id && x.DeletedOn == null, cancellationToken);
+        if (checkPosi != null)
+            return CTBaseResult.UnProcess("Category is used in Position.");
 
         checkCat.DeletedOn = DateTimeOffset.UtcNow;
 
