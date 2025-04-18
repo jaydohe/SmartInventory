@@ -17,7 +17,7 @@ public static class CodeGenerationUtils
     /// <param name="digitCount">Number of random digits to append (default: 4)</param>
     /// <param name="defaultPrefix">Default prefix if name is empty (default: "CAT")</param>
     /// <returns>A code generated from the name</returns>
-    public static string GenerateCodeFromName(string? name, int digitCount = 4, string defaultPrefix = "CAT")
+    public static string GenerateCodeFromName(string? name, int digitCount = 4, string defaultPrefix = "")
     {
         if (string.IsNullOrWhiteSpace(name))
             return defaultPrefix + GenerateRandomDigits(digitCount);

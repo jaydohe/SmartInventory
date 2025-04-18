@@ -40,7 +40,7 @@ public class CreateWarehouseCommandHandler(
 
         var checkExisted = await warehouseRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Name == request.Arg.Name && x.DeletedOn == null, cancellationToken);
-        if (checkExisted != null)
+        if (checkExisted != null && checkExisted.CategoryId == request.Arg.CategoryId)
         {
             if (checkExisted.ManagerId == request.Arg.ManagerId)
                 return CTBaseResult.UnProcess("The manager is already managing another warehouse.");
@@ -54,7 +54,7 @@ public class CreateWarehouseCommandHandler(
                 .FirstOrDefaultAsync(x => x.Id == request.Arg.CategoryId && x.DeletedOn == null, cancellationToken);
             if (checkCate is null)
                 return CTBaseResult.NotFound("Category");
-            if (checkCate?.CategoryEntityType != CategoryEntityTypes.WAREHOUSE)
+            if (checkCate.CategoryEntityType != CategoryEntityTypes.WAREHOUSE)
                 return CTBaseResult.UnProcess("Category is not warehouse type.");
         }
 

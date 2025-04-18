@@ -46,7 +46,10 @@ public class UpdateCategoryCommandHandler(
         if (checkExisted != null)
             return CTBaseResult.UnProcess($"Category in {checkCategory.CategoryEntityType} is existed.");
 
-        checkCategory.Code = CodeGenerationUtils.GenerateCodeFromName(request.Arg.Name) ?? checkCategory.Code;
+        if (request.Arg.Name != null)
+        {
+            checkCategory.Code = CodeGenerationUtils.GenerateCodeFromName(request.Arg.Name) ?? checkCategory.Code;
+        }
         checkCategory.Name = request.Arg.Name ?? checkCategory.Name;
         checkCategory.ModifiedOn = DateTimeOffset.UtcNow;
 

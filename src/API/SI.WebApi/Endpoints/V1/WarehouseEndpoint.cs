@@ -37,8 +37,8 @@ public class WarehouseEndpoint : IEndpoint
             .ToOk(e => Results.Ok(e));
 
     private async Task<IResult> GetWarehouseAsync(
-        [FromServices] IMediator mediator, string id)
-            => (await mediator.Send(new GetWarehouseQuery(id)))
+        [FromServices] IMediator mediator, string id, BaseAPIRequest request)
+            => (await mediator.Send(new GetWarehouseQuery(id, request.ToQueryContext())))
                 .ToOk(e => Results.Ok(e));
 
     private async Task<IResult> CreateWarehouseAsync(

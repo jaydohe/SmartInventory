@@ -10,18 +10,20 @@ using Microsoft.EntityFrameworkCore;
 using SI.Domain.Common.Authenticate;
 using SI.Domain.Entities;
 
-namespace SI.Application.Features.EmployeeFeatures.Queries;
+namespace SI.Application.Features.ProductFeatures.Queries;
 
-public class GetEmployeeQuery(string id, QueryRequestV3 query)
+public class GetProductQuery(string id, QueryRequestV3 query)
     : CTBaseQuery<string, QueryRequestV3, OkDynamicResponse>(id, query)
-{ }
+{
+}
 
-public class GetEmployeeQueryHandler(
+public class GetProductQueryHandler(
+    IRepository<Product> productRepos,
     IRepository<Employee> employeeRepos,
     IMapper mapper,
-    IUserIdentifierProvider identifierProvider) : IQueryHandler<GetEmployeeQuery, OkDynamicResponse>
+    IUserIdentifierProvider identifierProvider) : IQueryHandler<GetProductQuery, OkDynamicResponse>
 {
-    public async Task<CTBaseResult<OkDynamicResponse>> Handle(GetEmployeeQuery request, CancellationToken cancellationToken)
+    public async Task<CTBaseResult<OkDynamicResponse>> Handle(GetProductQuery request, CancellationToken cancellationToken)
     {
         var role = identifierProvider.Role;
         var employeeId = identifierProvider.EmployeeId;
@@ -35,15 +37,15 @@ public class GetEmployeeQueryHandler(
         }
 
         QueryRequestV3 queryContext = request.QueryContext;
-        var employee = await employeeRepos.HandleLinqQueryRequestV2(queryContext)
+        var product = await productRepos.HandleLinqQueryRequestV2(queryContext)
             .Where(e => e.Id == request.Id)
-            .ProjectDynamic<Employee>(mapper,
+            .ProjectDynamic<Product>(mapper,
                 new PopulateDescriptor(queryContext.Populate),
                 queryContext.ToCacheKey())
             .FirstOrDefaultAsync(cancellationToken);
-        if (employee is null)
-            return CTBaseResult.NotFound("Employee");
+        if (product is null)
+            return CTBaseResult.NotFound("Product");
 
-        return CTBaseResult.Success(employee);
+        return CTBaseResult.Success(product);
     }
 }

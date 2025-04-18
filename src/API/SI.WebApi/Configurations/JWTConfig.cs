@@ -47,6 +47,16 @@ public static class JWTConfiguration
                     UserRoles.ADMIN.ToString(),
                     UserRoles.SALESMAN.ToString());
             });
+            // Tất cả các quyền
+            options.AddPolicy(APIPolicies.FULL, policy =>
+            {
+                policy.RequireRole(
+                    UserRoles.DEV.ToString(),
+                    UserRoles.ADMIN.ToString(),
+                    UserRoles.WAREHOUSE_STAFF.ToString(),
+                    UserRoles.WAREHOUSE_PRODUCER.ToString(),
+                    UserRoles.SALESMAN.ToString());
+            });
         });
         services.AddAuthentication(options =>
         {
