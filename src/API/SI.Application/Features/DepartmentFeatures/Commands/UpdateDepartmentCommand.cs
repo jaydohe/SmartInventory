@@ -45,7 +45,10 @@ public class UpdateDepartmentCommandHandler(
         if (checkExisted != null)
             return CTBaseResult.UnProcess($"Department name is existed.");
 
-        checkDepartment.Code = CodeGenerationUtils.GenerateCodeFromName(request.Arg.Name) ?? checkDepartment.Code;
+        if (request.Arg.Name != null)
+        {
+            checkDepartment.Code = CodeGenerationUtils.GenerateCodeFromName(request.Arg.Name) ?? checkDepartment.Code;
+        }
         checkDepartment.Name = request.Arg.Name ?? checkDepartment.Name;
         checkDepartment.ModifiedOn = DateTimeOffset.UtcNow;
 

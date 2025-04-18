@@ -6,6 +6,7 @@ using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
 using SI.Contract.WarehouseContract;
 using SI.Domain.Common.Authenticate;
+using SI.Domain.Common.Utils;
 using SI.Domain.Entities;
 using SI.Domain.Enums;
 
@@ -40,8 +41,8 @@ public class UpdateWarehouseCommandHandler(
 
         if (role is "WAREHOUSE_STAFF")
         {
-            var checkAccess = await warehouseRepos.BuildQuery
-                .FirstOrDefaultAsync(x => x.ManagerId == employeeId, cancellationToken);
+            var checkAccess = await empRepos.BuildQuery
+                .FirstOrDefaultAsync(x => x.Id == employeeId && x.IsManager == true, cancellationToken);
             if (checkAccess is null)
                 return CTBaseResult.UnProcess("Just manager can access.");
         }
@@ -69,7 +70,7 @@ public class UpdateWarehouseCommandHandler(
 
         var checkExisted = await warehouseRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Name == request.Arg.Name && x.DeletedOn == null, cancellationToken);
-        if (checkExisted != null)
+        if (checkExisted != null && checkExisted.CategoryId == request.Arg.CategoryId)
         {
             if (checkExisted.ManagerId == request.Arg.ManagerId)
                 return CTBaseResult.UnProcess("The manager is already managing another warehouse.");
@@ -110,6 +111,10 @@ public class UpdateWarehouseCommandHandler(
         checkWarehouse.DistrictId = request.Arg.DistrictId ?? checkWarehouse.DistrictId;
         checkWarehouse.ProvinceId = request.Arg.ProvinceId ?? checkWarehouse.ProvinceId;
         checkWarehouse.CategoryId = request.Arg.CategoryId;
+        if (request.Arg.Name != null)
+        {
+            checkWarehouse.Code = CodeGenerationUtils.GenerateCodeFromName(request.Arg.Name) ?? checkWarehouse.Code;
+        }
         checkWarehouse.Name = request.Arg.Name ?? checkWarehouse.Name;
         checkWarehouse.Address = request.Arg.Address ?? checkWarehouse.Address;
         checkWarehouse.Capacity = request.Arg.Capacity ?? checkWarehouse.Capacity;

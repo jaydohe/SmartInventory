@@ -24,11 +24,19 @@ public class GetAllEmployeeQueryHandler(
     {
         var wareId = identifierProvider.WareId;
         var role = identifierProvider.Role;
+        var employeeId = identifierProvider.EmployeeId;
 
         var queryContext = request.QueryContext;
         var employeeQuery = employeeRepos.HandleLinqQueryRequestV2(request.QueryContext);
         if (role is "WAREHOUSE_STAFF")
+        {
+            var checkManager = await employeeRepos.BuildQuery
+                .FirstOrDefaultAsync(x => x.Id == employeeId && x.IsManager == true, cancellationToken);
+            if (checkManager is null)
+                return CTBaseResult.UnProcess("Just manager can access.");
+
             employeeQuery = employeeQuery.Where(x => x.WarehouseId == wareId);
+        }
 
         var (executeQuery, totalRecords, totalPages) =
             employeeQuery.HandleLinqQueryPageRequestV2(

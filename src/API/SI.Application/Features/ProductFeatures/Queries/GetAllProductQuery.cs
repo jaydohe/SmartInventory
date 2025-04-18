@@ -9,46 +9,45 @@ using Microsoft.EntityFrameworkCore;
 using SI.Domain.Common.Authenticate;
 using SI.Domain.Entities;
 
-namespace SI.Application.Features.DepartmentFeatures.Queries;
+namespace SI.Application.Features.ProductFeatures.Queries;
 
-public class GetAllDepartmentQuery(QueryPageRequestV3 query)
+public class GetAllProductQuery(QueryPageRequestV3 query)
     : CTBaseQuery<QueryPageRequestV3, OkDynamicPageResponse>(query)
-{
-}
+{ }
 
-public class GetAllDepartmentQueryHandler(
-    IRepository<Department> repository,
-    IRepository<Employee> empRepos,
+public class GetAllProductQueryHandler(
+    IRepository<Product> productRepos,
+    IRepository<Employee> employeeRepos,
     IMapper mapper,
-    IUserIdentifierProvider identifierProvider) : IQueryHandler<GetAllDepartmentQuery, OkDynamicPageResponse>
+    IUserIdentifierProvider identifierProvider) : IQueryHandler<GetAllProductQuery, OkDynamicPageResponse>
 {
-    public async Task<CTBaseResult<OkDynamicPageResponse>> Handle(GetAllDepartmentQuery request, CancellationToken cancellationToken)
+    public async Task<CTBaseResult<OkDynamicPageResponse>> Handle(GetAllProductQuery request, CancellationToken cancellationToken)
     {
+        var wareId = identifierProvider.WareId;
         var role = identifierProvider.Role;
         var employeeId = identifierProvider.EmployeeId;
 
         var queryContext = request.QueryContext;
-        var departmentQuery = repository.HandleLinqQueryRequestV2(request.QueryContext);
-        if (role is "WAREHOUSE_STAFF")
+        var productQuery = productRepos.HandleLinqQueryRequestV2(request.QueryContext);
+        if (role is "WAREHOUSE_STAFF" || role is "WAREHOUSE_PRODUCER")
         {
-            var checkManager = await empRepos.BuildQuery
+            var checkManager = await employeeRepos.BuildQuery
                 .FirstOrDefaultAsync(x => x.Id == employeeId && x.IsManager == true, cancellationToken);
             if (checkManager is null)
                 return CTBaseResult.UnProcess("Just manager can access.");
 
-            departmentQuery = departmentQuery
-                .Where(x => x.DeletedOn == null);
+            productQuery = productQuery.Where(x => x.WarehouseId == wareId);
         }
 
         var (executeQuery, totalRecords, totalPages) =
-            departmentQuery.HandleLinqQueryPageRequestV2(
+            productQuery.HandleLinqQueryPageRequestV2(
             queryContext,
             queryContext.IsAscending,
             queryContext.OrderBy);
         if (queryContext.Populate.Any(e => e.Count(s => s == '.') >= 3))
-            executeQuery = departmentQuery.AsSplitQuery();
+            executeQuery = productQuery.AsSplitQuery();
 
-        var data = await executeQuery.ProjectDynamic<Department>
+        var data = await executeQuery.ProjectDynamic<Product>
             (mapper, new(request.QueryContext.Populate), request.QueryContext.ToCacheKey())
             .ToArrayAsync(cancellationToken);
 
