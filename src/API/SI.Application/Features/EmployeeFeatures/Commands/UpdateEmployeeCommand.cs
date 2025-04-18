@@ -24,7 +24,10 @@ public class UpdateEmployeeCommand(string id, UpdateEmployeeArg arg) : ICommand<
 public class UpdateEmployeeCommandHandler(
     IUnitOfWork unitOfWork,
     IRepository<Employee> employeeRepos,
-    IRepository<Department> departmentRepos) : ICommandHandler<UpdateEmployeeCommand, OkResponse>
+    IRepository<Department> departmentRepos,
+    IRepository<Position> positionRepos,
+    IRepository<Warehouse> wareRepos,
+    IRepository<User> userRepos) : ICommandHandler<UpdateEmployeeCommand, OkResponse>
 {
     public async Task<CTBaseResult<OkResponse>> Handle(UpdateEmployeeCommand request, CancellationToken cancellationToken)
     {
@@ -47,23 +50,60 @@ public class UpdateEmployeeCommandHandler(
             return CTBaseResult.NotFound("Gender Type");
 
         var checkEmp = await employeeRepos.BuildQuery
-            .Include(e => e.Department)
             .FirstOrDefaultAsync(x => x.Id == request.Id && x.DeletedOn == null, cancellationToken);
         if (checkEmp is null)
             return CTBaseResult.NotFound("Employee");
+        if (request.Arg.Name != null && checkEmp.Name == request.Arg.Name)
+            return CTBaseResult.UnProcess("Warehouse name has not been changed.");
+        if (request.Arg.PhoneNumber != null && checkEmp.PhoneNumber == request.Arg.PhoneNumber)
+            return CTBaseResult.UnProcess("Phone Number has not been changed.");
+        if (request.Arg.Email != null && checkEmp.Email == request.Arg.Email)
+            return CTBaseResult.UnProcess("Email has not been changed.");
+        if (request.Arg.Address != null && checkEmp.Address == request.Arg.Address)
+            return CTBaseResult.UnProcess("Address has not been changed.");
 
-        if (request.Arg.DepartmentId != null)
+        var checkDepartment = await departmentRepos.BuildQuery
+            .FirstOrDefaultAsync(x => x.Id == request.Arg.DepartmentId && x.DeletedOn == null, cancellationToken);
+        if (request.Arg.DepartmentId != null && checkDepartment is null)
+            return CTBaseResult.NotFound("Department");
+
+        var checkPosition = await positionRepos.BuildQuery
+            .FirstOrDefaultAsync(x => x.Id == request.Arg.PositionId && x.DeletedOn == null, cancellationToken);
+        if (request.Arg.PositionId != null && checkPosition is null)
+            return CTBaseResult.NotFound("Position");
+
+        var checkWarehouse = await wareRepos.BuildQuery
+            .FirstOrDefaultAsync(x => x.Id == request.Arg.WarehouseId && x.DeletedOn == null, cancellationToken);
+        if (request.Arg.WarehouseId != null && checkWarehouse is null)
+            return CTBaseResult.NotFound("Warehouse");
+
+        if (request.Arg.WarehouseId != null && checkEmp.IsManager == true)
         {
-            var checkEmpDepartment = await departmentRepos.BuildQuery
-                .FirstOrDefaultAsync(x => x.Id == request.Arg.DepartmentId && x.DeletedOn == null, cancellationToken);
-            if (checkEmpDepartment is null)
-                return CTBaseResult.NotFound("Department");
+            var updateWarehouse = await wareRepos.BuildQuery
+                .FirstOrDefaultAsync(x => x.Id == checkEmp.WarehouseId && x.ManagerId == checkEmp.Id && x.DeletedOn == null, cancellationToken);
+            if (updateWarehouse != null)
+            {
+                updateWarehouse.ManagerId = string.Empty;
+                updateWarehouse.ModifiedOn = DateTimeOffset.UtcNow;
+            }
+        }
+
+        if (request.Arg.Name != null)
+        {
+            var updateUser = await userRepos.BuildQuery
+                .FirstOrDefaultAsync(x => x.EmployeeId == checkEmp.Id && x.DeletedOn == null, cancellationToken);
+            if (updateUser is null)
+                return CTBaseResult.NotFound("User");
+
+            updateUser.Name = request.Arg.Name ?? updateUser.Name;
+            updateUser.ModifiedOn = DateTimeOffset.UtcNow;
         }
 
         checkEmp.DepartmentId = request.Arg.DepartmentId ?? checkEmp.DepartmentId;
         checkEmp.WardId = request.Arg.WardId ?? checkEmp.WardId;
         checkEmp.DistrictId = request.Arg.DistrictId ?? checkEmp.DistrictId;
         checkEmp.ProvinceId = request.Arg.ProvinceId ?? checkEmp.ProvinceId;
+        checkEmp.WarehouseId = request.Arg.WarehouseId ?? checkEmp.WarehouseId;
         checkEmp.PositionId = request.Arg.PositionId ?? checkEmp.PositionId;
         checkEmp.Name = request.Arg.Name ?? checkEmp.Name;
         checkEmp.GenderType = request.Arg.Gender ?? checkEmp.GenderType;

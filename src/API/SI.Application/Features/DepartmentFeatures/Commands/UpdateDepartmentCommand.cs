@@ -38,7 +38,7 @@ public class UpdateDepartmentCommandHandler(
         if (checkDepartment is null)
             return CTBaseResult.NotFound("Department");
         if (checkDepartment.Name == request.Arg.Name)
-            return CTBaseResult.UnProcess("Department name is not changed.");
+            return CTBaseResult.UnProcess("Department name has not been changed.");
 
         var checkExisted = await departmentRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Name == request.Arg.Name && x.DeletedOn == null, cancellationToken);

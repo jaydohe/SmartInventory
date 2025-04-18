@@ -6,6 +6,7 @@ public class UpdateEmployeeArg
     public string? WardId { get; set; }
     public string? DistrictId { get; set; }
     public string? ProvinceId { get; set; }
+    public string? WarehouseId { get; set; }
     public string? PositionId { get; set; }
     public string? Name { get; set; }
     public string? Gender { get; set; }
