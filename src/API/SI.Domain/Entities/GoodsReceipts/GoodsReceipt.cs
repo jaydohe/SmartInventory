@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SI.Domain.Common.Abstractions;
 using SI.Domain.Common.Primitives;
+using SI.Domain.Entities.Orders;
 using SI.Domain.Entities.ProductionCommands;
 using SI.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
@@ -18,10 +19,16 @@ public class GoodsReceipt : AggregateRoot, IAuditableEntity, ISoftDeletableEntit
     public string? ProductionCommandId { get; set; }
 
     // <summary>
-    // Nếu nhập hàng từ nhà cung cấp thì không cần nhập lệnh sản xuất
+    // Nếu nhập hàng từ nhà cung cấp thì không cần nhập lệnh sản xuất và đơn hàng
     // </summary>
     [ForeignKey(nameof(MaterialSupplier))]
     public string? MaterialSupplierId { get; set; }
+
+    // <summary>
+    // Nếu nhập hàng từ đơn hàng thì không cần nhập lệnh sản xuất và nhà cung cấp
+    // </summary>
+    [ForeignKey(nameof(Order))]
+    public string? OrderId { get; set; }
 
     // <summary>
     // Người tạo phiếu nhập hàng
@@ -69,6 +76,7 @@ public class GoodsReceipt : AggregateRoot, IAuditableEntity, ISoftDeletableEntit
 
     public virtual ProductionCommand? ProductionCommand { get; set; }
     public virtual MaterialSupplier? MaterialSupplier { get; set; }
+    public virtual Order? Order { get; set; }
     public virtual User? User { get; set; }
     public virtual Warehouse? Warehouse { get; set; }
     public virtual ICollection<GoodsReceiptDetail>? GoodsReceiptDetail { get; set; }

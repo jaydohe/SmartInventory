@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SI.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using SI.Infrastructure.Persistence;
 namespace SI.Infrastructure.Migrations
 {
     [DbContext(typeof(SIDbContext))]
-    partial class SIDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250419212332_AddIsRefund_Order")]
+    partial class AddIsRefund_Order
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -57,7 +60,7 @@ namespace SI.Infrastructure.Migrations
 
                     b.HasIndex("TargetId");
 
-                    b.ToTable("ACTIVITY", (string)null);
+                    b.ToTable("ACTIVITY");
                 });
 
             modelBuilder.Entity("SI.Domain.Entities.Agency", b =>
@@ -138,7 +141,7 @@ namespace SI.Infrastructure.Migrations
 
                     b.HasIndex("WardId");
 
-                    b.ToTable("AGENCY", (string)null);
+                    b.ToTable("AGENCY");
 
                     b.HasData(
                         new
@@ -205,7 +208,7 @@ namespace SI.Infrastructure.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("BILLOFMATERIAL", (string)null);
+                    b.ToTable("BILLOFMATERIAL");
                 });
 
             modelBuilder.Entity("SI.Domain.Entities.BOM.BillOfMaterialDetail", b =>
@@ -245,7 +248,7 @@ namespace SI.Infrastructure.Migrations
 
                     b.HasIndex("MaterialId");
 
-                    b.ToTable("BILLOFMATERIALDETAIL", (string)null);
+                    b.ToTable("BILLOFMATERIALDETAIL");
                 });
 
             modelBuilder.Entity("SI.Domain.Entities.Category", b =>
@@ -279,7 +282,7 @@ namespace SI.Infrastructure.Migrations
 
                     b.HasIndex("Code");
 
-                    b.ToTable("CATEGORY", (string)null);
+                    b.ToTable("CATEGORY");
 
                     b.HasData(
                         new
@@ -353,7 +356,7 @@ namespace SI.Infrastructure.Migrations
 
                     b.HasIndex("Code");
 
-                    b.ToTable("DEPARTMENT", (string)null);
+                    b.ToTable("DEPARTMENT");
 
                     b.HasData(
                         new
@@ -466,7 +469,7 @@ namespace SI.Infrastructure.Migrations
 
                     b.HasIndex("WarehouseId");
 
-                    b.ToTable("EMPLOYEE", (string)null);
+                    b.ToTable("EMPLOYEE");
 
                     b.HasData(
                         new
@@ -600,7 +603,7 @@ namespace SI.Infrastructure.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("FORECAST", (string)null);
+                    b.ToTable("FORECAST");
                 });
 
             modelBuilder.Entity("SI.Domain.Entities.GoodsIssues.GoodsIssue", b =>
@@ -666,7 +669,7 @@ namespace SI.Infrastructure.Migrations
 
                     b.HasIndex("WarehouseId");
 
-                    b.ToTable("GOODSISSUE", (string)null);
+                    b.ToTable("GOODSISSUE");
                 });
 
             modelBuilder.Entity("SI.Domain.Entities.GoodsIssues.GoodsIssueDetail", b =>
@@ -707,7 +710,7 @@ namespace SI.Infrastructure.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("GOODSISSUEDETAIL", (string)null);
+                    b.ToTable("GOODSISSUEDETAIL");
                 });
 
             modelBuilder.Entity("SI.Domain.Entities.GoodsReceipts.GoodsReceipt", b =>
@@ -781,7 +784,7 @@ namespace SI.Infrastructure.Migrations
 
                     b.HasIndex("WarehouseId");
 
-                    b.ToTable("GOODSRECEIPT", (string)null);
+                    b.ToTable("GOODSRECEIPT");
                 });
 
             modelBuilder.Entity("SI.Domain.Entities.GoodsReceipts.GoodsReceiptDetail", b =>
@@ -822,7 +825,7 @@ namespace SI.Infrastructure.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("GOODSRECEIPTDETAIL", (string)null);
+                    b.ToTable("GOODSRECEIPTDETAIL");
                 });
 
             modelBuilder.Entity("SI.Domain.Entities.Inventory", b =>
@@ -857,7 +860,7 @@ namespace SI.Infrastructure.Migrations
 
                     b.HasIndex("WarehouseId");
 
-                    b.ToTable("INVENTORY", (string)null);
+                    b.ToTable("INVENTORY");
                 });
 
             modelBuilder.Entity("SI.Domain.Entities.InventoryTransaction", b =>
@@ -894,7 +897,7 @@ namespace SI.Infrastructure.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("INVENTORYTRANSACTION", (string)null);
+                    b.ToTable("INVENTORYTRANSACTION");
                 });
 
             modelBuilder.Entity("SI.Domain.Entities.MaterialSupplier", b =>
@@ -980,7 +983,7 @@ namespace SI.Infrastructure.Migrations
 
                     b.HasIndex("WardId");
 
-                    b.ToTable("MATERIALSUPPLIER", (string)null);
+                    b.ToTable("MATERIALSUPPLIER");
 
                     b.HasData(
                         new
@@ -1055,7 +1058,7 @@ namespace SI.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("NOTIFICATION", (string)null);
+                    b.ToTable("NOTIFICATION");
                 });
 
             modelBuilder.Entity("SI.Domain.Entities.Orders.Order", b =>
@@ -1097,7 +1100,7 @@ namespace SI.Infrastructure.Migrations
 
                     b.HasIndex("Code");
 
-                    b.ToTable("ORDER", (string)null);
+                    b.ToTable("ORDER");
                 });
 
             modelBuilder.Entity("SI.Domain.Entities.Orders.OrderDetail", b =>
@@ -1135,7 +1138,7 @@ namespace SI.Infrastructure.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ORDERDETAIL", (string)null);
+                    b.ToTable("ORDERDETAIL");
                 });
 
             modelBuilder.Entity("SI.Domain.Entities.Position", b =>
@@ -1165,7 +1168,7 @@ namespace SI.Infrastructure.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("POSITION", (string)null);
+                    b.ToTable("POSITION");
 
                     b.HasData(
                         new
@@ -1281,7 +1284,7 @@ namespace SI.Infrastructure.Migrations
 
                     b.HasIndex("MaterialSupplierId");
 
-                    b.ToTable("PRODUCT", (string)null);
+                    b.ToTable("PRODUCT");
 
                     b.HasData(
                         new
@@ -1372,7 +1375,7 @@ namespace SI.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("PRODUCTIONCOMMAND", (string)null);
+                    b.ToTable("PRODUCTIONCOMMAND");
                 });
 
             modelBuilder.Entity("SI.Domain.Entities.ProductionCommands.ProductionCommandDetail", b =>
@@ -1413,7 +1416,7 @@ namespace SI.Infrastructure.Migrations
 
                     b.HasIndex("ProductionCommandId");
 
-                    b.ToTable("PRODUCTIONCOMMANDDETAIL", (string)null);
+                    b.ToTable("PRODUCTIONCOMMANDDETAIL");
                 });
 
             modelBuilder.Entity("SI.Domain.Entities.ProductionCommands.ProductionCommandProcess", b =>
@@ -1455,7 +1458,7 @@ namespace SI.Infrastructure.Migrations
 
                     b.HasIndex("ProductionCommandId");
 
-                    b.ToTable("PRODUCTIONCOMMANDPROCESS", (string)null);
+                    b.ToTable("PRODUCTIONCOMMANDPROCESS");
                 });
 
             modelBuilder.Entity("SI.Domain.Entities.Setup", b =>
@@ -1478,7 +1481,7 @@ namespace SI.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SETUP", (string)null);
+                    b.ToTable("SETUP");
                 });
 
             modelBuilder.Entity("SI.Domain.Entities.TokenStore", b =>
@@ -1529,7 +1532,7 @@ namespace SI.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("TOKENSTORE", (string)null);
+                    b.ToTable("TOKENSTORE");
                 });
 
             modelBuilder.Entity("SI.Domain.Entities.User", b =>
@@ -1575,7 +1578,7 @@ namespace SI.Infrastructure.Migrations
 
                     b.HasIndex("EmployeeId");
 
-                    b.ToTable("USER", (string)null);
+                    b.ToTable("USER");
 
                     b.HasData(
                         new
@@ -1701,7 +1704,7 @@ namespace SI.Infrastructure.Migrations
 
                     b.HasIndex("WarehouseId");
 
-                    b.ToTable("WAREHOUSE", (string)null);
+                    b.ToTable("WAREHOUSE");
 
                     b.HasData(
                         new
@@ -1756,7 +1759,7 @@ namespace SI.Infrastructure.Migrations
 
                     b.HasIndex("ProvinceId");
 
-                    b.ToTable("DISTRICT", (string)null);
+                    b.ToTable("DISTRICT");
                 });
 
             modelBuilder.Entity("SI.Domain.ValueObjeSI.Location.Province", b =>
@@ -1777,7 +1780,7 @@ namespace SI.Infrastructure.Migrations
 
                     b.HasIndex("Name");
 
-                    b.ToTable("PROVINCE", (string)null);
+                    b.ToTable("PROVINCE");
                 });
 
             modelBuilder.Entity("SI.Domain.ValueObjeSI.Location.Ward", b =>
@@ -1804,7 +1807,7 @@ namespace SI.Infrastructure.Migrations
 
                     b.HasIndex("Name");
 
-                    b.ToTable("WARD", (string)null);
+                    b.ToTable("WARD");
                 });
 
             modelBuilder.Entity("SI.Domain.Entities.Agency", b =>

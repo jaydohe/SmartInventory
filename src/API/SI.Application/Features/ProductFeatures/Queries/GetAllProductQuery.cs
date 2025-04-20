@@ -36,7 +36,7 @@ public class GetAllProductQueryHandler(
             if (checkManager is null)
                 return CTBaseResult.UnProcess("Just manager can access.");
 
-            productQuery = productQuery.Where(x => x.WarehouseId == wareId);
+            productQuery = productQuery.Where(x => x.DeletedOn == null);
         }
 
         var (executeQuery, totalRecords, totalPages) =

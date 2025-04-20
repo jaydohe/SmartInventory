@@ -57,6 +57,15 @@ public static class JWTConfiguration
                     UserRoles.WAREHOUSE_PRODUCER.ToString(),
                     UserRoles.SALESMAN.ToString());
             });
+            // Nhân viên bán hàng và nhân viên kho
+            options.AddPolicy(APIPolicies.STAFF_SALESMAN, policy =>
+            {
+                policy.RequireRole(
+                    UserRoles.DEV.ToString(),
+                    UserRoles.ADMIN.ToString(),
+                    UserRoles.WAREHOUSE_STAFF.ToString(),
+                    UserRoles.SALESMAN.ToString());
+            });
         });
         services.AddAuthentication(options =>
         {

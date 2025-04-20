@@ -3,14 +3,24 @@
 public enum OrderStatus
 {
     // <summary>
+    // mới tạo
+    // </summary>
+    NEW = 0,
+
+    // <summary> 
     // đang xử lý
     // </summary
-    INPROCESS = 0,
+    INPROCESS = 1,
 
     // <summary>
-    // đã giao
+    // đã giao hàng
     // </summary>
-    DONE = 1,
+    DELIVERED = 2,
+
+    // <summary>
+    // đã hoàn tiền
+    // </summary>
+    REFUNDED = 3,
 
     // <summary>
     // đã hủy

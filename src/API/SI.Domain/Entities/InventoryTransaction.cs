@@ -1,6 +1,5 @@
 ﻿using SI.Domain.Common.Abstractions;
 using SI.Domain.Common.Primitives;
-using SI.Domain.Enums;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SI.Domain.Entities;
@@ -8,7 +7,7 @@ namespace SI.Domain.Entities;
 public class InventoryTransaction : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
 {
     // <summary>
-    // Có thể là GoodsReceiptId, GoodsIssue, OrderId,...
+    // Có thể là GoodsReceiptId, GoodsIssue,...
     // </summary>
     public string ReferenceId { get; set; } = null!;
 
