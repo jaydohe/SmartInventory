@@ -61,7 +61,7 @@ public class UpdateProductCommandHandler(
 
         var checkExisted = await productRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Name == request.Arg.Name && x.DeletedOn == null, cancellationToken);
-        if (checkExisted != null && checkExisted.CategoryId == checkProduct.CategoryId && checkExisted.WarehouseId == checkProduct.WarehouseId)
+        if (checkExisted != null && checkExisted.CategoryId == checkProduct.CategoryId)
             return CTBaseResult.UnProcess("Product already exists.");
 
         if (request.Arg.CategoryId != null)

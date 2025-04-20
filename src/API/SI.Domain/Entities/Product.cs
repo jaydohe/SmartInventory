@@ -16,9 +16,6 @@ public class Product : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
     [ForeignKey(nameof(MaterialSupplier))]
     public string? MaterialSupplierId { get; set; }
 
-    [ForeignKey(nameof(Warehouse))]
-    public string WarehouseId { get; set; } = null!;
-
     [ForeignKey(nameof(Category))]
     public string CategoryId { get; set; } = null!;
 
@@ -70,7 +67,6 @@ public class Product : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
     public DateTimeOffset? DeletedOn { get; set; }
 
     public virtual MaterialSupplier? MaterialSupplier { get; set; }
-    public virtual Warehouse? Warehouse { get; set; }
     public virtual Category? Category { get; set; }
 
     public Product(string id) : base(id) { }
@@ -89,7 +85,6 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
             new Product("1")
             {
                 CategoryId = "2",
-                WarehouseId = "choi-da-time",
                 Code = "PROD001",
                 Name = "Sản phẩm 1",
                 Description = "Mô tả sản phẩm 1",
@@ -103,7 +98,6 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
             {
                 CategoryId = "2",
                 MaterialSupplierId = "bare",
-                WarehouseId = "basket",
                 Code = "PROD002",
                 Name = "Sản phẩm 2",
                 Description = "Mô tả sản phẩm 2",

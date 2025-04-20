@@ -24,7 +24,9 @@ public class Order : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
     // </summary>
     public decimal TotalAmount { get; set; }
 
-    public OrderStatus OrderStatus { get; set; } = OrderStatus.INPROCESS;
+    public bool IsRefund { get; set; } = false;
+
+    public OrderStatus OrderStatus { get; set; } = OrderStatus.NEW;
 
     public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
     public DateTimeOffset? ModifiedOn { get; set; }

@@ -34,11 +34,6 @@ public class DeleteWarehouseCommandHandler(
         if (checkEmployee != null)
             return CTBaseResult.UnProcess("Warehouse is used in Employee");
 
-        var checkProd = await prodRepos.BuildQuery
-            .FirstOrDefaultAsync(x => x.WarehouseId == checkWare.Id && x.DeletedOn == null, cancellationToken);
-        if (checkProd != null)
-            return CTBaseResult.UnProcess("Warehouse is used in Product");
-
         checkWare.DeletedOn = DateTimeOffset.UtcNow;
 
         var ret = await unitOfWork.SaveChangeAsync(cancellationToken);

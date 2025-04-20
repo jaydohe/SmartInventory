@@ -25,8 +25,7 @@ public class CreateProductCommandHandler(
     IUnitOfWork unitOfWork,
     IRepository<Product> productRepos,
     IRepository<MaterialSupplier> supplierRepos,
-    IRepository<Category> categoryRepos,
-    IRepository<Warehouse> warehouseRepos) : ICommandHandler<CreateProductCommand, OkResponse>
+    IRepository<Category> categoryRepos) : ICommandHandler<CreateProductCommand, OkResponse>
 {
     public async Task<CTBaseResult<OkResponse>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {
@@ -42,7 +41,7 @@ public class CreateProductCommandHandler(
 
         var checkExisted = await productRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Name == request.Arg.Name && x.DeletedOn == null, cancellationToken);
-        if (checkExisted != null && checkExisted.CategoryId == request.Arg.CategoryId && checkExisted.WarehouseId == request.Arg.WarehouseId)
+        if (checkExisted != null && checkExisted.CategoryId == request.Arg.CategoryId)
             return CTBaseResult.UnProcess("Product already exists.");
 
         if (request.Arg.MaterialSupplierId != null)
@@ -59,11 +58,6 @@ public class CreateProductCommandHandler(
         if (request.Arg.ProductType == ProductTypes.RAW_MATERIAL && request.Arg.MaterialSupplierId == null)
             return CTBaseResult.UnProcess("Product Type must not be RAW MATERIAL.");
 
-        var checkWarehouse = await warehouseRepos.BuildQuery
-            .FirstOrDefaultAsync(x => x.Id == request.Arg.WarehouseId && x.DeletedOn == null, cancellationToken);
-        if (checkWarehouse is null)
-            return CTBaseResult.NotFound("Warehouse");
-
         var checkCategory = await categoryRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Id == request.Arg.CategoryId && x.DeletedOn == null, cancellationToken);
         if (checkCategory is null)
@@ -74,7 +68,6 @@ public class CreateProductCommandHandler(
         var newProduct = new Product
         {
             MaterialSupplierId = request.Arg.MaterialSupplierId,
-            WarehouseId = request.Arg.WarehouseId,
             CategoryId = request.Arg.CategoryId,
             Code = CodeGenerationUtils.GenerateCodeFromName(request.Arg.Name),
             Name = request.Arg.Name,
@@ -99,9 +92,6 @@ public class CreateProductCommandValidator : AbstractValidator<CreateProductComm
 {
     public CreateProductCommandValidator()
     {
-        RuleFor(x => x.Arg.WarehouseId)
-            .NotEmpty()
-            .WithMessage("WarehouseId is required.");
         RuleFor(x => x.Arg.CategoryId)
             .NotEmpty()
             .WithMessage("CategoryId is required.");

@@ -4,7 +4,6 @@ public class GetProductResult
 {
     public string? Id { get; set; }
     public string? MaterialSupplierId { get; set; }
-    public string WarehouseId { get; set; } = null!;
     public string CategoryId { get; set; } = null!;
     public string Code { get; set; } = null!;
     public string Name { get; set; } = null!;

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SI.Domain.Common.Abstractions;
 using SI.Domain.Common.Primitives;
+using SI.Domain.Entities.Orders;
 using SI.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -24,6 +25,12 @@ public class GoodsIssue : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
     // </summary>
     [ForeignKey(nameof(Agency))]
     public string AgencyId { get; set; } = null!;
+
+    // <summary>
+    // Đơn hàng liên quan
+    // </summary>
+    [ForeignKey(nameof(Order))]
+    public string OrderId { get; set; } = null!;
 
     // <summary>
     // Mã phiếu xuất hàng
@@ -57,6 +64,7 @@ public class GoodsIssue : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
     public virtual User? User { get; set; }
     public virtual Warehouse? Warehouse { get; set; }
     public virtual Agency? Agency { get; set; }
+    public virtual Order? Order { get; set; }
     public virtual ICollection<GoodsIssueDetail>? GoodsIssueDetails { get; set; }
 }
 
