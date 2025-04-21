@@ -40,6 +40,8 @@ public class LoginCommandHandler(
             return CTBaseResult.BadRequest(checkValid.Errors);
 
         var getUser = await userRepos.BuildQuery
+            .Include(e => e.Employee)
+            .ThenInclude(e => e.Warehouse)
             .FirstOrDefaultAsync(e => e.LoginName == request.Arg.LoginName, cancellationToken);
         if (getUser is null)
             return CTBaseResult.NotFound("User");
