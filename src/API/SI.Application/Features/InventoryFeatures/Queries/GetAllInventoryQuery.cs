@@ -9,45 +9,40 @@ using Microsoft.EntityFrameworkCore;
 using SI.Domain.Common.Authenticate;
 using SI.Domain.Entities;
 
-namespace SI.Application.Features.EmployeeFeatures.Queries;
+namespace SI.Application.Features.InventoryFeatures.Queries;
 
-public class GetAllEmployeeQuery(QueryPageRequestV3 query)
+public class GetAllInventoryQuery(QueryPageRequestV3 query)
     : CTBaseQuery<QueryPageRequestV3, OkDynamicPageResponse>(query)
-{ }
-
-public class GetAllEmployeeQueryHandler(
-    IRepository<Employee> employeeRepos,
-    IMapper mapper,
-    IUserIdentifierProvider identifierProvider) : IQueryHandler<GetAllEmployeeQuery, OkDynamicPageResponse>
 {
-    public async Task<CTBaseResult<OkDynamicPageResponse>> Handle(GetAllEmployeeQuery request, CancellationToken cancellationToken)
+}
+
+public class GetAllInventoryQueryHandler(
+    IRepository<Inventory> inventoryRepos,
+    IMapper mapper,
+    IUserIdentifierProvider identifierProvider) : IQueryHandler<GetAllInventoryQuery, OkDynamicPageResponse>
+{
+    public async Task<CTBaseResult<OkDynamicPageResponse>> Handle(GetAllInventoryQuery request, CancellationToken cancellationToken)
     {
         var warehouseId = identifierProvider.WarehouseId;
         var role = identifierProvider.Role;
         var employeeId = identifierProvider.EmployeeId;
 
         var queryContext = request.QueryContext;
-        var employeeQuery = employeeRepos.HandleLinqQueryRequestV2(request.QueryContext);
-        if (role is "WAREHOUSE_STAFF")
+        var inventoryQuery = inventoryRepos.HandleLinqQueryRequestV2(request.QueryContext);
+        if (role is "WAREHOUSE_STAFF" || role is "WAREHOUSE_PRODUCER")
         {
-            var checkManager = await employeeRepos.BuildQuery
-                .FirstOrDefaultAsync(x => x.Id == employeeId && x.IsManager == true, cancellationToken);
-            if (checkManager is null)
-                return CTBaseResult.UnProcess("Just manager can access.");
-
-            employeeQuery = employeeQuery.Where(x => x.WarehouseId == warehouseId);
+            inventoryQuery = inventoryQuery.Where(x => x.WarehouseId == warehouseId);
         }
 
-        var (executeQuery, totalRecords, totalPages) =
-            employeeQuery.HandleLinqQueryPageRequestV2(
+        var (executeQuery, totalRecords, totalPages) = 
+            inventoryQuery.HandleLinqQueryPageRequestV2(
             queryContext,
             queryContext.IsAscending,
             queryContext.OrderBy);
-
         if (queryContext.Populate.Any(e => e.Count(s => s == '.') >= 3))
-            executeQuery = employeeQuery.AsSplitQuery();
+            executeQuery = inventoryQuery.AsSplitQuery();
 
-        var data = await executeQuery.ProjectDynamic<Employee>
+        var data = await executeQuery.ProjectDynamic<Inventory>
             (mapper, new(request.QueryContext.Populate), request.QueryContext.ToCacheKey())
             .ToArrayAsync(cancellationToken);
 

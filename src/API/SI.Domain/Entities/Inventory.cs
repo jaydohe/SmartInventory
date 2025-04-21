@@ -9,7 +9,7 @@ namespace SI.Domain.Entities;
 
 [ODataRouting(nameof(Inventory),
     RouteRefix = "private-api",
-    IgnoredActions = [ApiActions.Create])]
+    IgnoredActions = [ApiActions.Create, ApiActions.Delete])]
 [Authorize]
 public class Inventory : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
 {
