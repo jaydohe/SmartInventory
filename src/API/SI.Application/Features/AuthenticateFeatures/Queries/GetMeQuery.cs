@@ -24,7 +24,7 @@ public class GetMeQueryHandler(
     public async Task<CTBaseResult<OkDynamicResponse>> Handle(GetMeQuery request, CancellationToken cancellationToken)
     {
         var userId = userIdentifier.UserId;
-        var warehouseId = userIdentifier.WarehouseId;
+        var wareId = userIdentifier.WareId;
 
         var getUserId = await userRepos.BuildQuery
             .FirstOrDefaultAsync(e => e.Id == userId, cancellationToken);
@@ -32,7 +32,7 @@ public class GetMeQueryHandler(
             return CTBaseResult.NotFound($"User {userId}");
 
         var getWareName = await wareRepos.BuildQuery
-            .Where(e => e.Id == warehouseId)
+            .Where(e => e.Id == wareId)
             .Select(e => e.Name)
             .FirstOrDefaultAsync(cancellationToken);
 
