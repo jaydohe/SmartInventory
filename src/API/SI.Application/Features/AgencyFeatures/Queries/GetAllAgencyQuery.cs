@@ -8,11 +8,9 @@ namespace SI.Application.Features.AgencyFeatures.Queries;
 
 public class GetAllAgencyQuery(QueryPageRequestV3 request)
     : CTBaseQuery<QueryPageRequestV3, OkDynamicPageResponse>(request)
-{
-}
+{ }
 
 public class GetAllAgencyQueryHandler(
     IRepository<Agency> repository,
     IMapper mapper) : PageQueryHandler<GetAllAgencyQuery, Agency>(repository, mapper)
-{
-}
+{ }
