@@ -1,7 +1,6 @@
 ﻿using CTCore.DynamicQuery.Core.Domain.Interfaces;
 using CTCore.DynamicQuery.Core.Mediators.Interfaces;
 using CTCore.DynamicQuery.Core.Primitives;
-using Mapster;
 using Microsoft.EntityFrameworkCore;
 using SI.Contract.OrderContract;
 using SI.Domain.Entities.Orders;
@@ -20,7 +19,7 @@ public class GetAllOrderQueryHandler(
                     .AsNoTracking()
                     .Include(e => e.OrderDetails)!
                     .ToListAsync(cancellationToken: cancellationToken);
-        if (getOrder is null)
+        if (getOrder is { Count: 0})
             return CTBaseResult.UnProcess("Order do not have result.");
 
         return getOrder.Select(o => new OrderResult

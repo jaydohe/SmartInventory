@@ -11,10 +11,10 @@ public class UserIdentitfierProvider(IHttpContextAccessor httpContextAccessor) :
                 .Select(c => c.Value)
                 .First()!;
 
-    public string WareId => httpContextAccessor.HttpContext?.User.Claims
-                ?.Where(c => c.Type == "wareId")
+    public string WarehouseId => httpContextAccessor.HttpContext?.User.Claims
+                ?.Where(c => c.Type == "warehouseId")
                 .Select(c => c.Value)
-                .FirstOrDefault()!;
+                .First()!;
 
     public string Role => httpContextAccessor.HttpContext?.User.Claims
                 ?.Where(c => c.Type == ClaimTypes.Role)
