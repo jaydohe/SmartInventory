@@ -1,16 +1,9 @@
-﻿using CTCore.DynamicQuery.OData.Core;
-using CTCore.DynamicQuery.OData.Definations;
-using Microsoft.AspNetCore.Authorization;
-using SI.Domain.Common.Abstractions;
+﻿using SI.Domain.Common.Abstractions;
 using SI.Domain.Common.Primitives;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SI.Domain.Entities;
 
-[ODataRouting(nameof(Inventory),
-    RouteRefix = "private-api",
-    IgnoredActions = [ApiActions.Create, ApiActions.Delete])]
-[Authorize]
 public class Inventory : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
 {
     [ForeignKey(nameof(Product))]
