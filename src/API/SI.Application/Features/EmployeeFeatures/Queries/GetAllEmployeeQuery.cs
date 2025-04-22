@@ -22,7 +22,7 @@ public class GetAllEmployeeQueryHandler(
 {
     public async Task<CTBaseResult<OkDynamicPageResponse>> Handle(GetAllEmployeeQuery request, CancellationToken cancellationToken)
     {
-        var warehouseId = identifierProvider.WarehouseId;
+        var wareId = identifierProvider.WareId;
         var role = identifierProvider.Role;
         var employeeId = identifierProvider.EmployeeId;
 
@@ -35,7 +35,7 @@ public class GetAllEmployeeQueryHandler(
             if (checkManager is null)
                 return CTBaseResult.UnProcess("Just manager can access.");
 
-            employeeQuery = employeeQuery.Where(x => x.WarehouseId == warehouseId);
+            employeeQuery = employeeQuery.Where(x => x.WarehouseId == wareId);
         }
 
         var (executeQuery, totalRecords, totalPages) =
