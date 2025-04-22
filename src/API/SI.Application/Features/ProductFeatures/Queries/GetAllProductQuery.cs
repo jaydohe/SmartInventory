@@ -23,7 +23,7 @@ public class GetAllProductQueryHandler(
 {
     public async Task<CTBaseResult<OkDynamicPageResponse>> Handle(GetAllProductQuery request, CancellationToken cancellationToken)
     {
-        var wareId = identifierProvider.WareId;
+        var warehouseId = identifierProvider.WarehouseId;
         var role = identifierProvider.Role;
         var employeeId = identifierProvider.EmployeeId;
 

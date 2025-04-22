@@ -25,7 +25,6 @@ public class GetAllUserQueryHandler(
 {
     public async Task<CTBaseResult<OkDynamicPageResponse>> Handle(GetAllUserQuery request, CancellationToken cancellationToken)
     {
-        var wareId = identifierProvider.WareId;
         var role = identifierProvider.Role;
 
         var queryContext = request.QueryContext;
