@@ -5,8 +5,8 @@ services:
       dockerfile: Dockerfile
     environment:
       - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT:-Production}
-      - S3_ACCESS_KEY=${admin}
-      - S3_SECRET_KEY=${S3_SECRET_KEY:-yourStrongPassword}
+      - S3_ACCESS_KEY=${S3_ACCESS_KEY:-j2XOftFulDtQNvXEdgPJ}
+      - S3_SECRET_KEY=${S3_SECRET_KEY:-841yENuBzNgRvpNTyzVC6FALCesSEwgGBN1Ehice}
     networks:
       - s-net
     logging:
