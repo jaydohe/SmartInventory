@@ -1,11 +1,11 @@
 steps:
   # Build the Docker image
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/smartinventory-456319/my-backend', '.']
+    args: ['build', '-t', 'gcr.io/smartinventory-456319/SmartInventory', '.']
 
   # Push the image to Google Container Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/smartinventory-456319/my-backend']
+    args: ['push', 'gcr.io/smartinventory-456319/SmartInventory']
 
   # Deploy the Docker image to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -13,11 +13,11 @@ steps:
     args:
       - 'run'
       - 'deploy'
-      - 'my-backend'
-      - '--image=gcr.io/smartinventory-456319/my-backend'
-      - '--region=us-central1'
+      - 'SmartInventory'
+      - '--image=gcr.io/smartinventory-456319/SmartInventory'
+      - '--region=asia-southeast1'
       - '--platform=managed'
       - '--allow-unauthenticated'
 
 images:
-  - 'gcr.io/smartinventory-456319/my-backend'
+  - 'gcr.io/smartinventory-456319/SmartInventory'
