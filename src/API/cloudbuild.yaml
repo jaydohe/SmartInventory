@@ -24,4 +24,3 @@ images:
 
 options:
   logging: CLOUD_LOGGING_ONLY
-  worker_pool: 'projects/smartinventory-456319/locations/asia-southeast1/workerPools/my-custom-pool'
