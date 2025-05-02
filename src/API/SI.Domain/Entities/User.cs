@@ -63,7 +63,7 @@ public class User : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
         };
     }
 
-    public void ActivityCreateUser(string userName, string userRole, string? wareId, string? departId)
+    public void ActivityCreateUser(string userName, string userRole, string? wareId)
     {
         var payLoad = new WriteActiPayLoad
         (
@@ -71,13 +71,12 @@ public class User : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
             ActivityContentTypes.CREATED,
             $@"{userName} ({userRole}) đã thêm {this.Name} vào lúc {DateTimeOffset.UtcNow.ToLocal():dd/MM/yyyy HH:mm:ss}",
             ActivityEntityTypes.USER,
-            wareId,
-            departId
+            wareId
         );
         this.Raise(new WriteActivityEvent(Activity.Create(payLoad)));
     }
 
-    public void ActivityUpdateUser(string userName, string userRole, string? wareId, string? departId)
+    public void ActivityUpdateUser(string userName, string userRole, string? wareId)
     {
         var payLoad = new WriteActiPayLoad
         (
@@ -85,13 +84,12 @@ public class User : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
             ActivityContentTypes.UPDATED,
             $@"{userName} ({userRole}) đã cập nhật tài khoản {this.Name} vào lúc {DateTimeOffset.UtcNow.ToLocal():dd/MM/yyyy HH:mm:ss}",
             ActivityEntityTypes.USER,
-            wareId,
-            departId
+            wareId
         );
         this.Raise(new WriteActivityEvent(Activity.Create(payLoad)));
     }
 
-    public void ActivityLockUser(string userName, string userRole, string? wareId, string? departId)
+    public void ActivityLockUser(string userName, string userRole, string? wareId)
     {
         var payLoad = new WriteActiPayLoad
         (
@@ -99,13 +97,12 @@ public class User : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
             ActivityContentTypes.UPDATED,
             $@"{userName} ({userRole}) đã khóa tài khoản {this.Name} vào lúc {DateTimeOffset.UtcNow.ToLocal():dd/MM/yyyy HH:mm:ss}",
             ActivityEntityTypes.USER,
-            wareId,
-            departId
+            wareId
         );
         this.Raise(new WriteActivityEvent(Activity.Create(payLoad)));
     }
 
-    public void ActivityUnlockUser(string userName, string userRole, string? wareId, string? departId)
+    public void ActivityUnlockUser(string userName, string userRole, string? wareId)
     {
         var payLoad = new WriteActiPayLoad
         (
@@ -113,13 +110,12 @@ public class User : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
             ActivityContentTypes.UPDATED,
             $@"{userName} ({userRole}) đã mở khóa tài khoản {this.Name} vào lúc {DateTimeOffset.UtcNow.ToLocal():dd/MM/yyyy HH:mm:ss}",
             ActivityEntityTypes.USER,
-            wareId,
-            departId
+            wareId
         );
         this.Raise(new WriteActivityEvent(Activity.Create(payLoad)));
     }
 
-    public void ActivityUpdateUserRole(string userName, string userRole, string? wareId, string? departId)
+    public void ActivityUpdateUserRole(string userName, string userRole, string? wareId)
     {
         var payLoad = new WriteActiPayLoad
         (
@@ -127,13 +123,12 @@ public class User : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
             ActivityContentTypes.UPDATED,
             $@"{userName} ({userRole}) đã cập nhật phân quyền của {this.Name} thành {this.Role} vào lúc {DateTimeOffset.UtcNow.ToLocal():dd/MM/yyyy HH:mm:ss}",
             ActivityEntityTypes.USER,
-            wareId,
-            departId
+            wareId
         );
         this.Raise(new WriteActivityEvent(Activity.Create(payLoad)));
     }
 
-    public void ActivityResetPass(string userName, string userRole, string? wareId, string? departId)
+    public void ActivityResetPass(string userName, string userRole, string? wareId)
     {
         var payLoad = new WriteActiPayLoad
         (
@@ -141,13 +136,12 @@ public class User : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
             ActivityContentTypes.UPDATED,
             $@"{userName} ({userRole}) đã cập nhật mật khẩu của {this.Name} vào lúc {DateTimeOffset.UtcNow.ToLocal():dd/MM/yyyy HH:mm:ss}",
             ActivityEntityTypes.USER,
-            wareId,
-            departId
+            wareId
         );
         this.Raise(new WriteActivityEvent(Activity.Create(payLoad)));
     }
 
-    public void ActivityDelUser(string userName, string userRole, string? wareId, string? departId)
+    public void ActivityDelUser(string userName, string userRole, string? wareId)
     {
         var payLoad = new WriteActiPayLoad
         (
@@ -155,8 +149,7 @@ public class User : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
             ActivityContentTypes.DELETED,
             $@"{userName} ({userRole}) đã xóa tài khoản {this.Name} vào lúc {DateTimeOffset.UtcNow.ToLocal():dd/MM/yyyy HH:mm:ss}",
             ActivityEntityTypes.USER,
-            wareId,
-            departId
+            wareId
         );
         this.Raise(new WriteActivityEvent(Activity.Create(payLoad)));
     }

@@ -54,8 +54,7 @@ public class Activity : CTBaseEntity
             ContentType = payLoad.ContentType,
             Content = payLoad.Content,
             EntityType = payLoad.EntityType,
-            WarehouseId = payLoad.WarehouseId,
-            DepartmentId = payLoad.DepartmentId
+            WarehouseId = payLoad.WarehouseId
         };
     }
 }

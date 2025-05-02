@@ -26,6 +26,7 @@ public class UserEndpoint : IEndpoint
         userGR.MapGet("/get-by-id/{id}", GetUserAsync);
         userGR.MapPost("/create", CreateUserAsync);
         userGR.MapPatch("/update-is-login/{id}", UpdateIsLoginAsync);
+        userGR.MapPatch("/update-role/{id}/role/{role}", UpdateUserRoleAsync);
         userGR.MapDelete("/delete/{id}", DelUserAsync);
 
         return endpoints;
@@ -50,6 +51,11 @@ public class UserEndpoint : IEndpoint
     private async Task<IResult> UpdateIsLoginAsync(
         [FromServices] IMediator mediator, string id, [FromBody] UpdateIsLoginArg arg)
         => (await mediator.Send(new UpdateIsLoginCommand(id, arg)))
+            .ToOk(e => Results.Ok(e));
+
+    private async Task<IResult> UpdateUserRoleAsync(
+        [FromServices] IMediator mediator, string id, string role)
+        => (await mediator.Send(new UpdateUserRoleCommand(id, role)))
             .ToOk(e => Results.Ok(e));
 
     private async Task<IResult> DelUserAsync(

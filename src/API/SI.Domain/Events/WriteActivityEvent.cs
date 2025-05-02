@@ -20,6 +20,5 @@ public record WriteActiPayLoad(
     ActivityContentTypes ContentType,
     string Content,
     string EntityType,
-    string? WarehouseId,
-    string? DepartmentId
+    string? WarehouseId
 );
