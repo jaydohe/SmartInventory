@@ -41,11 +41,9 @@ public record NotifPayloadEvent(
 
 public readonly struct NotifType
 {
-    public const string SCHEME = "SCHEME";
-    public const string TICKET = "TICKET";
-    public const string SCHEME_OWNER = "SCHEME_OWNER";
-    public const string TICKET_OWNER = "TICKET_OWNER";
-    public const string SCHEME_UNDO = "SCHEME_UNDO";
-    public const string TICKET_UNDO = "TICKET_UNDO"; 
-    public const string EOH = "EOH";
+    public const string ORDER = "ORDER";
+    public const string FORECAST = "FORECAST";
+    public const string GOODSISSUE = "GOODSISSUE";
+    public const string GOODSRECEIPT = "GOODSRECEIPT";
+    public const string PRODUCTIONCOMMAND = "PRODUCTIONCOMMAND";
 }
