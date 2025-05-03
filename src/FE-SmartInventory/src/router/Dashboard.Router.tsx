@@ -1,5 +1,4 @@
 import Dashboard from '@/pages/Dashboard';
-import DeviceMap from '@/pages/DeviceMap';
 
 import { Route, Routes } from 'react-router-dom';
 
