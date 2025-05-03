@@ -22,22 +22,22 @@ export class SignalListener {
   public isConnected: boolean = false;
 
   public userId: string | null = null;
-  public unitId: string | null = null;
+  public wareId: string | null = null;
   constructor() {
     this.HubConnection = null;
   }
 
   // public accessTokenFactory2 = (): string => this.accessTokenFactory;
 
-  public async registerUser(idUser: string, unitId: string) {
+  public async registerUser(idUser: string, idWare: string) {
     // console.log(idUser, unitId, this.HubConnection);
     // console.log(idUser && unitId && this.HubConnection === null);
     if (this.HubConnection === null) {
       console.log('Initializing SignalR connection...');
       this.userId = idUser;
-      this.unitId = unitId;
+      this.wareId = idWare;
       // this.accessTokenFactory = accessTokenFactory;
-      const url = URL + `?userId=${idUser}&unitId=${unitId}`;
+      const url = URL + `?userId=${idUser}&unitId=${idWare}`;
 
       this.HubConnection = new HubConnectionBuilder()
         .withUrl(url)
