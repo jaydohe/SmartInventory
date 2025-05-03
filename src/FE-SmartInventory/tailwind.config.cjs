@@ -1,5 +1,5 @@
 /** @type {import('tailwindcss').Config} */
-
+/**chỉnh màu sắc trong trang html*/
 module.exports = {
   important: true,
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
@@ -17,8 +17,8 @@ module.exports = {
       colorBgContainer: '#ffffff',
       textWhite: '#ffffff',
 
-      colorLink: '#13c2c2',
-      colorLinkHover: '#15b2b2',
+      colorLink: '#00b0ec',
+      colorLinkHover: '#174cda',
 
       successColor: '#52c41a',
       successColorHover: '#73d13d',

@@ -2,7 +2,7 @@ import { createContext } from 'react';
 import * as signalR from '@microsoft/signalr';
 import { HubConnectionBuilder, LogLevel, HubConnectionState } from '@microsoft/signalr';
 
-const URL = import.meta.env.VITE_HUB_ADDRESS;
+const URL = import.meta.env.VITE_HUB_ADDRESS ?? `http://103.107.182.5:9601/KioskHub`;
 
 interface ISignalRContext {
   connection: SignalListener | null;

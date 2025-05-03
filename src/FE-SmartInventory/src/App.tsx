@@ -13,7 +13,7 @@ import { DefaultRouter } from './router';
 
 import { useIsFetching, useIsMutating, useQueryClient } from '@tanstack/react-query';
 
-const URL = import.meta.env.VITE_URL_SIGNALR ?? `https://localhost:5001`;
+const URL = import.meta.env.VITE_URL_SIGNALR ?? `https://esp-api.stlsolution.com`;
 
 function App() {
   const [newConnection, setNewConnection] = useState<SignalListener | null>(null);

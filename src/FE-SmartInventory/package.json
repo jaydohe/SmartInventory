@@ -1,15 +1,17 @@
 {
-  "name": "package",
+  "name": "ZLight",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
   "scripts": {
     "dev": "vite --mode dev --host",
     "local": "vite --mode loc --host",
+    "stg": "vite --mode stg --host",
     "live": "vite --host --port 80",
     "build": "tsc && vite build --mode stg",
     "deploy": "tsc && vite build --mode prod",
     "build-uat": "tsc && vite build --mode dev",
+    "buildTest": "tsc && vite --mode stg build",
     "preview": "vite preview"
   },
   "dependencies": {

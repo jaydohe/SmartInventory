@@ -20,6 +20,6 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["src", "src/Layout/AdminLayout.tsx"],
+  "include": ["src", "src/Layout/AdminLayout.tsx", "src/pages/IssueMap/Components/ConfirmProcessed.tsx"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
