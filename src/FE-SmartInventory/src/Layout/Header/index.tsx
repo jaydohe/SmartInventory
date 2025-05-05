@@ -1,5 +1,5 @@
 import BellNotification from '@/assets/img/BellNotification.svg';
-import logo from '@/assets/img/logo1.png';
+import logo from '@/assets/img/Login_Logo.png';
 import DrawerComponents from '@/Components/Drawer/index';
 import NotificationCom from '@/Components/Notification';
 import { ADMIN, WAREHOUSE_STAFF, WAREHOUSE_PRODUCER, SALESMAN } from '@/Constant';
