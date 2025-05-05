@@ -21,7 +21,7 @@ const LoginNew: React.FC = () => {
 
   useEffect(() => {
     if (accessToken && refreshToken) {
-      navigate('/device-map');
+      navigate('/agency');
     }
   }, [accessToken, refreshToken]);
 

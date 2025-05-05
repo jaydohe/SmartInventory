@@ -14,7 +14,7 @@ export default function NotFound() {
           <p>Xin lỗi, trang bạn đang truy cập không thể tìm thấy</p>
         </div>
 
-        <div className="text-center my-5  " onClick={() => navigate('/dashboard')}>
+        <div className="text-center my-5  " onClick={() => navigate('/agency')}>
           <Button
             type="primary"
             size="large"
