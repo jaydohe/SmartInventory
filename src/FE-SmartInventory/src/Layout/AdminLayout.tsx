@@ -39,7 +39,7 @@ const AdminLayout: React.FC = () => {
   }
 
   if (accessToken && refreshToken && location.pathname === '/') {
-    return <Navigate to="/smart-management" replace />;
+    return <Navigate to="/self" replace />;
   }
 
   return (

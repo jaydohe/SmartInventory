@@ -15,6 +15,9 @@ export const QueryKeys = {
   GET_ALL_USER: 'getAllUser',
   DETAIL_USER: 'detailUser',
 
+  GET_ALL_AGENCY: 'getAllAgency',
+  DETAIL_AGENCY:  'detailAgency',
+
   GET_ALL_ORDERS: 'getAllOrders',
   DETAIL_ORDER: 'detailOrder',
 

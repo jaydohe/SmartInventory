@@ -19,7 +19,7 @@ export default function Forbidden() {
           <Button
             onClick={() => {
               ForbiddenStore.getState().setForbidden(false);
-              navigate('/dashboard');
+              navigate('/agency');
             }}
             type="primary"
             size="large"
