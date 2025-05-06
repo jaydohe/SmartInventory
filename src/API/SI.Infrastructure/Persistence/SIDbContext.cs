@@ -100,7 +100,7 @@ public class SIDbContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         // dev
-        var connectionForMigration = "Server=localhost;Database=si.dev;User=root;Password=Devbyjelly123;";
+        var connectionForMigration = "Server=34.87.166.154;Database=sys_dev;User=root;Password=Devbyjelly123;";
 
         if (!optionsBuilder.IsConfigured)
         {
