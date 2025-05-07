@@ -125,7 +125,7 @@ export default function SelfInfo() {
                 <Avatar size={120} icon={<UserOutlined />} className="mb-4 bg-primary" />
                 <h3 className="mb-2 text-xl font-semibold">{selfInfo?.data.name}</h3>
                 <p className="font-medium text-base flex items-center justify-center gap-2">
-                  {selfInfo?.data.wareName} <RoleTag role={role as RoleEnumString} />
+                    {selfInfo?.data.wareName} <RoleTag role={role as RoleEnumString} />
                 </p>
 
                 <Row gutter={[16, 16]} className="mt-4">
@@ -162,16 +162,38 @@ export default function SelfInfo() {
                 <Descriptions.Item label="Tên Người Dùng">{selfInfo?.data.name}</Descriptions.Item>
 
                 <Descriptions.Item label="Tên Đăng Nhập">{selfInfo?.data.loginName}</Descriptions.Item>
-                <Descriptions.Item label="Phòng ban">{selfInfo?.data.positionName}</Descriptions.Item>
-
-                <Descriptions.Item label="Đơn vị kho">{selfInfo?.data.wareName}</Descriptions.Item>
-                <Descriptions.Item label="Giới tính">{selfInfo?.data.gender}</Descriptions.Item>
-
-                <Descriptions.Item label="Số điện thoại">{selfInfo?.data.phoneNumber}</Descriptions.Item>
-                <Descriptions.Item label="Email">{selfInfo?.data.email}</Descriptions.Item>
-
-                <Descriptions.Item label="Địa chỉ">{selfInfo?.data.address}</Descriptions.Item>
-                
+                <Descriptions.Item label="Phòng ban">
+                  {selfInfo?.data.positionName === 'null'
+                  ? 'Không có'
+                  : selfInfo?.data.positionName}
+                </Descriptions.Item>
+                <Descriptions.Item label="Đơn vị kho">
+                  {selfInfo?.data.wareName === 'null'
+                  ? 'Không có'
+                  : selfInfo?.data.wareName}
+                  </Descriptions.Item>
+                <Descriptions.Item label="Giới tính">
+                  {selfInfo?.data.gender === 'FEMALE'
+                    ? 'Nữ'
+                    : selfInfo?.data.gender === 'MALE'
+                    ? 'Nam'
+                    : 'Khác'}
+                </Descriptions.Item>
+                <Descriptions.Item label="Số điện thoại">
+                  {selfInfo?.data.phoneNumber
+                  ? 'Không có'
+                  : selfInfo?.data.phoneNumber}
+                </Descriptions.Item>
+                <Descriptions.Item label="Email">
+                  {selfInfo?.data.email
+                  ? 'Không có'
+                  : selfInfo?.data.email}
+                </Descriptions.Item>
+                <Descriptions.Item label="Địa chỉ">
+                  {selfInfo?.data.address
+                  ? 'Không có'
+                  : selfInfo?.data.address}
+                </Descriptions.Item>
               </Descriptions>
             </Card>
           </Col>
