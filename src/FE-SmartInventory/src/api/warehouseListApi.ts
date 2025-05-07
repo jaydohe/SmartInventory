@@ -1,5 +1,5 @@
 import { TPage, TResponse } from '@/interface';
-import { TWarehouse } from '@/interface/TWarehouse';
+import { TCreateWarehouse, TUpdateWarehouse, TWarehouse } from '@/interface/TWarehouse';
 import axiosClient from './AxiosClient';
 
 export const warehouseListApi = {
@@ -13,12 +13,12 @@ export const warehouseListApi = {
     const res = await axiosClient.get(url);
     return res.data;
   },
-  createWarehouse: async (data: TWarehouse) => {
+  createWarehouse: async (data: TCreateWarehouse) => {
     const url = '/api/v1/warehouse/create';
     const res = await axiosClient.post(url, data);
     return res.data;
   },
-  updateWarehouse: async (id: string, data: TWarehouse) => {
+  updateWarehouse: async (id: string, data: TUpdateWarehouse) => {
     const url = `/api/v1/warehouse/update/${id}`;
     const res = await axiosClient.patch(url, data);
     return res.data;
