@@ -10,10 +10,10 @@ public readonly struct TransactionTypes
     // <summary>
     // Xuất kho
     // </summary>
-    public const string EXPORT = "IMPORT";
+    public const string EXPORT = "EXPORT";
 
     // <summary>
     // Điều chỉnh số lượng tồn kho
     // </summary>
-    public const string ADJUST = "IMPORT";
+    public const string ADJUST = "ADJUST";
 }
