@@ -29,5 +29,4 @@ export const NavigateNotifyPage = (parentNavigate: TNotifyType) => {
     default:
       return `/`;
   }
-};
-
+}

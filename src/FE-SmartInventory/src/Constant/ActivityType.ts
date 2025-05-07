@@ -8,6 +8,7 @@ export  const enum ActivityContentTypes {
 // entityType:
 export const enum ActivityEntityTypes {
   USER = 'USER', // user
+  PRODUCT = 'PRODUCT', // product
 }
 
 export const genActivityContentType = {
@@ -16,7 +17,8 @@ export const genActivityContentType = {
   [ActivityContentTypes.DELETED]: { name: 'Xoá', color: 'error' },
 };
 export const genActivityEntityTypes = {
-  [ActivityEntityTypes.USER]: 'người dùng'
+  [ActivityEntityTypes.USER]: 'người dùng',
+  [ActivityEntityTypes.PRODUCT]: 'sản phẩm'
 };
 
 export const arActivityContentType = [
