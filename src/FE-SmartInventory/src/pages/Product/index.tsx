@@ -38,7 +38,6 @@ import {
   import { TBuilderQuery } from '@/interface';
   import { useQueryProduct } from './Hook/useQueryProduct';
   import CreateProduct from './Components/CreateProduct';
-  import ProductInfo from './Components/ProductInfo';
   import StatisticCard from '@/Components/Statistic';
   import { authStoreSelectors } from '@/Stores/userStore';
   import { useQueryWarehouse } from '@/hook/useQueryWarehouse';
