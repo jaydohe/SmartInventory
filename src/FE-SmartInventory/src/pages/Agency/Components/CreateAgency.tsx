@@ -32,6 +32,27 @@ const CreateAgency = ({ handleCreateAgency }: { handleCreateAgency: (data: TCrea
   return (
     <Form form={form} layout="vertical" onFinish={onFinish}>
       <Form.Item
+        name="wardId"
+        label="WardId"
+        rules={[{ required: true, message: 'Vui lòng nhập WardId' }]}
+      >
+        <Input placeholder="Nhập DistrictI" />
+      </Form.Item>
+      <Form.Item
+        name="districtI"
+        label="DistrictI"
+        rules={[{ required: true, message: 'Vui lòng nhập DistrictI' }]}
+      >
+        <Input placeholder="Nhập DistrictI" />
+      </Form.Item>
+      <Form.Item
+        name="provinceId"
+        label="ProvinceId"
+        rules={[{ required: true, message: 'Vui lòng nhập ProvinceId' }]}
+      >
+        <Input placeholder="Nhập ProvinceId" />
+      </Form.Item>
+      <Form.Item
         name="name"
         label="Tên đại lý"
         rules={[{ required: true, message: 'Vui lòng nhập tên đại lý' }]}
@@ -39,49 +60,49 @@ const CreateAgency = ({ handleCreateAgency }: { handleCreateAgency: (data: TCrea
         <Input placeholder="Nhập tên đại lý" />
       </Form.Item>
       <Form.Item
-        name="Representative"
+        name="representative"
         label="Tên người đại diện"
         rules={[{ required: true, message: 'Vui lòng nhập tên người đại diện' }]}
       >
         <Input placeholder="Nhập tên người đại diện" />
       </Form.Item>
       <Form.Item
-        name="TaxCode"
+        name="taxCode"
         label="Mã số thuế"
         rules={[{ required: true, message: 'Vui lòng nhập mã số thuế' }]}
       >
         <Input placeholder="Nhập mã số thuế" />
       </Form.Item>
       <Form.Item
-        name="PhoneNumber"
+        name="phoneNumber"
         label="Số điện thoại"
         rules={[{ required: true, message: 'Vui lòng nhập số điện thoại' }]}
       >
         <Input placeholder="Nhập số điện thoại" />
       </Form.Item>
       <Form.Item
-        name="Email"
+        name="email"
         label="Email"
         rules={[{ required: true, message: 'Vui lòng nhập Email' }]}
       >
         <Input placeholder="Nhập Email" />
       </Form.Item>
       <Form.Item
-        name="Address"
+        name="address"
         label="Địa chỉ"
         rules={[{ required: true, message: 'Vui lòng nhập địa chỉ' }]}
       >
         <Input placeholder="Nhập địa chỉ" />
       </Form.Item>
       <Form.Item
-        name="CurrentDebt"
+        name="currentDebt"
         label="Công nợ"
         rules={[{ required: true, message: 'Vui lòng nhập Công nợ' }]}
       >
         <Input placeholder="Nhập Địa chỉ" />
       </Form.Item>
       <Form.Item
-        name="Note"
+        name="note"
         label="Ghi chú"
         rules={[{ required: true, message: 'Vui lòng nhập ghi chú' }]}
       >
