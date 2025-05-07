@@ -1,4 +1,4 @@
-export const enum GoodsStatus {
+export enum GoodsStatus {
     CREATED   = 0,   // Tạo mới
     PENDING   = 1,   // Chờ xác nhận
     SUCCESS   = 2,   // Đã xác nhận

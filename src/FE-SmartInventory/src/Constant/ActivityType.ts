@@ -1,5 +1,5 @@
 // contentType:
-export const enum ActivityContentTypes {
+export  const enum ActivityContentTypes {
   CREATED = 0,
   UPDATED = 1,
   DELETED = -1,

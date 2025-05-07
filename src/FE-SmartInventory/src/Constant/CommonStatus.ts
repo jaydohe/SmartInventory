@@ -1,4 +1,4 @@
-export const enum CommonStatus {
+export enum CommonStatus {
     INACTIVE = 0,  // Khóa tài khoản
     ACTIVE   = 1,  // Đang hoạt động
     DELETED  = -1, // Đã xóa

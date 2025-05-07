@@ -1,4 +1,4 @@
-export enum notifyLevel {
+/*export enum notifyLevel {
   warning = 'WARNING',
   notify = 'NOTIFY',
 }
@@ -30,3 +30,4 @@ export const NavigateNotifyPage = (parentNavigate: TNotifyType) => {
       return `/`;
   }
 };
+*/

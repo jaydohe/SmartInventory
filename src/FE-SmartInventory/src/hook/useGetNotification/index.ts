@@ -1,4 +1,4 @@
-import { notificationApi } from '@/api/notificationApi';
+/*import { notificationApi } from '@/api/notificationApi';
 import { QueryKeys } from '@/Constant';
 
 import { TNotification, TPage, TResponse } from '@/interface';
@@ -42,3 +42,4 @@ export const useGetUnReadCount = (params: string) => {
     retry: 3,
   });
 };
+*/
