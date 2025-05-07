@@ -14,8 +14,26 @@ export type TProduct = {
   categoryId: string;
 };
 
-// tạo mới => bạn sẽ không có id
-export type TCreateProduct = Omit<TProduct, 'id'>;
+export type TCreateProduct = {
+  name: string;
+  description: string;
+  unit: string;
+  productType: string;
+  purchasePrice: number;
+  sellingPrice: number;
+  holdingCost: number;
+  materialSupplierId?: string; // nullable
+  warehouseId: string;
+  categoryId: string;
+};
 
-// cập nhật => giống create, nhưng có thêm id
-export type TUpdateProduct = TCreateProduct & { id: string };
+export type TUpdateProduct = {
+  id: string; // cần để biết đang cập nhật sản phẩm nào
+  name?: string;
+  description?: string;
+  unit?: string;
+  purchasePrice?: number;
+  sellingPrice?: number;
+  holdingCost?: number;
+  categoryId?: string;
+};

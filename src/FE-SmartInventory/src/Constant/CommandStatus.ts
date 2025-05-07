@@ -1,4 +1,4 @@
-export enum CommandStatus {
+export const enum CommandStatus {
         CREATED = 0,
         PENDING = 1,
         CONFIRMED = 2,
