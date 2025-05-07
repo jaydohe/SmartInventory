@@ -10,10 +10,10 @@ import { TBuilderQuery } from '@/interface';
 
 const { Option } = Select;
 
-const CreateProduct = ({ handleCreateProduct }: { handleCreateProduct: (data: TCreateUser) => void }) => {
+const handleCreateProduct = ({ handleCreateProduct }: { handleCreateProduct: (data: TCreateProduct) => void }) => {
   const [form] = Form.useForm();
   const [filter, setFilter] =useState<TBuilderQuery>( {
-    toJoin: ['products.*'],
+    toJoin: ['users.*'],
     isAsc: true,
     orderBy: 'name',
     toPaging: {
@@ -22,13 +22,24 @@ const CreateProduct = ({ handleCreateProduct }: { handleCreateProduct: (data: TC
     },
   });
   const { getAllWarehouse } = useQueryWarehouse(useBuilderQuery(filter));
-
+  
   const onFinish = (data: TCreateProduct) => {
-    console.log('data:', data);
     handleCreateProduct(data);
     form.resetFields();
   };
-
+  const CreateProduct = ({
+    handleCreateProduct,
+    categories,
+    warehouses,
+    suppliers
+  }: {
+    handleCreateProduct: (data: TCreateProduct) => void;
+    categories: { id: string; name: string }[];
+    warehouses: { id: string; name: string }[];
+    suppliers: { id: string; name: string }[];
+  }) => {
+  const [form] = Form.useForm();
+  
   return (
     <Form layout="vertical" form={form} onFinish={onFinish}>
       <Form.Item
