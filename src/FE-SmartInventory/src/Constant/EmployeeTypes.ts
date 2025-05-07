@@ -4,7 +4,7 @@ export const enum  GenderTypes {
     OTHER = "OTHER",
 }
 export const genGenderTypes = {
-    [GenderTypes.MALE]: 'MALE',
-    [GenderTypes.FEMALE]: 'FEMALE',
-    [GenderTypes.OTHER]: 'OTHER',
+    [GenderTypes.MALE]: 'Nam',
+    [GenderTypes.FEMALE]: 'Nữ',
+    [GenderTypes.OTHER]: 'Khác',
 };

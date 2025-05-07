@@ -6,16 +6,10 @@ const UpdateProduct = ({
   initialValues,
   handleUpdateProduct,
   handleCancel,
-  categories,
-  warehouses,
-  suppliers,
 }: {
   initialValues: TUpdateProduct;
   handleUpdateProduct: (values: TUpdateProduct) => void;
   handleCancel: () => void;
-  categories: { id: string; name: string }[];
-  warehouses: { id: string; name: string }[];
-  suppliers: { id: string; name: string }[];
 }) => {
   const [form] = Form.useForm();
   const [formChange, setFormChange] = useState(false);
@@ -27,7 +21,7 @@ const UpdateProduct = ({
   return (
     <Form
       form={form}
-      layout="vertical"
+      layout="horizontal"
       initialValues={initialValues}
       onFinish={onFinish}
       onFieldsChange={() => setFormChange(true)}
