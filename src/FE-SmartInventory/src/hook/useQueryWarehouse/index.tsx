@@ -1,7 +1,7 @@
 import { useQueryClient, UseQueryOptions, useQuery, useMutation } from '@tanstack/react-query';
 import { warehouseListApi } from '@/api/warehouseListApi';
 import { TPage, TResponse } from '@/interface';
-import { TWarehouse } from '@/interface/TWarehouse';
+import { TCreateWarehouse, TWarehouse } from '@/interface/TWarehouse';
 import { QueryKeys } from '@/Constant';
 import { toast } from 'react-toastify';
 
@@ -20,7 +20,7 @@ export const useQueryWarehouse = (params: string, options?: useQueryWarehouseOpt
   });
 
   const createWarehouse = useMutation({
-    mutationFn: (data: TWarehouse) => warehouseListApi.createWarehouse(data),
+    mutationFn: (data: TCreateWarehouse) => warehouseListApi.createWarehouse(data),
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: [QueryKeys.GET_ALL_WAREHOUSE, params] });
       toast.success('Tạo kho mới thành công');

@@ -36,7 +36,7 @@ export default function ActivityPage(props: IActivityPageProps) {
     orderBy: 'createdAt',
     appendQuery: [
       {
-        unitId: {
+        warehouseId: {
           value: wareId,
           queryOperator: '$eq',
           queryOperatorParent: '$and',
