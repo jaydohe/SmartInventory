@@ -27,6 +27,9 @@ export const QueryKeys = {
 // Oders
   GET_ALL_ORDERS: 'getAllOrders',
   DETAIL_ORDER: 'detailOrder',
+// EMPLOYEE
+  GET_ALL_EMPLOYEE: 'getAllEmployee',
+  DETAIL_EMPLOYEE: 'detailEmployee',
 // ACTIVITY
   ACTIVITY: 'activity',
 };

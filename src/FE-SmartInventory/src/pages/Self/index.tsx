@@ -179,21 +179,9 @@ export default function SelfInfo() {
                     ? 'Nam'
                     : 'Khác'}
                 </Descriptions.Item>
-                <Descriptions.Item label="Số điện thoại">
-                  {selfInfo?.data.phoneNumber
-                  ? 'Không có'
-                  : selfInfo?.data.phoneNumber}
-                </Descriptions.Item>
-                <Descriptions.Item label="Email">
-                  {selfInfo?.data.email
-                  ? 'Không có'
-                  : selfInfo?.data.email}
-                </Descriptions.Item>
-                <Descriptions.Item label="Địa chỉ">
-                  {selfInfo?.data.address
-                  ? 'Không có'
-                  : selfInfo?.data.address}
-                </Descriptions.Item>
+                <Descriptions.Item label="Số điện thoại">{selfInfo?.data.phoneNumber}</Descriptions.Item>
+                <Descriptions.Item label="Email">{selfInfo?.data.email}</Descriptions.Item>
+                <Descriptions.Item label="Địa chỉ">{selfInfo?.data.address}</Descriptions.Item>
               </Descriptions>
             </Card>
           </Col>
