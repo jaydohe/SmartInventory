@@ -86,12 +86,12 @@ export default function User() {
   });
 
   const params = useBuilderQuery(filter);
-  const { getAllUser, createUserByUnit, deleteUser } = useQueryUser(params);
+  const { getAllUser, createUser, deleteUser } = useQueryUser(params);
   const { data: listUser } = getAllUser;
   const unitName = listUser?.data?.[0]?.warehouse?.name || 'N/A';
 
   const handleCreateUser = (data: TCreateUser) => {
-    createUserByUnit.mutate(data, {
+    createUser.mutate(data, {
       onSuccess: () => {
         handleCloseModal();
       },
@@ -335,7 +335,7 @@ export default function User() {
               key="all"
             >
               <Table
-                rowKey={(record) => record.id}
+                rowKey={(record: { id: any; }) => record.id}
                 columns={columns}
                 dataSource={listUser?.data}
                 tableLayout={'auto'}
@@ -381,7 +381,7 @@ export default function User() {
                 key={role}
               >
                 <Table
-                  rowKey={(record) => record.id}
+                  rowKey={(record: { id: any; }) => record.id}
                   columns={columns}
                   dataSource={usersByRole[role as RoleEnumString]}
                   tableLayout={'auto'}
@@ -408,7 +408,7 @@ export default function User() {
 
         {role === RoleEnumString.DEV && (
           <Table
-            rowKey={(record) => record.id}
+            rowKey={(record: { id: any; }) => record.id}
             columns={columns}
             dataSource={listUser?.data}
             tableLayout={'auto'}

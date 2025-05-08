@@ -12,6 +12,7 @@ import { PrivateRouters } from '../PrivateRouters';
 import SelfRouter from '../Self.Router';
 import UserRouter from '../User.router';
 import ActivityRouter from '../Activity.Router';
+import ProductRouter from '../Product.Router'
 
 export const DefaultRouter = () => {
   return (
@@ -44,6 +45,7 @@ export const DefaultRouter = () => {
             <Route path="/self" element={<SelfRouter />}></Route>
             <Route path="/activity/*" element={<ActivityRouter />}></Route>
             <Route path="/user/*" element={<UserRouter />}></Route>
+            <Route path="/product/*" element={<ProductRouter />}></Route>
           </Route>
 
           <Route
@@ -55,6 +57,7 @@ export const DefaultRouter = () => {
           >
             <Route path="/self" element={<SelfRouter />}></Route>
             <Route path="/activity/*" element={<ActivityRouter />}></Route>
+            
           </Route>
           
         </Route>
