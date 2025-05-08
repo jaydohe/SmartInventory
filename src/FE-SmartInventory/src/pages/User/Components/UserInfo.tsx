@@ -1,5 +1,4 @@
 import { Button, Card, Col, Divider, Form, Input, Modal, Row, Space, Tag, Typography } from 'antd';
-
 import { QueryKeys, RoleEnumString, UserOptionEnum } from '@/Constant';
 import { TUpdatePassword, TUpdateUser } from '@/interface/TUser';
 import {
@@ -189,7 +188,7 @@ export default function UserInfo({ userId }: { userId: string }) {
               style={{ backgroundColor: '#52c41a', borderColor: '#52c41a' }}
               block
             >
-              Đổi mật khẩu
+              Cài lại mật khẩu
             </Button>
 
             <Button

@@ -21,7 +21,7 @@ const LoginNew: React.FC = () => {
 
   useEffect(() => {
     if (accessToken && refreshToken) {
-      navigate('/agency');
+      navigate('/self');
     }
   }, [accessToken, refreshToken]);
 

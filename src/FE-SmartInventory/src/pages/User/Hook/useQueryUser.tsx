@@ -1,7 +1,5 @@
 import { TPage, TResponse } from '@/interface';
-
 import { QueryKeys, RoleEnum, RoleEnumString } from '@/Constant';
-
 import { TUser, TCreateUser, TUpdateUser, TUpdatePassword } from '@/interface/TUser';
 import { useQueryClient, UseQueryOptions, useQuery, useMutation } from '@tanstack/react-query';
 import { userListApi } from '@/api/userListApi';

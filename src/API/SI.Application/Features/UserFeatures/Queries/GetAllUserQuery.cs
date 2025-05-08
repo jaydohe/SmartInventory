@@ -29,10 +29,11 @@ public class GetAllUserQueryHandler(
 
         var queryContext = request.QueryContext;
         var userQuery = userRepos.HandleLinqQueryRequestV2(request.QueryContext);
-        if (role is "ADMIN")
+        if (role == "ADMIN")
         {
             userQuery = userQuery
                 .Where(x => x.Role != UserRoles.DEV)
+                .Where(x => x.Role.ToString() != role)
                 .Where(x => x.DeletedOn == null);
         }
 

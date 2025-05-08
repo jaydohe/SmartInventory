@@ -1,4 +1,4 @@
-export enum CommandStatus {
+export const enum CommandStatus {
         CREATED = 0,
         PENDING = 1,
         CONFIRMED = 2,
@@ -17,7 +17,7 @@ export const CommandStatusNames : Record<CommandStatus, string> = {
 };
 
 export const CommandStatusList = [
-    { name: 'Dã tạo', id: CommandStatus.CREATED },
+    { name: 'Đã tạo', id: CommandStatus.CREATED },
     { name: 'Đang chờ xác nhận', id: CommandStatus.PENDING },
     { name: 'Đã xác nhận', id: CommandStatus.CONFIRMED },
     { name: 'Đang sản xuất', id: CommandStatus.INPROGRESS },

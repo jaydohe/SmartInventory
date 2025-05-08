@@ -1,37 +1,37 @@
 export interface ISelfRes {
-  positionId: string | null;
-  positionName: string | null;
+  positionId: string ;
+  positionName: string ;
   userId: string;
   code: string;
   name: string;
   loginName: string;
-  wareId: string | null;
-  wareName: string | null;
-  departmentId: string | null;
-  departmentName: string | null;
-  gender: string | null;
-  isManage: boolean | null;
-  phoneNumber: string | null;
-  email: string | null;
-  address: string | null;
-  wardId: string | null;
+  wareId: string ;
+  wareName: string ;
+  departmentId: string ;
+  departmentName: string ;
+  gender: string ;
+  isManage: boolean ;
+  phoneNumber: string ;
+  email: string ;
+  address: string ;
+  wardId: string ;
   ward?: {
     id: string;
     name: string;
     districtId: string;
   };
-  districtId: string | null;
+  districtId: string ;
   district?: {
     id: string;
     name: string;
     provinceId: string;
   };
-  provinceId: string | null;
+  provinceId: string ;
   province?: {
     id: string;
     name: string;
   };
-  dateHired: string | null;
+  dateHired: string ;
 }
 export interface IUpdatePasswordSelf {
   oldPassword: string;

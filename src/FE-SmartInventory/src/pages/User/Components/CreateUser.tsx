@@ -26,7 +26,6 @@ const CreateUser = ({ handleCreateUser }: { handleCreateUser: (data: TCreateUser
 
   const onFinish = (data: TCreateUser) => {
     console.log('data:', data);
-
     handleCreateUser(data);
     form.resetFields();
   };
