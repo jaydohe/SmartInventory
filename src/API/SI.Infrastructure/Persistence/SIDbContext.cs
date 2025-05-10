@@ -100,7 +100,7 @@ public class SIDbContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         // dev
-        var connectionForMigration = "Server=54.251.108.92;Database=SmartInventory;User=root;Password=Devbyjelly@123;";
+        var connectionForMigration = "Server=mydb-instance.cvqkwyaoayqq.ap-southeast-1.rds.amazonaws.com;Database=si_dev;User=root;Password=Devbyjelly123;Connect Timeout=60;Default Command Timeout=120;";
 
         if (!optionsBuilder.IsConfigured)
         {
