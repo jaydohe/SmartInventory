@@ -4,7 +4,7 @@ namespace SI.Contract.OrderContract;
 
 public class OrderResult
 {
-    public string Id { get; set; } = null!;
+    public required string Id { get; set; } = null!;
     public string Code { get; set; } = null!;
     public string AgencyId { get; set; } = null!;
     public decimal TotalAmount { get; set; }
@@ -19,7 +19,7 @@ public class OrderResult
 
 public class OrderDetailDTO
 {
-    public string Id { get; set; }
+    public required string Id { get; set; }
     public string ProductId { get; set; } = null!;
     public int Quantity { get; set; }
     public decimal UnitPrice { get; set; }

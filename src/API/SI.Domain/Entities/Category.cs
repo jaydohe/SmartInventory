@@ -15,7 +15,7 @@ public class Category : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
 
     // <summary>
     // Tên danh mục
-    // </summary>
+    // </summary>   
     public string Name { get; set; } = null!;
 
     // <summary>
@@ -58,19 +58,7 @@ public class CategoryConfiguration() : IEntityTypeConfiguration<Category>
                 Code = "CATW003", 
                 Name = "Danh mục 3",
                 CategoryEntityType = CategoryEntityTypes.WAREHOUSE
-            },
-            new Category("4")
-            {
-                Code = "CATW004",
-                Name = "Toàn thời gian",
-                CategoryEntityType = CategoryEntityTypes.POSITION
-            },
-            new Category("5")
-            {
-                Code = "CATW005",
-                Name = "Bán thời gian",
-                CategoryEntityType = CategoryEntityTypes.POSITION
-            },
+            }
         };
         builder.HasData(categories);
     }
