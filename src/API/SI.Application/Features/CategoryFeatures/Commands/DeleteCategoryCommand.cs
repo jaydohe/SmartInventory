@@ -35,11 +35,6 @@ public class DeleteCategoryCommandHandler(
         if (checkProd != null)
             return CTBaseResult.UnProcess("Category is used in Product.");
 
-        var checkPosi = await posiRepos.BuildQuery
-            .FirstOrDefaultAsync(x => x.CategoryId == checkCat.Id && x.DeletedOn == null, cancellationToken);
-        if (checkPosi != null)
-            return CTBaseResult.UnProcess("Category is used in Position.");
-
         checkCat.DeletedOn = DateTimeOffset.UtcNow;
 
         var ret = await unitOfWork.SaveChangeAsync(cancellationToken);

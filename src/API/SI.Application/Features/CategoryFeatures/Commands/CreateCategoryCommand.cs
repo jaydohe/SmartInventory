@@ -32,8 +32,7 @@ public class CreateCategoryCommandHandler(
             return CTBaseResult.BadRequest(checkValid.Errors);
 
         if (request.Arg.CategoryEntityType != CategoryEntityTypes.PRODUCT &&
-            request.Arg.CategoryEntityType != CategoryEntityTypes.WAREHOUSE &&
-            request.Arg.CategoryEntityType != CategoryEntityTypes.POSITION)
+            request.Arg.CategoryEntityType != CategoryEntityTypes.WAREHOUSE)
             return CTBaseResult.NotFound("Category Entity Type");
 
         var checkCategory = await categoryRepos.BuildQuery

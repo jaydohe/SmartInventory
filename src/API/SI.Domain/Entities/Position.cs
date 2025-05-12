@@ -9,9 +9,6 @@ namespace SI.Domain.Entities;
 
 public class Position : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
 {
-    [ForeignKey(nameof(Category))]
-    public string? CategoryId { get; set; }
-
     // <summary>
     // Tên chức vụ
     // </summary>
@@ -21,8 +18,6 @@ public class Position : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
     public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
     public DateTimeOffset? ModifiedOn { get; set; }
     public DateTimeOffset? DeletedOn { get; set; }
-
-    public virtual Category? Category { get; set; }
 
     public Position(string id) : base(id) { }
     public Position() : base() { }
@@ -37,37 +32,30 @@ public class PositionConfiguration : IEntityTypeConfiguration<Position>
         {
             new Position("1") 
             {
-                CategoryId = "4",
                 Name = "Giám đốc" 
             },
             new Position("2") 
             {
-                CategoryId = "4",
                 Name = "Phó giám đốc" 
             },
             new Position("3") 
             {
-                CategoryId = "4",
                 Name = "Trưởng phòng" 
             },
             new Position("4") 
             {
-                CategoryId = "4",
                 Name = "Quản lý kho" 
             },
             new Position("5")
             {
-                CategoryId = "4",
                 Name = "Nhân viên kho"
             },
             new Position("6")
             {
-                CategoryId = "4",
                 Name = "Quản lý sản xuất"
             },
             new Position("7")
             {
-                CategoryId = "5",
                 Name = "Nhân viên bán hàng"
             }
         };

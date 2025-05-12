@@ -1,5 +1,4 @@
 ﻿using Asp.Versioning.Builder;
-using CTCore.DynamicQuery;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SI.Application.Features.SetupFeatures.Commands;
@@ -22,20 +21,20 @@ public class SetupEndpoint : IEndpoint
             .HasApiVersion(1)
             .RequireAuthorization(APIPolicies.ADMIN);
 
-        setupGR.MapGet("/get-zscore", GetZscoreAsync);
-        setupGR.MapPost("/zscore", SetupZscoreAsync);
+        setupGR.MapGet("/get-setup", GetSetupAsync);
+        setupGR.MapPost("/", SetupAsync);
 
         return endpoints;
     }
 
     // private method
-    private async Task<IResult> GetZscoreAsync(
+    private async Task<IResult> GetSetupAsync(
         [FromServices] IMediator mediator)
-        => (await mediator.Send(new GetZscoreQuery()))
+        => (await mediator.Send(new GetSetupQuery()))
             .ToOk(e => Results.Ok(e));
 
-    private async Task<IResult> SetupZscoreAsync(
-        [FromServices] IMediator mediator, [FromBody] SetupZscoreArg arg)
-        => (await mediator.Send(new SetupZscoreCommand(arg)))
+    private async Task<IResult> SetupAsync(
+        [FromServices] IMediator mediator, [FromBody] SetupArg arg)
+        => (await mediator.Send(new SetupCommand(arg)))
             .ToOk(e => Results.Ok(e));
 }
