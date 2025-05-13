@@ -8,20 +8,21 @@ using CTCore.DynamicQuery.Population;
 using Microsoft.EntityFrameworkCore;
 using SI.Domain.Common.Authenticate;
 using SI.Domain.Entities;
+using SI.Domain.Enums;
 
 namespace SI.Application.Features.CategoryFeatures.Queries;
 
-public class GetAllCategoryQuery(QueryPageRequestV3 query)
+public class GetAllCategoryProductQuery(QueryPageRequestV3 query)
     : CTBaseQuery<QueryPageRequestV3, OkDynamicPageResponse>(query)
 { }
 
-public class GetAllCategoryQueryHandler(
+public class GetAllCategoryProductQueryHandler(
     IRepository<Category> repository,
     IRepository<Employee> empRepos,
     IMapper mapper,
-    IUserIdentifierProvider identifierProvider) : IQueryHandler<GetAllCategoryQuery, OkDynamicPageResponse>
+    IUserIdentifierProvider identifierProvider) : IQueryHandler<GetAllCategoryProductQuery, OkDynamicPageResponse>
 {
-    public async Task<CTBaseResult<OkDynamicPageResponse>> Handle(GetAllCategoryQuery request, CancellationToken cancellationToken)
+    public async Task<CTBaseResult<OkDynamicPageResponse>> Handle(GetAllCategoryProductQuery request, CancellationToken cancellationToken)
     {
         var role = identifierProvider.Role;
         var employeeId = identifierProvider.EmployeeId;
@@ -38,6 +39,10 @@ public class GetAllCategoryQueryHandler(
             categoryQuery = categoryQuery
                 .Where(x => x.DeletedOn == null);
         }
+
+        categoryQuery = categoryQuery
+            .Where(x => x.DeletedOn == null)
+            .Where(x => x.CategoryEntityType == CategoryEntityTypes.PRODUCT);
 
         var (executeQuery, totalRecords, totalPages) =
             categoryQuery.HandleLinqQueryPageRequestV2(
