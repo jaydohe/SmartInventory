@@ -44,7 +44,7 @@ public class UpdateCategoryCommandHandler(
         var checkExisted = await categoryRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Name == request.Arg.Name && x.CategoryEntityType == checkCategory.CategoryEntityType && x.DeletedOn == null, cancellationToken);
         if (checkExisted != null)
-            return CTBaseResult.UnProcess($"Category in {checkCategory.CategoryEntityType} is existed.");
+            return CTBaseResult.UnProcess($"Category is existed.");
 
         if (request.Arg.Name != null)
         {

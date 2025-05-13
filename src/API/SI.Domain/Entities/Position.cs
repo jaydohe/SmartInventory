@@ -1,12 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CTCore.DynamicQuery.OData.Core;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SI.Domain.Common.Abstractions;
 using SI.Domain.Common.Primitives;
+using SI.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SI.Domain.Entities;
 
+[ODataRouting(nameof(Position), RouteRefix = "api/v1")]
+[Authorize(Policy = APIPolicies.ADMIN)]
 public class Position : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
 {
     // <summary>
