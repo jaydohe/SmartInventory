@@ -14,8 +14,7 @@ public class DeleteWarehouseCommand(string id) : ICommand<OkResponse>
 public class DeleteWarehouseCommandHandler(
     IUnitOfWork unitOfWork,
     IRepository<Warehouse> wareRepos,
-    IRepository<Employee> employeeRepos,
-    IRepository<Product> prodRepos) : ICommandHandler<DeleteWarehouseCommand, OkResponse>
+    IRepository<Employee> employeeRepos) : ICommandHandler<DeleteWarehouseCommand, OkResponse>
 {
     public async Task<CTBaseResult<OkResponse>> Handle(DeleteWarehouseCommand request, CancellationToken cancellationToken)
     {

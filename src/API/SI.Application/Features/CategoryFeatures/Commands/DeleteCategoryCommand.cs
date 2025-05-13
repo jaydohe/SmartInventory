@@ -15,8 +15,7 @@ public class DeleteCategoryCommandHandler(
     IUnitOfWork unitOfWork,
     IRepository<Category> categoryRepos,
     IRepository<Warehouse> wareRepos,
-    IRepository<Product> prodRepos,
-    IRepository<Position> posiRepos) : ICommandHandler<DeleteCategoryCommand, OkResponse>
+    IRepository<Product> prodRepos) : ICommandHandler<DeleteCategoryCommand, OkResponse>
 {
     public async Task<CTBaseResult<OkResponse>> Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
     {
