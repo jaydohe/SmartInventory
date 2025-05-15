@@ -6,7 +6,6 @@ using Asp.Versioning.Builder;
 using Asp.Versioning;
 using SI.Webapi.Extensions;
 using Microsoft.Extensions.FileProviders;
-using SI.WebApi.Configurations;
 using System.Text.Json.Serialization;
 using CTCore.DynamicQuery.OData;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -34,7 +33,6 @@ builder.Services.AddVersionApi();
 builder.Services.AddCorsConfig();
 builder.Services.AddJWTConfig(builder.Configuration);
 builder.Services.RegisterEndpoints();
-builder.Services.AddHttpClientConfig(builder.Configuration);
 
 builder.Services.AddHybridCache();
 

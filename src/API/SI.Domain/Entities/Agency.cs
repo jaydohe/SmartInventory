@@ -2,23 +2,12 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SI.Domain.Common.Abstractions;
 using SI.Domain.Common.Primitives;
-using SI.Domain.ValueObjeSI.Location;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SI.Domain.Entities;
 
 public class Agency : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
 {
-    [ForeignKey(nameof(Ward))]
-    public string WardId { get; set; } = null!;
-
-    [ForeignKey(nameof(District))]
-    public string DistrictId { get; set; } = null!;
-
-    [ForeignKey(nameof(Province))]
-    public string ProvinceId { get; set; } = null!;
-
     // <summary>
     // Mã đại lý
     // </summary>
@@ -76,10 +65,6 @@ public class Agency : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
     public DateTimeOffset? ModifiedOn { get; set; }
     public DateTimeOffset? DeletedOn { get; set; }
 
-    public virtual Ward? Ward { get; set; }
-    public virtual District? District { get; set; }
-    public virtual Province? Province { get; set; }
-
     public Agency(string id) : base(id) { }
     public Agency() : base() { }
 }
@@ -95,9 +80,6 @@ public class AgencyConfiguration : IEntityTypeConfiguration<Agency>
         {
             new Agency("law")
             {
-                WardId = "1",
-                DistrictId = "1",
-                ProvinceId = "1",
                 Code = "AGC001",
                 Name = "Công ty TNHH ABC",
                 Representative = "Tuyến Quý Tuân Nguyen",
@@ -109,9 +91,6 @@ public class AgencyConfiguration : IEntityTypeConfiguration<Agency>
             },
             new Agency("sunshine")
             {
-                WardId = "1",
-                DistrictId = "1",
-                ProvinceId = "1",
                 Code = "AGC002",
                 Name = "Công ty TNHH XYZ",
                 Representative = "Sơn Nhung Ngải Phạm",

@@ -56,12 +56,6 @@ public class GetMeQueryHandler(
             PhoneNumber = getEmployee?.PhoneNumber ?? "null",
             Email = getEmployee?.Email ?? "null",
             Address = getEmployee?.Address ?? "null",
-            WardId = getEmployee?.WardId ?? "null",
-            WardName = getEmployee?.Ward?.Name ?? "null",
-            DistrictId = getEmployee?.DistrictId ?? "null",
-            DistrictName = getEmployee?.District?.Name ?? "null",
-            ProvinceId = getEmployee?.ProvinceId ?? "null",
-            ProvinceName = getEmployee?.Province?.Name ?? "null",
             DateHired = getEmployee?.DateHired.ToString() ?? "null"
         };
 

@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using SI.Domain.Common.Abstractions;
 using SI.Domain.Common.Primitives;
-using SI.Domain.ValueObjeSI.Location;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -18,15 +17,6 @@ public class Warehouse : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
 
     [ForeignKey(nameof(Manager))]
     public string? ManagerId { get; set; }
-
-    [ForeignKey(nameof(Ward))]
-    public string WardId { get; set; } = null!;
-
-    [ForeignKey(nameof(District))]
-    public string DistrictId { get; set; } = null!;
-
-    [ForeignKey(nameof(Province))]
-    public string ProvinceId { get; set; } = null!;
 
     [ForeignKey(nameof(Category))]
     public string? CategoryId { get; set; }
@@ -59,9 +49,6 @@ public class Warehouse : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
 
     public virtual Warehouse? MasterWarehouse { get; set; }
     public virtual Employee? Manager { get; set; }
-    public virtual Ward? Ward { get; set; }
-    public virtual District? District { get; set; }
-    public virtual Province? Province { get; set; }
     public virtual Category? Category { get; set; }
     public virtual ICollection<Warehouse>? SlaveWarehouses { get; set; }
     public virtual ICollection<Employee>? Employees { get; set; }
@@ -95,9 +82,6 @@ public class WarehouseConfiguration() : IEntityTypeConfiguration<Warehouse>
                 CategoryId = "1",
                 //ManagerId = "hihihaha",
                 Code = "CDT001",
-                WardId = "1",
-                DistrictId = "1",
-                ProvinceId = "1",
                 Name = "Jellyjellyjelly",
                 Address = "123 ham tu",
                 Capacity = 999
@@ -105,9 +89,6 @@ public class WarehouseConfiguration() : IEntityTypeConfiguration<Warehouse>
             new Warehouse("basket")
             {
                 CategoryId = "3",
-                WardId = "1",
-                DistrictId = "1",
-                ProvinceId = "1",
                 Code = "BASKET001",
                 Name = "Basket",
                 Address = "123 ham tu",

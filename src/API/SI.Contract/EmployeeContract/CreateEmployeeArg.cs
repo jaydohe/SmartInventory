@@ -4,9 +4,6 @@ public class CreateEmployeeArg
 {
     public string PositionId { get; set; } = null!;
     public string DepartmentId { get; set; } = null!;
-    public string WardId { get; set; } = null!;
-    public string DistrictId { get; set; } = null!;
-    public string ProvinceId { get; set; } = null!;
     public string? WarehouseId { get; set; }
     public string Code { get; set; } = null!;
     public string Name { get; set; } = null!;

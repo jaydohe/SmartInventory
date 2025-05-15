@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SI.Domain.Common.Abstractions;
 using SI.Domain.Common.Primitives;
 using SI.Domain.Enums;
-using SI.Domain.ValueObjeSI.Location;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -16,15 +15,6 @@ public class Employee : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
     // </summary>
     [ForeignKey(nameof(Department))]
     public string? DepartmentId { get; set; }
-
-    [ForeignKey(nameof(Ward))]
-    public string WardId { get; set; } = null!;
-
-    [ForeignKey(nameof(District))]
-    public string DistrictId { get; set; } = null!;
-
-    [ForeignKey(nameof(Province))]
-    public string ProvinceId { get; set; } = null!;
 
     [ForeignKey(nameof(Warehouse))]
     public string? WarehouseId { get; set; }
@@ -79,9 +69,6 @@ public class Employee : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
     public DateTimeOffset? DeletedOn { get; set; }
 
     public virtual Department? Department { get; set; }
-    public virtual Ward? Ward { get; set; }
-    public virtual District? District { get; set; }
-    public virtual Province? Province { get; set; }
     public virtual Warehouse? Warehouse { get; set; }
     public virtual Position? Position { get; set; }
 
@@ -100,9 +87,6 @@ public class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
             // Giám đốc
             new Employee("bonk")
             {
-                WardId = "1",
-                DistrictId = "1",
-                ProvinceId = "1",
                 PositionId = "1",
                 Code = "ADMIN01",
                 Name = "Nguyễn Văn C",
@@ -116,9 +100,6 @@ public class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
             new Employee("hihihaha")
             {
                 DepartmentId = "huhuhu",
-                WardId = "1",
-                DistrictId = "1",
-                ProvinceId = "1",
                 PositionId = "4",
                 Code = "MANAGER01",
                 Name = "Nguyễn Văn A",
@@ -134,9 +115,6 @@ public class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
             new Employee("hihihaharamram")
             {
                 DepartmentId = "huhuhu",
-                WardId = "1",
-                DistrictId = "1",
-                ProvinceId = "1",
                 PositionId = "5",
                 Code = "EMPLOYEE01",
                 Name = "Nguyễn Văn B",
@@ -152,9 +130,6 @@ public class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
             new Employee("bankmiramram")
             {
                 DepartmentId = "sugar-town",
-                WardId = "1",
-                DistrictId = "1",
-                ProvinceId = "1",
                 PositionId = "6",
                 Code = "EMPLOYEE02",
                 Name = "Nguyễn Văn D",
@@ -170,9 +145,6 @@ public class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
             new Employee("dainam")
             {
                 DepartmentId = "parrot-smell",
-                WardId = "1",
-                DistrictId = "1",
-                ProvinceId = "1",
                 PositionId = "7",
                 Code = "EMPLOYEE03",
                 Name = "Nguyễn Văn E",

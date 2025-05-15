@@ -100,9 +100,6 @@ public class UpdateEmployeeCommandHandler(
         }
 
         checkEmp.DepartmentId = request.Arg.DepartmentId ?? checkEmp.DepartmentId;
-        checkEmp.WardId = request.Arg.WardId ?? checkEmp.WardId;
-        checkEmp.DistrictId = request.Arg.DistrictId ?? checkEmp.DistrictId;
-        checkEmp.ProvinceId = request.Arg.ProvinceId ?? checkEmp.ProvinceId;
         checkEmp.WarehouseId = request.Arg.WarehouseId ?? checkEmp.WarehouseId;
         checkEmp.PositionId = request.Arg.PositionId ?? checkEmp.PositionId;
         checkEmp.Name = request.Arg.Name ?? checkEmp.Name;

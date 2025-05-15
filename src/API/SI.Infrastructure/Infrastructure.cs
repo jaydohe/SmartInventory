@@ -4,7 +4,6 @@ using SI.Infrastructure.Persistence;
 using SI.Infrastructure.Common.Mapping;
 using SI.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
-using SI.Infrastructure.Integrations;
 using AutoMapper;
 using CTCore.DynamicQuery.Core.Domain.Interfaces;
 using SI.Infrastructure.Integrations.OpenXML;
@@ -25,7 +24,6 @@ public static class Infrastructure
         services.AddScoped<IUnitOfWork, UnitOfWork<SIDbContext>>();
         services.AddScoped(typeof(IRepository<>), typeof(SIRepository<>));
         services.RegisterMapsterConfiguration();
-        services.AddScoped<ProvinceOpenAPIService>();
 
         var mapperConfig = new MapperConfiguration(cfg =>
         {

@@ -54,9 +54,6 @@ public class UpdateAgencyCommandHandler(
         if (checkExist != null)
             return CTBaseResult.UnProcess("Agency name already exists.");
 
-        checkAgency.WardId = request.Arg.WardId ?? checkAgency.WardId;
-        checkAgency.DistrictId = request.Arg.DistrictId ?? checkAgency.DistrictId;
-        checkAgency.ProvinceId = request.Arg.ProvinceId ?? checkAgency.ProvinceId;
         if (request.Arg.Name != null)
         {
             checkAgency.Code = CodeGenerationUtils.GenerateCodeFromName(request.Arg.Name);

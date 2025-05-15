@@ -56,9 +56,6 @@ public class CreateEmployeeCommandHandler(
         {
             PositionId = request.Arg.PositionId,
             DepartmentId = request.Arg.DepartmentId,
-            WardId = request.Arg.WardId,
-            DistrictId = request.Arg.DistrictId,
-            ProvinceId = request.Arg.ProvinceId,
             Code = request.Arg.Code,
             Name = request.Arg.Name,
             GenderType = request.Arg.Gender,
@@ -107,15 +104,5 @@ public class CreateEmployeeCommandValidator : AbstractValidator<CreateEmployeeCo
             .WithMessage("Address is required.")
             .MaximumLength(1024)
             .WithMessage("Address is too long. Only up to 1024 characters.");
-        RuleFor(x => x.Arg.ProvinceId)
-            .NotEmpty()
-            .WithMessage("ProvinceId is required.");
-        RuleFor(x => x.Arg.DistrictId)
-            .NotEmpty()
-            .WithMessage("DistrictId is required.");
-        RuleFor(x => x.Arg.WardId)
-            .NotEmpty()
-            .WithMessage("WardId is required.");
-
     }
 }

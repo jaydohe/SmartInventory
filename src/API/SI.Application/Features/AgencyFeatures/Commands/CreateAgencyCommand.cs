@@ -42,9 +42,6 @@ public class CreateAgencyCommandHandler(
 
         var newAgency = new Agency
         {
-            WardId = request.Arg.WardId,
-            DistrictId = request.Arg.DistrictId,
-            ProvinceId = request.Arg.ProvinceId,
             Code = CodeGenerationUtils.GenerateCodeFromName(request.Arg.Name),
             Name = request.Arg.Name,
             Representative = request.Arg.Representative,
@@ -69,15 +66,6 @@ public class CreateAgencyCommandValidator : AbstractValidator<CreateAgencyComman
 {
     public CreateAgencyCommandValidator()
     {
-        RuleFor(x => x.Arg.WardId)
-            .NotEmpty()
-            .WithMessage("WardId is required.");
-        RuleFor(x => x.Arg.DistrictId)
-            .NotEmpty()
-            .WithMessage("DistrictId is required.");
-        RuleFor(x => x.Arg.ProvinceId)
-            .NotEmpty()
-            .WithMessage("ProvinceId is required.");
         RuleFor(x => x.Arg.Name)
             .NotEmpty()
             .WithMessage("Name is required.")

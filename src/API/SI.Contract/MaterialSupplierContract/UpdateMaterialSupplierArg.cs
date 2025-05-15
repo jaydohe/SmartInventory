@@ -2,9 +2,6 @@
 
 public class UpdateMaterialSupplierArg
 {
-    public string? WardId { get; set; }
-    public string? DistrictId { get; set; }
-    public string? ProvinceId { get; set; }
     public string? Name { get; set; }
     public string? Representative { get; set; }
     public string? PhoneNumber { get; set; }

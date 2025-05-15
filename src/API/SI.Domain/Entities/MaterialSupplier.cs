@@ -2,23 +2,12 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SI.Domain.Common.Abstractions;
-using SI.Domain.ValueObjeSI.Location;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SI.Domain.Entities;
 
 public class MaterialSupplier : CTBaseEntity, IAuditableEntity, ISoftDeletableEntity
 {
-    [ForeignKey(nameof(Ward))]
-    public string WardId { get; set; } = null!;
-
-    [ForeignKey(nameof(District))]
-    public string DistrictId { get; set; } = null!;
-
-    [ForeignKey(nameof(Province))]
-    public string ProvinceId { get; set; } = null!;
-
     // <summary>
     // Mã nhà cung cấp vật liệu
     // </summary>
@@ -82,10 +71,6 @@ public class MaterialSupplier : CTBaseEntity, IAuditableEntity, ISoftDeletableEn
     public DateTimeOffset? ModifiedOn { get; set; }
     public DateTimeOffset? DeletedOn { get; set; }
 
-    public virtual Ward? Ward { get; set; }
-    public virtual District? District { get; set; }
-    public virtual Province? Province { get; set; }
-
     public MaterialSupplier(string id) : base(id) { }
     public MaterialSupplier() : base() { }
 }
@@ -101,9 +86,6 @@ public class MaterialSupplierConfiguration : IEntityTypeConfiguration<MaterialSu
         {
             new MaterialSupplier("bare")
             {
-                WardId = "1",
-                DistrictId = "1",
-                ProvinceId = "1",
                 Code = "SUPPLIER001",
                 Name = "Nhà cung cấp 1",
                 Representative = "Nguyễn Văn A",
@@ -116,9 +98,6 @@ public class MaterialSupplierConfiguration : IEntityTypeConfiguration<MaterialSu
             },
             new MaterialSupplier("cower")
             {
-                WardId = "1",
-                DistrictId = "1",
-                ProvinceId = "1",
                 Code = "SUPPLIER002",
                 Name = "Nhà cung cấp 2",
                 Representative = "Nguyễn Văn B",

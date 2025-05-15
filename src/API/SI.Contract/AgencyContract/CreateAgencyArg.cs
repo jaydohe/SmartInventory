@@ -2,9 +2,6 @@
 
 public class CreateAgencyArg
 {
-    public string WardId { get; set; } = null!;
-    public string DistrictId { get; set; } = null!;
-    public string ProvinceId { get; set; } = null!;
     public string Name { get; set; } = null!;
     public string Representative { get; set; } = null!;
     public string? TaxCode { get; set; }

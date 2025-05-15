@@ -56,9 +56,6 @@ public class UpdateMaterialSupplierCommandHandler(
         if (checkExist != null)
             return CTBaseResult.UnProcess("Material Supplier name already exists.");
 
-        checkMaterialSupplier.WardId = request.Arg.WardId ?? checkMaterialSupplier.WardId;
-        checkMaterialSupplier.DistrictId = request.Arg.DistrictId ?? checkMaterialSupplier.DistrictId;
-        checkMaterialSupplier.ProvinceId = request.Arg.ProvinceId ?? checkMaterialSupplier.ProvinceId;
         if (request.Arg.Name != null)
         {
             checkMaterialSupplier.Code = CodeGenerationUtils.GenerateCodeFromName(request.Arg.Name);

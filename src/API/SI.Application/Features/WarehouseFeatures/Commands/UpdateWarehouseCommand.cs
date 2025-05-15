@@ -107,9 +107,6 @@ public class UpdateWarehouseCommandHandler(
 
         checkWarehouse.WarehouseId = request.Arg.WarehouseId;
         checkWarehouse.ManagerId = request.Arg.ManagerId;
-        checkWarehouse.WardId = request.Arg.WardId ?? checkWarehouse.WardId;
-        checkWarehouse.DistrictId = request.Arg.DistrictId ?? checkWarehouse.DistrictId;
-        checkWarehouse.ProvinceId = request.Arg.ProvinceId ?? checkWarehouse.ProvinceId;
         checkWarehouse.CategoryId = request.Arg.CategoryId;
         if (request.Arg.Name != null)
         {

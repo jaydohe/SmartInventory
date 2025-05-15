@@ -1,5 +1,4 @@
 using SI.Domain.Entities;
-using SI.Domain.ValueObjeSI.Location;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using SI.Domain.Entities.Orders;
@@ -60,9 +59,6 @@ public class SIDbContext : DbContext
     public DbSet<ProductionCommand> ProductionCommands { get; set; }
     public DbSet<ProductionCommandDetail> ProductionCommandDetails { get; set; }
     public DbSet<ProductionCommandProcess> ProductionCommandProcesses { get; set; }
-    public DbSet<Province> Provinces { get; set; }
-    public DbSet<District> Districts { get; set; }
-    public DbSet<Ward> Wards { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -91,9 +87,6 @@ public class SIDbContext : DbContext
         modelBuilder.ApplyConfiguration(new GoodsReceiptConfiguration());
         modelBuilder.ApplyConfiguration(new OrderConfiguration());
         modelBuilder.ApplyConfiguration(new ProductionCommandConfiguration());
-        modelBuilder.ApplyConfiguration(new ProvinceConfiguration());
-        modelBuilder.ApplyConfiguration(new DistrictConfiguration());
-        modelBuilder.ApplyConfiguration(new WardConfiguration());
 
         base.OnModelCreating(modelBuilder);
     }

@@ -77,9 +77,6 @@ public class CreateWarehouseCommandHandler(
 
         var newWarehouse = new Warehouse
         {
-            WardId = request.Arg.WardId,
-            DistrictId = request.Arg.DistrictId,
-            ProvinceId = request.Arg.ProvinceId,
             CategoryId = request.Arg.CategoryId,
             WarehouseId = request.Arg.WarehouseId,
             ManagerId = request.Arg.ManagerId,
@@ -115,14 +112,5 @@ public class CreateWarehouseCommandValidator : AbstractValidator<CreateWarehouse
         RuleFor(x => x.Arg.Capacity)
             .GreaterThan(0)
             .WithMessage("Capacity must be greater than 0.");
-        RuleFor(x => x.Arg.ProvinceId)
-            .NotEmpty()
-            .WithMessage("ProvinceId is required.");
-        RuleFor(x => x.Arg.DistrictId)
-            .NotEmpty()
-            .WithMessage("DistrictId is required.");
-        RuleFor(x => x.Arg.WardId)
-            .NotEmpty()
-            .WithMessage("WardId is required.");
     }
 }

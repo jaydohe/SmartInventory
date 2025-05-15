@@ -57,12 +57,6 @@ public class GoodsReceipt : AggregateRoot, IAuditableEntity, ISoftDeletableEntit
     public decimal TotalAmount { get; set; }
 
     // <summary>
-    // Tổng tiền bằng chữ
-    // </summary>
-    [StringLength(1024)]
-    public string TotalToText { get; set; } = null!;
-
-    // <summary>
     // Ghi chú
     // </summary>
     [StringLength(1024)]
