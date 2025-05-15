@@ -8,24 +8,14 @@ public enum CommandStatus
     CREATED = 0,
 
     // <summary>
-    // Đang chờ xác nhận
-    // </summary>
-    PENDING = 1,
-
-    // <summary>
-    // Đã xác nhận
-    // </summary>
-    CONFIRMED = 2,
-
-    // <summary>
     // Đang sản xuất
     // </summary>
-    INPROGRESS = 3,
+    INPROGRESS = 1,
 
     // <summary>
     // Đã hoàn thành
     // </summary>
-    COMPLETED = 4,
+    COMPLETED = 2,
 
     // <summary>
     // Đã hủy

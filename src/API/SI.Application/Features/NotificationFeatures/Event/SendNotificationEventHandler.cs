@@ -15,7 +15,7 @@ namespace SI.Application.Features.NotificationFeatures.Event;
 public class SendNotificationEventHandler(
     IServiceProvider serviceProvider,
     ILogger<SendNotificationEventHandler> logger,
-    IHubContext<MonitorHub, INotificationMonitor> hubContext,
+    IHubContext<MonitorHub, INotificationMonitor> hubContext, 
     HybridCache hybridCache) :
     IDomainEventHandler<SendNotificationEvent>
 {
