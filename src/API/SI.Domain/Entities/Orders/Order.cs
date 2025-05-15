@@ -2,7 +2,9 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SI.Domain.Common.Abstractions;
 using SI.Domain.Common.Primitives;
+using SI.Domain.Common.Utils;
 using SI.Domain.Enums;
+using SI.Domain.Events;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -34,6 +36,18 @@ public class Order : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
 
     public virtual Agency? Agency { get; set; }
     public virtual ICollection<OrderDetail>? OrderDetails { get; set; }
+
+    public void SendNotifRequestProductionCommand(string userId, params string[] userIds)
+    {
+        var payload = new NotifPayload(
+            Guid.CreateVersion7().ToString(),
+            NotifType.PRODUCTIONCOMMAND,
+            $"Yêu cầu lệnh sản xuất",
+            $@"{userId} đã yêu cầu lệnh sản xuất vào lúc {DateTimeOffset.UtcNow.ToLocal():dd/MM/yyyy HH:mm:ss}"
+        );
+        this.Raise(new SendNotificationEvent(userId, true, Notification.Create(payload, userIds)));
+    }
+
 }
 
 public class OrderConfiguration : IEntityTypeConfiguration<Order>

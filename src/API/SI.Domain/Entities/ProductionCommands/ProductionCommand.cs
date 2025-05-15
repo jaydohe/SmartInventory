@@ -2,7 +2,10 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SI.Domain.Common.Abstractions;
 using SI.Domain.Common.Primitives;
+using SI.Domain.Common.Utils;
+using SI.Domain.Entities.Orders;
 using SI.Domain.Enums;
+using SI.Domain.Events;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -10,8 +13,11 @@ namespace SI.Domain.Entities.ProductionCommands;
 
 public class ProductionCommand : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
 {
-    [ForeignKey(nameof(Agency))]
-    public string AgencyId { get; set; } = null!;
+    // <summary>
+    // Id của đơn hàng liên quan nếu có
+    // </summary>
+    [ForeignKey(nameof(Order))]
+    public string? OrderId { get; set; }
 
     // <summary>
     // Người tạo lệnh sản xuất
@@ -29,12 +35,6 @@ public class ProductionCommand : AggregateRoot, IAuditableEntity, ISoftDeletable
     // Tổng tiền
     // </summary>
     public decimal TotalAmount { get; set; }
-
-    // <summary>
-    // Tổng tiền bằng chữ
-    // </summary>
-    [StringLength(1024)]
-    public string TotalToText { get; set; } = null!;
 
     // <summary>
     // Mô tả
@@ -58,7 +58,7 @@ public class ProductionCommand : AggregateRoot, IAuditableEntity, ISoftDeletable
     public DateTimeOffset? ModifiedOn { get; set; }
     public DateTimeOffset? DeletedOn { get; set; }
 
-    public virtual Agency? Agency { get; set; }
+    public virtual Order? Order { get; set; }
     public virtual User? User { get; set; }
     public virtual ICollection<ProductionCommandDetail>? ProductionCommandDetail { get; set; }
 }

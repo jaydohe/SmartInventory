@@ -19,4 +19,5 @@ public struct APIPolicies
     public const string SALESFULL = "SALESFULL"; // DEV, ADMIN and SALESMAN
     public const string FULL = "FULL"; // DEV, ADMIN and WAREHOUSE_STAFF, WAREHOUSE_PRODUCER, SALESMAN
     public const string STAFF_SALESMAN = "STAFF_SALESMAN"; // DEV, ADMIN and WAREHOUSE_STAFF, SALESMAN
+    public const string STAFF_PRODUCER = "STAFF_PRODUCER"; // DEV, ADMIN and WAREHOUSE_STAFF, WAREHOUSE_PRODUCER
 }
