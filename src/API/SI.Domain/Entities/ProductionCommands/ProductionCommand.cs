@@ -60,7 +60,8 @@ public class ProductionCommand : AggregateRoot, IAuditableEntity, ISoftDeletable
 
     public virtual Order? Order { get; set; }
     public virtual User? User { get; set; }
-    public virtual ICollection<ProductionCommandDetail>? ProductionCommandDetail { get; set; }
+    public virtual ICollection<ProductionCommandDetail>? Details { get; set; }
+    public virtual ICollection<ProductionCommandProcess>? Processes { get; set; }
 }
 
 public class ProductionCommandConfiguration : IEntityTypeConfiguration<ProductionCommand>
