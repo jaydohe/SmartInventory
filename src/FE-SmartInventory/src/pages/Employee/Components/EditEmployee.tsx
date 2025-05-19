@@ -1,27 +1,20 @@
+import { Form, Input, Button, Select, Switch, Row, Col, DatePicker } from 'antd';
+import { useEffect, useState } from 'react';
+import { TEmployee, TUpdateEmployee } from '@/interface/TEmployee';
 import { GENDER, genGenderTypes } from '@/Constant/EmployeeTypes';
-import { useBuilderQuery } from '@/hook';
-import { useQueryWarehouse } from '@/hook/useQueryWarehouse';
-import { TBuilderQuery } from '@/interface';
-import { TCreateEmployee } from '@/interface/TEmployee';
-import { Button, DatePicker, Form, Input, Select, Switch, Row, Col } from 'antd';
-import { useState } from 'react';
-import { TiUserAdd } from 'react-icons/ti';
-import GenderTag from './GenderTag';
-
-import CreateUser from '@/pages/User/Components/CreateUser';
-import { CalendarOutlined } from '@ant-design/icons';
-import moment from 'moment';
 import dayjs from 'dayjs';
 import { useQueryDepartment } from '@/pages/DepartmentPage/Hook/useQueryDepartment';
+import { useQueryWarehouse } from '@/hook/useQueryWarehouse';
+import { TBuilderQuery } from '@/interface';
+import { useBuilderQuery } from '@/hook/useBuilderQuery';
 import { useQueryPosition } from '@/pages/PositionPage/Hook/useQueryPosition';
 
-const { Option } = Select;
-
-interface CreateEmployeeProps {
-  handleCreateEmployee: (data: TCreateEmployee) => void;
+interface EditEmployeeProps {
+  handleUpdateEmployee: (id: string, data: TUpdateEmployee) => void;
+  employee: TEmployee;
 }
 
-const CreateEmployee: React.FC<CreateEmployeeProps> = ({ handleCreateEmployee }) => {
+const EditEmployee: React.FC<EditEmployeeProps> = ({ handleUpdateEmployee, employee }) => {
   const [form] = Form.useForm();
   const [filter, setFilter] = useState<TBuilderQuery>({
     isAsc: false,
@@ -39,116 +32,40 @@ const CreateEmployee: React.FC<CreateEmployeeProps> = ({ handleCreateEmployee })
   const { getAllWarehouse } = useQueryWarehouse(useBuilderQuery(filter));
   const { getAllDepartment } = useQueryDepartment(useBuilderQuery(filter));
   const { getAllPosition } = useQueryPosition(useBuilderQuery(filter));
-
-  const [selectedLocations, setSelectedLocations] = useState<{
-    cityCode?: string;
-    districtCode?: string;
-    wardCode?: string;
-  }>({});
-
-  const [filterDistricts, setFilterDistricts] = useState<TBuilderQuery>({});
-  const [filterWards, setFilterWards] = useState<TBuilderQuery>({});
-
-  // console.log('ADDRESS', cityList, districtList, wardList);
-
-  const handleCityChange = async (valueId: string) => {
-    try {
-      // Reset everything first
+  useEffect(() => {
+    if (employee) {
       form.setFieldsValue({
-        districtCode: undefined,
-        wardCode: undefined,
+        name: employee.name,
+        departmentId: employee.departmentId,
+        positionId: employee.positionId,
+        warehouseId: employee.warehouseId,
+        gender: employee.genderType,
+        phoneNumber: employee.phoneNumber,
+        email: employee.email,
+        address: employee.address,
+        isManager: employee.isManager,
       });
-
-      setSelectedLocations({
-        cityCode: valueId,
-        districtCode: undefined,
-        wardCode: undefined,
-      });
-
-      setFilterDistricts({
-        appendQuery: [
-          {
-            provinceId: {
-              value: `${valueId}`,
-              queryOperator: '$eq',
-              queryOperatorParent: '$and',
-            },
-          },
-        ],
-      });
-    } catch (error) {
-      console.error('Error updating city:', error);
     }
-  };
-
-  const handleDistrictChange = async (valueId: string) => {
-    try {
-      // Reset ward field
-      form.setFieldsValue({
-        wardCode: undefined,
-      });
-
-      setSelectedLocations((prev) => ({
-        ...prev,
-        districtCode: valueId,
-        wardCode: undefined,
-      }));
-
-      setFilterWards({
-        appendQuery: [
-          {
-            districtId: {
-              value: `${valueId}`,
-              queryOperator: '$eq',
-              queryOperatorParent: '$and',
-            },
-          },
-        ],
-      });
-    } catch (error) {
-      console.error('Error updating district:', error);
-    }
-  };
-
-  const handleWardChange = (valueId: string) => {
-    setSelectedLocations((prev) => ({
-      ...prev,
-      wardCode: valueId,
-    }));
-  };
+  }, [employee, form]);
 
   const onFinish = async (values: any) => {
-    const dataSubmit: TCreateEmployee = {
+    const dataSubmit: TUpdateEmployee = {
       ...values,
-      dateHired: values.dateHired ? values.dateHired.format('YYYY-MM-DD') : '',
       isManager: values.isManager || false,
     };
-    handleCreateEmployee(dataSubmit);
+    handleUpdateEmployee(employee.id, dataSubmit);
     form.resetFields();
   };
 
   return (
     <Form form={form} layout="vertical" onFinish={onFinish}>
-      <Row gutter={16}>
-        <Col span={12}>
-          <Form.Item
-            name="code"
-            label="Mã nhân viên"
-            rules={[{ required: true, message: 'Vui lòng nhập mã nhân viên' }]}
-          >
-            <Input placeholder="Nhập mã nhân viên" />
-          </Form.Item>
-        </Col>
-        <Col span={12}>
-          <Form.Item
-            name="name"
-            label="Tên nhân viên"
-            rules={[{ required: true, message: 'Vui lòng nhập tên nhân viên' }]}
-          >
-            <Input placeholder="Nhập tên nhân viên" />
-          </Form.Item>
-        </Col>
-      </Row>
+      <Form.Item
+        name="name"
+        label="Tên nhân viên"
+        rules={[{ required: true, message: 'Vui lòng nhập tên nhân viên' }]}
+      >
+        <Input placeholder="Nhập tên nhân viên" />
+      </Form.Item>
 
       <Row gutter={16}>
         <Col span={12}>
@@ -244,32 +161,15 @@ const CreateEmployee: React.FC<CreateEmployeeProps> = ({ handleCreateEmployee })
         <Input placeholder="Nhập địa chỉ" />
       </Form.Item>
 
-      <Row gutter={16}>
-        <Col span={12}>
-          <Form.Item
-            name="dateHired"
-            label="Ngày bắt đầu làm việc"
-            rules={[{ required: true, message: 'Vui lòng chọn ngày bắt đầu làm việc' }]}
-          >
-            <DatePicker
-              placeholder="Chọn ngày bắt đầu làm việc"
-              className="w-full"
-              format="DD/MM/YYYY"
-            />
-          </Form.Item>
-        </Col>
-        <Col span={12}>
-          <Form.Item name="isManager" label="Là quản lý" valuePropName="checked">
-            <Switch />
-          </Form.Item>
-        </Col>
-      </Row>
+      <Form.Item name="isManager" label="Là quản lý" valuePropName="checked">
+        <Switch />
+      </Form.Item>
 
       <Button type="primary" htmlType="submit" className="w-full font-semibold text-base mt-4">
-        Tạo nhân viên
+        Cập nhật nhân viên
       </Button>
     </Form>
   );
 };
 
-export default CreateEmployee;
+export default EditEmployee;

@@ -1,10 +1,8 @@
 export const enum CategoryEntityTypes {
-    WAREHOUSE = "WAREHOUSE",
-    PRODUCT = "PRODUCT",
-    POSITION = "POSITION",
+  WAREHOUSE = 'WAREHOUSE',
+  PRODUCT = 'PRODUCT',
 }
-export const genCategoryEntityTypes= {
-    [CategoryEntityTypes.WAREHOUSE]: 'Kho',
-    [CategoryEntityTypes.PRODUCT]: 'Sản phẩm',
-    [CategoryEntityTypes.POSITION]: 'Chức vụ',
+export const genCategoryEntityTypes = {
+  [CategoryEntityTypes.WAREHOUSE]: 'Kho',
+  [CategoryEntityTypes.PRODUCT]: 'Sản phẩm',
 };

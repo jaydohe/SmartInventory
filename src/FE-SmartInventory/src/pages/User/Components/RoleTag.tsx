@@ -50,7 +50,7 @@ const RoleTag = ({
       color = 'default';
   }
   return (
-    <Tag className={classNames('text-sm font-medium mx-0 w-fit  truncate', className)} icon={icon} color={color}>
+    <Tag className={classNames('text-sm font-medium mx-0 w-fit  ', className)} icon={icon} color={color}>
       {userName ? (
         <span className="">
           {userName} ({roleName[role] || role})

@@ -1,35 +1,41 @@
 export const QueryKeys = {
-//Notification
+  //Notification
   UNREAD_NOTIFICATION: 'unReadNotification',
   NOTIFY: 'notify',
-// Token
+  // Token
   REFRESH_TOKEN: 'refreshToken',
   GET_INFO_USER: 'GetInfoUser',
   LOGIN: 'login',
-// Address
+  // Address
   GET_ALL_CITIES: 'getAllCities',
   GET_ALL_DISTRICTS: 'getAllDistricts',
   GET_ALL_WARDS: 'getAllWards',
-// User
+  // User
   GET_ALL_ACCOUNT: 'getAllAccount',
   DETAIL_ACCOUNT: 'detailAccount',
   GET_ALL_USER: 'getAllUser',
   DETAIL_USER: 'detailUser',
-// Agency
+  // Agency
   GET_ALL_AGENCY: 'getAllAgency',
-  DETAIL_AGENCY:  'detailAgency',
-// WAREHOUSE
+  DETAIL_AGENCY: 'detailAgency',
+  // WAREHOUSE
   GET_ALL_WAREHOUSE: 'getAllWarehouse',
   DETAIL_WAREHOUSE: 'detailWarehouse',
-// Product
+  // Product
   GET_ALL_PRODUCT: 'getAllPRODUCT',
-  DETAIL_PRODUCT:  'detailPRODUCT',
-// Oders
+  DETAIL_PRODUCT: 'detailPRODUCT',
+  // Oders
   GET_ALL_ORDERS: 'getAllOrders',
   DETAIL_ORDER: 'detailOrder',
-// EMPLOYEE
+  // EMPLOYEE
   GET_ALL_EMPLOYEE: 'getAllEmployee',
   DETAIL_EMPLOYEE: 'detailEmployee',
-// ACTIVITY
+  // ACTIVITY
   ACTIVITY: 'activity',
+
+  POSITION: 'position',
+  DEPARTMENT: 'department',
+  // CATEGORY
+  CATEGORY_PRODUCT: 'categoryProduct',
+  CATEGORY_WAREHOUSE: 'categoryWarehouse',
 };

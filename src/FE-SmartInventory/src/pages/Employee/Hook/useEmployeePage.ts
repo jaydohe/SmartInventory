@@ -1,17 +1,19 @@
 import { TPage, TResponse } from '@/interface';
-
-import { QueryKeys, RoleEnum, RoleEnumString } from '@/Constant';
-
+import { QueryKeys } from '@/Constant';
 import { useQueryClient, UseQueryOptions, useQuery, useMutation } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import { employeeApi } from '@/api/employeeApi';
 import { TCreateEmployee, TEmployee, TUpdateEmployee } from '@/interface/TEmployee';
 
 type useQueryEmployeeOptions = Omit<UseQueryOptions<TPage<TEmployee>>, 'queryKey' | 'queryFn'>;
-type useQueryDetailEmployeeOptions = Omit<UseQueryOptions<TResponse<TEmployee>>, 'queryKey' | 'queryFn'>;
+type useQueryDetailEmployeeOptions = Omit<
+  UseQueryOptions<TResponse<TEmployee>>,
+  'queryKey' | 'queryFn'
+>;
 
-export const useQueryAgency = (params: string, options?: useQueryEmployeeOptions) => {
+export const useQueryEmployee = (params: string, options?: useQueryEmployeeOptions) => {
   const queryClient = useQueryClient();
+
   // Lấy danh sách Employee
   const getAllEmployee = useQuery({
     ...options,
@@ -19,6 +21,7 @@ export const useQueryAgency = (params: string, options?: useQueryEmployeeOptions
     queryFn: () => employeeApi.getAll(params),
     enabled: !!params,
     placeholderData: (prevData) => prevData,
+    staleTime: 5 * 60 * 1000,
     retry: 3,
   });
 
@@ -26,30 +29,32 @@ export const useQueryAgency = (params: string, options?: useQueryEmployeeOptions
   const createEmployee = useMutation({
     mutationFn: (data: TCreateEmployee) => employeeApi.createEmployee(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [QueryKeys.GET_ALL_EMPLOYEE, params] });
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.GET_ALL_EMPLOYEE] });
       toast.success('Thêm nhân viên mới thành công');
     },
     onError: () => {
       toast.error('Thêm nhân viên thất bại');
     },
   });
+
   // Xóa Employee
   const deleteEmployee = useMutation({
-      mutationFn: (id: string) => employeeApi.deleteEmployee(id),
-      onSuccess: (_) => {
-        queryClient.invalidateQueries({ queryKey: [QueryKeys.GET_ALL_EMPLOYEE] });
-        toast.success('Xóa nhân viên thành công');
-      },
-    });
-  // Cập nhật nhân viên
+    mutationFn: (id: string) => employeeApi.deleteEmployee(id),
+    onSuccess: (_) => {
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.GET_ALL_EMPLOYEE] });
+      toast.success('Xóa nhân viên thành công');
+    },
+  });
+
+  // Cập nhật Employee
   const updateEmployee = useMutation({
-      mutationFn: ({ id, data }: { id: string; data: TUpdateEmployee }) =>
-        employeeApi.updateEmployee(id, data),
-      onSuccess: (data) => {
-        queryClient.invalidateQueries({ queryKey: [QueryKeys.GET_ALL_EMPLOYEE] });
-        toast.success('Cập nhật thông tin nhân viên thành công');
-      },
-    });
+    mutationFn: ({ id, data }: { id: string; data: TUpdateEmployee }) =>
+      employeeApi.updateEmployee(id, data),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.GET_ALL_EMPLOYEE] });
+      toast.success('Cập nhật thông tin nhân viên thành công');
+    },
+  });
 
   return { getAllEmployee, createEmployee, deleteEmployee, updateEmployee };
 };
