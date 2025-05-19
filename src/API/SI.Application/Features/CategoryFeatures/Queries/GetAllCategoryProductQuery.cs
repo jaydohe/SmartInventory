@@ -6,7 +6,6 @@ using CTCore.DynamicQuery.Core.Mediators.Interfaces;
 using CTCore.DynamicQuery.Core.Primitives;
 using CTCore.DynamicQuery.Population;
 using Microsoft.EntityFrameworkCore;
-using SI.Domain.Common.Authenticate;
 using SI.Domain.Entities;
 using SI.Domain.Enums;
 
@@ -18,28 +17,12 @@ public class GetAllCategoryWarehouseQuery(QueryPageRequestV3 query)
 
 public class GetAllCategoryWarehouseQueryHandler(
     IRepository<Category> repository,
-    IRepository<Employee> empRepos,
-    IMapper mapper,
-    IUserIdentifierProvider identifierProvider) : IQueryHandler<GetAllCategoryWarehouseQuery, OkDynamicPageResponse>
+    IMapper mapper) : IQueryHandler<GetAllCategoryWarehouseQuery, OkDynamicPageResponse>
 {
     public async Task<CTBaseResult<OkDynamicPageResponse>> Handle(GetAllCategoryWarehouseQuery request, CancellationToken cancellationToken)
     {
-        var role = identifierProvider.Role;
-        var employeeId = identifierProvider.EmployeeId;
-
         var queryContext = request.QueryContext;
         var categoryQuery = repository.HandleLinqQueryRequestV2(request.QueryContext);
-        if (role is "WAREHOUSE_STAFF")
-        {
-            var checkManager = await empRepos.BuildQuery
-                .FirstOrDefaultAsync(x => x.Id == employeeId && x.IsManager == true, cancellationToken);
-            if (checkManager is null)
-                return CTBaseResult.UnProcess("Just manager can access.");
-
-            categoryQuery = categoryQuery
-                .Where(x => x.DeletedOn == null);
-        }
-
         categoryQuery = categoryQuery
             .Where(x => x.DeletedOn == null)
             .Where(x => x.CategoryEntityType == CategoryEntityTypes.WAREHOUSE);

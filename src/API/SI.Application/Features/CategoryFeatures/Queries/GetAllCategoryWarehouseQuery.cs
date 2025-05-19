@@ -29,17 +29,6 @@ public class GetAllCategoryProductQueryHandler(
 
         var queryContext = request.QueryContext;
         var categoryQuery = repository.HandleLinqQueryRequestV2(request.QueryContext);
-        if (role is "WAREHOUSE_STAFF")
-        {
-            var checkManager = await empRepos.BuildQuery
-                .FirstOrDefaultAsync(x => x.Id == employeeId && x.IsManager == true, cancellationToken);
-            if (checkManager is null)
-                return CTBaseResult.UnProcess("Just manager can access.");
-
-            categoryQuery = categoryQuery
-                .Where(x => x.DeletedOn == null);
-        }
-
         categoryQuery = categoryQuery
             .Where(x => x.DeletedOn == null)
             .Where(x => x.CategoryEntityType == CategoryEntityTypes.PRODUCT);

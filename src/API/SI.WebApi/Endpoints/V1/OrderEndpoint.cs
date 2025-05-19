@@ -1,4 +1,5 @@
 ﻿using Asp.Versioning.Builder;
+using CTCore.DynamicQuery;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SI.Application.Features.OrderFeatures.Commands;
@@ -18,26 +19,27 @@ public class OrderEndpoint : IEndpoint
             .MapGroup($"{defaultPath}/order")
             .WithDisplayName("Order")
             .WithApiVersionSet(version)
-            .HasApiVersion(1);
+            .HasApiVersion(1)
+            .RequireAuthorization(APIPolicies.STAFF_SALESMAN);
 
-        orderGR.MapGet("/get-all", GetAllOrderAsync).RequireAuthorization(APIPolicies.ADMIN);
-        orderGR.MapGet("/get-by-id/{id}", GetOrderAsync).RequireAuthorization(APIPolicies.STAFF_SALESMAN);
-        orderGR.MapPost("/create", CreateOrderAsync).RequireAuthorization(APIPolicies.STAFF_SALESMAN);
-        orderGR.MapPatch("/update/{id}", UpdateOrderAsync).RequireAuthorization(APIPolicies.STAFF_SALESMAN);
-        orderGR.MapDelete("/delete/{id}", DelOrderAsync).RequireAuthorization(APIPolicies.STAFF_SALESMAN);
+        orderGR.MapGet("/get-all", GetAllOrderAsync);
+        orderGR.MapGet("/get-by-id/{id}", GetOrderAsync);
+        orderGR.MapPost("/create", CreateOrderAsync);
+        orderGR.MapPatch("/update/{id}", UpdateOrderAsync);
+        orderGR.MapDelete("/delete/{id}", DelOrderAsync);
 
         return endpoints;
     }
 
     // private method
     private async Task<IResult> GetAllOrderAsync(
-        [FromServices] IMediator mediator)
-        => (await mediator.Send(new GetAllOrderQuery()))
+        [FromServices] IMediator mediator, BaseAPIPageRequest request)
+        => (await mediator.Send(new GetAllOrderQuery(request.ToQueryContext())))
             .ToOk(e => Results.Ok(e));
 
     private async Task<IResult> GetOrderAsync(
-        [FromServices] IMediator mediator, string id)
-            => (await mediator.Send(new GetOrderQuery(id)))
+        [FromServices] IMediator mediator, string id, BaseAPIRequest request)
+            => (await mediator.Send(new GetOrderQuery(id, request.ToQueryContext())))
                 .ToOk(e => Results.Ok(e));
 
     private async Task<IResult> CreateOrderAsync(

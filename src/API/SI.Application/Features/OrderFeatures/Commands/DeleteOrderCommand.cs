@@ -2,6 +2,7 @@
 using CTCore.DynamicQuery.Core.Mediators.Interfaces;
 using CTCore.DynamicQuery.Core.Primitives;
 using Microsoft.EntityFrameworkCore;
+using SI.Domain.Common.Authenticate;
 using SI.Domain.Entities.Orders;
 using SI.Domain.Enums;
 
@@ -15,16 +16,21 @@ public class DeleteOrderCommand(string id) : ICommand<OkResponse>
 public class DeleteOrderCommandHandler(
     IUnitOfWork unitOfWork,
     IRepository<Order> orderRepos,
-    IRepository<OrderDetail> orderDetailRepos) : ICommandHandler<DeleteOrderCommand, OkResponse>
+    IRepository<OrderDetail> orderDetailRepos,
+    IUserIdentifierProvider identifierProvider) : ICommandHandler<DeleteOrderCommand, OkResponse>
 {
     public async Task<CTBaseResult<OkResponse>> Handle(DeleteOrderCommand request, CancellationToken cancellationToken)
     {
+        var userId = identifierProvider.UserId;
+
         var checkOrder = await orderRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Id == request.Id && x.DeletedOn == null, cancellationToken);
         if (checkOrder is null)
             return CTBaseResult.NotFound("Order");
         if (checkOrder.OrderStatus != OrderStatus.NEW)
             return CTBaseResult.UnProcess("Order is not NEW, so can not delete.");
+        if (checkOrder.OrderStatus == OrderStatus.NEW && checkOrder.UserId != userId)
+            return CTBaseResult.UnProcess("Order is not your order, so can not delete.");
 
         var checkOrderDetail = await orderDetailRepos.BuildQuery
             .Where(x => x.OrderId == checkOrder.Id && x.DeletedOn == null)

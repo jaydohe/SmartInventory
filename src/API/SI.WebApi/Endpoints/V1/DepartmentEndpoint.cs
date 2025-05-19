@@ -19,13 +19,14 @@ public class DepartmentEndpoint : IEndpoint
             .MapGroup($"{defaultPath}/department")
             .WithDisplayName("Department")
             .WithApiVersionSet(version)
-            .HasApiVersion(1);
+            .HasApiVersion(1)
+            .RequireAuthorization(APIPolicies.ADMIN);
 
-        departmentGR.MapGet("/get-all", GetAllDepartmentAsync).RequireAuthorization(APIPolicies.STAFFFULL);
-        departmentGR.MapGet("/get-by-id/{id}", GetDepartmentAsync).RequireAuthorization(APIPolicies.ADMIN);
-        departmentGR.MapPost("/create", CreateDepartmentAsync).RequireAuthorization(APIPolicies.ADMIN);
-        departmentGR.MapPatch("/update/{id}", UpdateDepartmentAsync).RequireAuthorization(APIPolicies.ADMIN);
-        departmentGR.MapDelete("/delete/{id}", DelDepartmentAsync).RequireAuthorization(APIPolicies.ADMIN);
+        departmentGR.MapGet("/get-all", GetAllDepartmentAsync);
+        departmentGR.MapGet("/get-by-id/{id}", GetDepartmentAsync);
+        departmentGR.MapPost("/create", CreateDepartmentAsync);
+        departmentGR.MapPatch("/update/{id}", UpdateDepartmentAsync);
+        departmentGR.MapDelete("/delete/{id}", DelDepartmentAsync);
 
         return endpoints;
     }

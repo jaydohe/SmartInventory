@@ -4,5 +4,5 @@ namespace SI.Contract.OrderContract;
 
 public class UpdateOrderStatusArg
 {
-    public string OrderStatus { get; set; } = null!;
+    public OrderStatus Status { get; set; }
 }

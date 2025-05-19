@@ -17,5 +17,5 @@ public enum GoodsStatus
     // <summary>
     // Đã hủy
     // </summary>
-    CANCELLED = -1
+    CANCELED = -1
 }

@@ -34,7 +34,7 @@ public class CreateProductionCommandRequestCommandHandler(
             .Select(x => x.Id)
             .ToArrayAsync(cancellationToken);
 
-        checkOrder.SendNotifRequestProductionCommand(identifierProvider.UserId, checkUserIds);
+        checkOrder.SendNotifRequestProductionCommand(identifierProvider.UserId, checkOrder.Code, checkUserIds);
 
         var ret = await unitOfWork.SaveChangeAsync(cancellationToken);
         if (ret <= 0)

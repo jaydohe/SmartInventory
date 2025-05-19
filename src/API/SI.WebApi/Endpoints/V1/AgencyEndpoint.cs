@@ -19,13 +19,14 @@ public class AgencyEndpoint : IEndpoint
             .MapGroup($"{defaultPath}/agency")
             .WithDisplayName("Agency")
             .WithApiVersionSet(version)
-            .HasApiVersion(1);
+            .HasApiVersion(1)
+            .RequireAuthorization(APIPolicies.STAFF_SALESMAN);
 
-        agencyGR.MapGet("/get-all", GetAllAgencyAsync).RequireAuthorization(APIPolicies.STAFF_SALESMAN);
-        agencyGR.MapGet("/get-by-id/{id}", GetAgencyAsync).RequireAuthorization(APIPolicies.STAFFFULL);
-        agencyGR.MapPost("/create", CreateAgencyAsync).RequireAuthorization(APIPolicies.STAFFFULL);
-        agencyGR.MapPatch("/update/{id}", UpdateAgencyAsync).RequireAuthorization(APIPolicies.STAFFFULL);
-        agencyGR.MapDelete("/delete/{id}", DelAgencyAsync).RequireAuthorization(APIPolicies.STAFFFULL);
+        agencyGR.MapGet("/get-all", GetAllAgencyAsync);
+        agencyGR.MapGet("/get-by-id/{id}", GetAgencyAsync);
+        agencyGR.MapPost("/create", CreateAgencyAsync);
+        agencyGR.MapPatch("/update/{id}", UpdateAgencyAsync);
+        agencyGR.MapDelete("/delete/{id}", DelAgencyAsync);
 
         return endpoints;
     }

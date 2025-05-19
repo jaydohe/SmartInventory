@@ -49,14 +49,20 @@ public class CreateProductionCommandCommandHandler(
                 .FirstOrDefaultAsync(x => x.Id == item.ProductId && x.DeletedOn == null, cancellationToken);
             if (product is null)
                 return CTBaseResult.NotFound("Product");
-            totalAmount += item.Quantity * product.SellingPrice;
+            totalAmount += item.Quantity * product.PurchasePrice;
         }
+
+        string name;
+        if (request.Arg.OrderId != null)
+            name = $"từ đơn hàng";
+        else
+            name = $"từ dự báo nhu cầu";
 
         var newProductionCommand = new ProductionCommand
         {
             OrderId = request.Arg.OrderId,
             UserId = userId,
-            Code = CodeGenerationUtils.GenerateCodeFromName("Lệnh sản xuất"),
+            Code = CodeGenerationUtils.GenerateCodeFromName("Lệnh sản xuất" + name),
             Description = request.Arg.Description,
             PlannedStart = request.Arg.PlannedStart,
             PlannedEnd = request.Arg.PlannedEnd,
@@ -80,7 +86,7 @@ public class CreateProductionCommandCommandHandler(
                     ProductionCommandId = newProductionCommand.Id,
                     ProductId = item.ProductId,
                     Quantity = item.Quantity,
-                    Price = checkOrderDetail.Product.SellingPrice,
+                    Price = checkOrderDetail.Product.PurchasePrice,
                     TotalPrice = item.Quantity * checkOrderDetail.Product.SellingPrice
                 };
                 productionCommandDetailRepos.Add(newDetail);
@@ -98,7 +104,7 @@ public class CreateProductionCommandCommandHandler(
                     ProductId = item.ProductId,
                     Quantity = item.Quantity,
                     Price = checkProduct.SellingPrice,
-                    TotalPrice = item.Quantity * checkProduct.SellingPrice
+                    TotalPrice = item.Quantity * checkProduct.PurchasePrice
                 };
                 productionCommandDetailRepos.Add(newDetail);
             }

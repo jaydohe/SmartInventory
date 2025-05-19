@@ -7,32 +7,30 @@ using CTCore.DynamicQuery.Core.Primitives;
 using CTCore.DynamicQuery.Population;
 using CTCore.DynamicQuery.Population.Public.Descriptors;
 using Microsoft.EntityFrameworkCore;
-using SI.Domain.Common.Authenticate;
-using SI.Domain.Entities;
+using SI.Domain.Entities.GoodsIssues;
 
-namespace SI.Application.Features.ProductFeatures.Queries;
+namespace SI.Application.Features.GoodsIssueFeatures.Queries;
 
-public class GetProductQuery(string id, QueryRequestV3 query)
+public class GetGoodsIssueQuery(string id, QueryRequestV3 query)
     : CTBaseQuery<string, QueryRequestV3, OkDynamicResponse>(id, query)
-{
-}
+{ }
 
-public class GetProductQueryHandler(
-    IRepository<Product> productRepos,
-    IMapper mapper) : IQueryHandler<GetProductQuery, OkDynamicResponse>
+public class GetGoodsIssueQueryHandler(
+    IRepository<GoodsIssue> goodsIssueRepos,
+    IMapper mapper) : IQueryHandler<GetGoodsIssueQuery, OkDynamicResponse>
 {
-    public async Task<CTBaseResult<OkDynamicResponse>> Handle(GetProductQuery request, CancellationToken cancellationToken)
+    public async Task<CTBaseResult<OkDynamicResponse>> Handle(GetGoodsIssueQuery request, CancellationToken cancellationToken)
     {
         QueryRequestV3 queryContext = request.QueryContext;
-        var product = await productRepos.HandleLinqQueryRequestV2(queryContext)
+        var goodsIssue = await goodsIssueRepos.HandleLinqQueryRequestV2(queryContext)
             .Where(e => e.Id == request.Id)
-            .ProjectDynamic<Product>(mapper,
+            .ProjectDynamic<GoodsIssue>(mapper,
                 new PopulateDescriptor(queryContext.Populate),
                 queryContext.ToCacheKey())
             .FirstOrDefaultAsync(cancellationToken);
-        if (product is null)
-            return CTBaseResult.NotFound("Product");
+        if (goodsIssue is null)
+            return CTBaseResult.NotFound("Goods Issue");
 
-        return CTBaseResult.Success(product);
+        return CTBaseResult.Success(goodsIssue);
     }
 }

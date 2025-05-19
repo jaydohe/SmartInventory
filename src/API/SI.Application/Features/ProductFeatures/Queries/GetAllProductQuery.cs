@@ -29,7 +29,7 @@ public class GetAllProductQueryHandler(
 
         var queryContext = request.QueryContext;
         var productQuery = productRepos.HandleLinqQueryRequestV2(request.QueryContext);
-        if (role is "WAREHOUSE_STAFF" || role is "WAREHOUSE_PRODUCER")
+        if (role is "WAREHOUSE_PRODUCER")
         {
             var checkManager = await employeeRepos.BuildQuery
                 .FirstOrDefaultAsync(x => x.Id == employeeId && x.IsManager == true, cancellationToken);

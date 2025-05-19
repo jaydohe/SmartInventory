@@ -20,7 +20,7 @@ public enum CommandStatus
     // <summary>
     // Đã hủy
     // </summary>
-    CANCELLED = -1
+    CANCELED = -1
 }
 
 public enum ProcessProductionStatus

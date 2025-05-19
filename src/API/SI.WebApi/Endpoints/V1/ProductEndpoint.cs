@@ -22,7 +22,7 @@ public class ProductEndpoint : IEndpoint
             .HasApiVersion(1);
 
         productGR.MapGet("/get-all", GetAllProductAsync).RequireAuthorization(APIPolicies.FULL);
-        productGR.MapGet("/get-by-id/{id}", GetProductAsync).RequireAuthorization(APIPolicies.STAFFFULL);
+        productGR.MapGet("/get-by-id/{id}", GetProductAsync).RequireAuthorization(APIPolicies.FULL);
         productGR.MapPost("/create", CreateProductAsync).RequireAuthorization(APIPolicies.STAFFFULL);
         productGR.MapPatch("/update/{id}", UpdateProductAsync).RequireAuthorization(APIPolicies.STAFFFULL);
         productGR.MapDelete("/delete/{id}", DelProductAsync).RequireAuthorization(APIPolicies.STAFFFULL);

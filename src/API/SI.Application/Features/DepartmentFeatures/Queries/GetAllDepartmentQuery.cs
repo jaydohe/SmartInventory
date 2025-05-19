@@ -6,7 +6,6 @@ using CTCore.DynamicQuery.Core.Mediators.Interfaces;
 using CTCore.DynamicQuery.Core.Primitives;
 using CTCore.DynamicQuery.Population;
 using Microsoft.EntityFrameworkCore;
-using SI.Domain.Common.Authenticate;
 using SI.Domain.Entities;
 
 namespace SI.Application.Features.DepartmentFeatures.Queries;
@@ -18,28 +17,12 @@ public class GetAllDepartmentQuery(QueryPageRequestV3 query)
 
 public class GetAllDepartmentQueryHandler(
     IRepository<Department> repository,
-    IRepository<Employee> empRepos,
-    IMapper mapper,
-    IUserIdentifierProvider identifierProvider) : IQueryHandler<GetAllDepartmentQuery, OkDynamicPageResponse>
+    IMapper mapper) : IQueryHandler<GetAllDepartmentQuery, OkDynamicPageResponse>
 {
     public async Task<CTBaseResult<OkDynamicPageResponse>> Handle(GetAllDepartmentQuery request, CancellationToken cancellationToken)
     {
-        var role = identifierProvider.Role;
-        var employeeId = identifierProvider.EmployeeId;
-
         var queryContext = request.QueryContext;
         var departmentQuery = repository.HandleLinqQueryRequestV2(request.QueryContext);
-        if (role is "WAREHOUSE_STAFF")
-        {
-            var checkManager = await empRepos.BuildQuery
-                .FirstOrDefaultAsync(x => x.Id == employeeId && x.IsManager == true, cancellationToken);
-            if (checkManager is null)
-                return CTBaseResult.UnProcess("Just manager can access.");
-
-            departmentQuery = departmentQuery
-                .Where(x => x.DeletedOn == null);
-        }
-
         var (executeQuery, totalRecords, totalPages) =
             departmentQuery.HandleLinqQueryPageRequestV2(
             queryContext,

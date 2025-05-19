@@ -23,8 +23,8 @@ public class CategoryEndpoint : IEndpoint
 
         catGR.MapGet("/get-all-product", GetAllCategoryProductAsync).RequireAuthorization(APIPolicies.STAFFFULL);
         catGR.MapGet("/get-all-warehouse", GetAllCategoryWarehouseAsync).RequireAuthorization(APIPolicies.STAFFFULL);
-        catGR.MapGet("/get-by-id/{id}", GetCategoryAsync).RequireAuthorization(APIPolicies.ADMIN);
-        catGR.MapPost("/create-product", CreateCategoryProductAsync).RequireAuthorization(APIPolicies.ADMIN);
+        catGR.MapGet("/get-by-id/{id}", GetCategoryAsync).RequireAuthorization(APIPolicies.STAFFFULL);
+        catGR.MapPost("/create-product", CreateCategoryProductAsync).RequireAuthorization(APIPolicies.STAFFFULL);
         catGR.MapPost("/create-warehouse", CreateCategoryWarehouseAsync).RequireAuthorization(APIPolicies.ADMIN);
         catGR.MapPatch("/update/{id}", UpdateCategoryAsync).RequireAuthorization(APIPolicies.ADMIN);
         catGR.MapDelete("/delete/{id}", DelCategoryAsync).RequireAuthorization(APIPolicies.ADMIN);
