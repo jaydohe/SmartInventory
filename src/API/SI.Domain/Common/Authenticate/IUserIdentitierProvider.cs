@@ -2,6 +2,7 @@ namespace SI.Domain.Common.Authenticate;
 
 public interface IUserIdentifierProvider
 {
+    public bool IsManager { get; }
     public string UserId { get; }
     public string WarehouseId { get; }
     public string Role {  get; }

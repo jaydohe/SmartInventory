@@ -6,6 +6,11 @@ namespace SI.Infrastructure.Common.Authenticate;
 
 public class UserIdentitfierProvider(IHttpContextAccessor httpContextAccessor) : IUserIdentifierProvider
 {
+    public bool IsManager => bool.Parse(httpContextAccessor.HttpContext?.User.Claims
+                ?.Where(c => c.Type == "isManager")
+                .Select(c => c.Value)
+                .FirstOrDefault() ?? "false");
+
     public string UserId => httpContextAccessor.HttpContext?.User.Claims
                 ?.Where(c => c.Type == "userId")
                 .Select(c => c.Value)

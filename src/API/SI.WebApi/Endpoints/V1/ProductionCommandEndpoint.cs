@@ -25,7 +25,7 @@ public class ProductionCommandEndpoint : IEndpoint
         productionCommandGR.MapGet("/get-by-id/{id}", GetProductionCommandAsync).RequireAuthorization(APIPolicies.STAFF_PRODUCER);
         productionCommandGR.MapPost("/create", CreateProductionCommandAsync).RequireAuthorization(APIPolicies.STAFFFULL);
         productionCommandGR.MapPost("/request", RequestProductionCommandAsync).RequireAuthorization(APIPolicies.SALESFULL);
-        productionCommandGR.MapPatch("/update/{id}", UpdateProductionCommandAsync).RequireAuthorization(APIPolicies.STAFF_PRODUCER);
+        productionCommandGR.MapPatch("/update/{id}", UpdateProductionCommandAsync).RequireAuthorization(APIPolicies.PRODUCERFULL);
         productionCommandGR.MapDelete("/delete/{id}", DelProductionCommandAsync).RequireAuthorization(APIPolicies.STAFFFULL);
         
         return endpoints;

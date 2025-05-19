@@ -14,11 +14,15 @@ public sealed class JWTTokenHelper(IConfiguration iconfiguration)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var tokenKey = Encoding.UTF8.GetBytes(iconfiguration["JwtSettings:Key"]!);
+        string isManagerValue = account.Employee?.IsManager.HasValue == true
+            ? account.Employee.IsManager.Value.ToString()!
+            : null!;
         var claims = new List<Claim>()
             {
                 new(JwtRegisteredClaimNames.Jti, tokenId),
                 new(JwtRegisteredClaimNames.Sub, "sub.trang1753@com"),
                 new(JwtRegisteredClaimNames.Email, "thientrang.1753@gmail.com"),
+                new("isManager", isManagerValue),
                 new("userId", account.Id),
                 new("warehouseId", account.Employee?.WarehouseId is null ? "null" : account.Employee.WarehouseId),
                 new("name", account.Name),
