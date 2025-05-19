@@ -54,7 +54,7 @@ public class DeleteProductCommandHandler(
 
         var checkProdCmd = await prodCmdRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Id == checkProduct.Id && x.DeletedOn == null, cancellationToken);
-        if (checkProdCmd != null && (checkProdCmd.Status != CommandStatus.CANCELLED || checkProdCmd.Status == CommandStatus.COMPLETED))
+        if (checkProdCmd != null && (checkProdCmd.Status != CommandStatus.CANCELED || checkProdCmd.Status == CommandStatus.COMPLETED))
             return CTBaseResult.UnProcess("Product is used in Production Command.");
 
         checkProduct.DeletedOn = DateTimeOffset.UtcNow;

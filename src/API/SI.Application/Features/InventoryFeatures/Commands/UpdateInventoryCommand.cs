@@ -33,9 +33,6 @@ public class UpdateInventoryCommandHandler(
             return CTBaseResult.BadRequest(checkValid.Errors);
 
         var warehouseId = identifierProvider.WarehouseId;
-        var role = identifierProvider.Role;
-        if (role != "WAREHOUSE_STAFF")
-            return CTBaseResult.UnProcess("Just warehouse staff can access.");
 
         var checkInventory = await inventoryRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.ProductId == request.ProductId && x.WarehouseId == warehouseId && x.DeletedOn == null, cancellationToken);

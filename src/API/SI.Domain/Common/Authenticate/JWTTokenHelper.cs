@@ -20,7 +20,7 @@ public sealed class JWTTokenHelper(IConfiguration iconfiguration)
                 new(JwtRegisteredClaimNames.Sub, "sub.trang1753@com"),
                 new(JwtRegisteredClaimNames.Email, "thientrang.1753@gmail.com"),
                 new("userId", account.Id),
-                new("warehouseId", account.Employee?.WarehouseId ?? "null"),
+                new("warehouseId", account.Employee?.WarehouseId is null ? "null" : account.Employee.WarehouseId),
                 new("name", account.Name),
                 new("positionId", account.Employee?.PositionId is null ? "null" : account.Employee.PositionId),
                 new("employeeId", account.EmployeeId is null ? "null" : account.EmployeeId),

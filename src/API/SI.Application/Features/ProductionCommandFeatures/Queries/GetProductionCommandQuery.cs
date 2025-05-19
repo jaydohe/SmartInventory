@@ -19,23 +19,10 @@ public class GetProductionCommandQuery(string id, QueryRequestV3 query)
 
 public class GetProductionCommandQueryHandler(
     IRepository<ProductionCommand> productionCommandRepos,
-    IRepository<Employee> employeeRepos,
-    IMapper mapper,
-    IUserIdentifierProvider identifierProvider) : IQueryHandler<GetProductionCommandQuery, OkDynamicResponse>
+    IMapper mapper) : IQueryHandler<GetProductionCommandQuery, OkDynamicResponse>
 {
     public async Task<CTBaseResult<OkDynamicResponse>> Handle(GetProductionCommandQuery request, CancellationToken cancellationToken)
     {
-        var role = identifierProvider.Role;
-        var employeeId = identifierProvider.EmployeeId;
-
-        if (role is "WAREHOUSE_STAFF" || role is "WAREHOUSE_PRODUCER")
-        {
-            var checkManager = await employeeRepos.BuildQuery
-                .FirstOrDefaultAsync(x => x.Id == employeeId && x.IsManager == true, cancellationToken);
-            if (checkManager is null)
-                return CTBaseResult.UnProcess("Just manager can access.");
-        }
-
         QueryRequestV3 queryContext = request.QueryContext;
         var productionCommand = await productionCommandRepos.HandleLinqQueryRequestV2(queryContext)
             .Where(e => e.Id == request.Id)

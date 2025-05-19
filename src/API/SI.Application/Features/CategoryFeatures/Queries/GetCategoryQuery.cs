@@ -8,7 +8,6 @@ using CTCore.DynamicQuery.Population;
 using CTCore.DynamicQuery.Population.Public.Descriptors;
 using Microsoft.EntityFrameworkCore;
 using SI.Domain.Entities;
-using SI.Domain.Enums;
 
 namespace SI.Application.Features.CategoryFeatures.Queries;
 

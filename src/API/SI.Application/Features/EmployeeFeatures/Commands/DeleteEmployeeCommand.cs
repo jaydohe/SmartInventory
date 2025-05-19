@@ -13,7 +13,8 @@ public class DeleteEmployeeCommand(string id) : ICommand<OkResponse>
 
 public class DeleteEmployeeCommandHandler(
     IUnitOfWork unitOfWork,
-    IRepository<Employee> employeeRepos) : ICommandHandler<DeleteEmployeeCommand, OkResponse>
+    IRepository<Employee> employeeRepos,
+    IRepository<User> userRepos) : ICommandHandler<DeleteEmployeeCommand, OkResponse>
 {
     public async Task<CTBaseResult<OkResponse>> Handle(DeleteEmployeeCommand request, CancellationToken cancellationToken)
     {
@@ -21,6 +22,11 @@ public class DeleteEmployeeCommandHandler(
             .FirstOrDefaultAsync(x => x.Id == request.Id && x.DeletedOn == null, cancellationToken);
         if (checkEmp is null)
             return CTBaseResult.NotFound("Employee");
+
+        var checkUser = await userRepos.BuildQuery
+            .FirstOrDefaultAsync(x => x.EmployeeId == request.Id && x.DeletedOn == null, cancellationToken);
+        if (checkUser != null)
+            return CTBaseResult.UnProcess("Employee had account.");
 
         checkEmp.DeletedOn = DateTimeOffset.UtcNow;
 

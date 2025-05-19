@@ -22,6 +22,24 @@ public class Order : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
     public string Code { get; set; } = null!;
 
     // <summary>
+    // Nguời tạo đơn hàng
+    // </summary>
+    [ForeignKey(nameof(User))]
+    public string UserId { get; set; } = null!;
+
+    // <summary>
+    // Phần trăm thuế (10%)
+    // </summary>
+    [Range(0, 100)]
+    public decimal? VAT { get; set; }
+
+    // <summary>
+    // Phần trăm chiết khấu (10%)
+    // </summary>
+    [Range(0, 100)]
+    public decimal? Discount { get; set; }
+
+    // <summary>
     // Tổng số tiền của đơn hàng
     // </summary>
     public decimal TotalAmount { get; set; }
@@ -34,16 +52,17 @@ public class Order : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
     public DateTimeOffset? ModifiedOn { get; set; }
     public DateTimeOffset? DeletedOn { get; set; }
 
+    public virtual User? User { get; set; }
     public virtual Agency? Agency { get; set; }
     public virtual ICollection<OrderDetail>? OrderDetails { get; set; }
 
-    public void SendNotifRequestProductionCommand(string userId, params string[] userIds)
+    public void SendNotifRequestProductionCommand(string userId, string code, params string[] userIds)
     {
         var payload = new NotifPayload(
             Guid.CreateVersion7().ToString(),
             NotifType.PRODUCTIONCOMMAND,
             $"Yêu cầu lệnh sản xuất",
-            $@"{userId} đã yêu cầu lệnh sản xuất vào lúc {DateTimeOffset.UtcNow.ToLocal():dd/MM/yyyy HH:mm:ss}"
+            $@"{userId} đã yêu cầu lệnh sản xuất từ đơn hàng {code} vào lúc {DateTimeOffset.UtcNow.ToLocal():dd/MM/yyyy HH:mm:ss}"
         );
         this.Raise(new SendNotificationEvent(userId, true, Notification.Create(payload, userIds)));
     }

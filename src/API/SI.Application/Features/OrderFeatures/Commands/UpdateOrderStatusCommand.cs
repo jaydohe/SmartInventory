@@ -20,25 +20,23 @@ public class UpdateOrderStatusCommandHandler(
 {
     public async Task<CTBaseResult<OkResponse>> Handle(UpdateOrderStatusCommand request, CancellationToken cancellationToken)
     {
-        var orderStatus = Enum.Parse<OrderStatus>(request.Arg.OrderStatus);
-        if (!Enum.IsDefined(typeof(OrderStatus), orderStatus))
-            return CTBaseResult.NotFound("Order Status");
-
         var checkOrder = await orderRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Id == request.Id && x.DeletedOn == null, cancellationToken);
         if (checkOrder is null)
             return CTBaseResult.NotFound("Order");
-        if (checkOrder.OrderStatus == orderStatus)
+        if (checkOrder.OrderStatus == request.Arg.Status)
             return CTBaseResult.UnProcess("Order status is same");
 
-        if (orderStatus == OrderStatus.NEW)
+        if (request.Arg.Status == OrderStatus.NEW)
             return CTBaseResult.UnProcess("Can not update Order status is new.");
-        if (orderStatus == OrderStatus.REFUNDED)
-            return CTBaseResult.UnProcess("Can not update Order status is refunded.");
-        if (orderStatus == OrderStatus.DELIVERED)
-            return CTBaseResult.UnProcess("Can not update Order status is delivered.");
 
-        checkOrder.OrderStatus = orderStatus;
+        if (checkOrder.OrderStatus == OrderStatus.CANCELED)
+            return CTBaseResult.UnProcess("Order has been canceled.");
+
+        if (checkOrder.OrderStatus == OrderStatus.DELIVERED)
+            return CTBaseResult.UnProcess("Order has been delivered.");
+
+        checkOrder.OrderStatus = request.Arg.Status;
 
         var ret = await unitOfWork.SaveChangeAsync(cancellationToken);
         if (ret <= 0)

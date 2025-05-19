@@ -5,6 +5,7 @@ using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
 using SI.Contract.OrderContract;
+using SI.Domain.Common.Authenticate;
 using SI.Domain.Common.Utils;
 using SI.Domain.Entities;
 using SI.Domain.Entities.Orders;
@@ -26,13 +27,16 @@ public class CreateOrderCommandHandler(
     IRepository<Order> orderRepos,
     IRepository<OrderDetail> orderDetailRepos,
     IRepository<Agency> agencyRepos,
-    IRepository<Product> prodRepos) : ICommandHandler<CreateOrderCommand, OkResponse>
+    IRepository<Product> prodRepos,
+    IUserIdentifierProvider identifierProvider) : ICommandHandler<CreateOrderCommand, OkResponse>
 {
     public async Task<CTBaseResult<OkResponse>> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
     {
         var checkValid = await request.ValidateAsync(cancellationToken);
         if (!checkValid.IsValid)
             return CTBaseResult.BadRequest(checkValid.Errors);
+
+        var userId = identifierProvider.UserId;
 
         var checkAgency = await agencyRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Id == request.Arg.AgencyId && x.DeletedOn == null, cancellationToken);
@@ -45,7 +49,6 @@ public class CreateOrderCommandHandler(
         {
             var product = await prodRepos.BuildQuery
                 .FirstOrDefaultAsync(x => x.Id == item.ProductId && x.DeletedOn == null, cancellationToken);
-
             if (product is null)
                 return CTBaseResult.NotFound("Product");
 
@@ -71,8 +74,11 @@ public class CreateOrderCommandHandler(
         var newOrder = new Order
         {
             Code = CodeGenerationUtils.GenerateCodeFromName(checkAgency.Name),
+            UserId = userId,
             AgencyId = request.Arg.AgencyId,
             IsRefund = request.Arg.IsRefund,
+            VAT = vat,
+            Discount = discount,
             TotalAmount = totalAmount
         };
         orderRepos.Add(newOrder);

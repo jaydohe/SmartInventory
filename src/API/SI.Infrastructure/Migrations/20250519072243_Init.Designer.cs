@@ -12,8 +12,8 @@ using SI.Infrastructure.Persistence;
 namespace SI.Infrastructure.Migrations
 {
     [DbContext(typeof(SIDbContext))]
-    [Migration("20250514191800_DelTotalToText_ProductionCommand")]
-    partial class DelTotalToText_ProductionCommand
+    [Migration("20250519072243_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -88,10 +88,6 @@ namespace SI.Infrastructure.Migrations
                     b.Property<DateTimeOffset?>("DeletedOn")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("DistrictId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(512)
@@ -114,10 +110,6 @@ namespace SI.Infrastructure.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("varchar(20)");
 
-                    b.Property<string>("ProvinceId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
                     b.Property<string>("Representative")
                         .IsRequired()
                         .HasMaxLength(512)
@@ -127,19 +119,9 @@ namespace SI.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
-                    b.Property<string>("WardId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("Code");
-
-                    b.HasIndex("DistrictId");
-
-                    b.HasIndex("ProvinceId");
-
-                    b.HasIndex("WardId");
 
                     b.ToTable("AGENCY");
 
@@ -149,32 +131,26 @@ namespace SI.Infrastructure.Migrations
                             Id = "law",
                             Address = "Hà Nội",
                             Code = "AGC001",
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 14, 19, 17, 59, 631, DateTimeKind.Unspecified).AddTicks(9446), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 19, 7, 22, 43, 187, DateTimeKind.Unspecified).AddTicks(3425), new TimeSpan(0, 0, 0, 0, 0)),
                             CurrentDebt = 10000000m,
-                            DistrictId = "1",
                             Email = "abc@gmail.com",
                             Name = "Công ty TNHH ABC",
                             PhoneNumber = "5887798511",
-                            ProvinceId = "1",
                             Representative = "Tuyến Quý Tuân Nguyen",
-                            TaxCode = "1234567890",
-                            WardId = "1"
+                            TaxCode = "1234567890"
                         },
                         new
                         {
                             Id = "sunshine",
                             Address = "Hà Nội",
                             Code = "AGC002",
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 14, 19, 17, 59, 632, DateTimeKind.Unspecified).AddTicks(2338), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 19, 7, 22, 43, 187, DateTimeKind.Unspecified).AddTicks(5831), new TimeSpan(0, 0, 0, 0, 0)),
                             CurrentDebt = 20000000m,
-                            DistrictId = "1",
                             Email = "xyz@gmail.com",
                             Name = "Công ty TNHH XYZ",
                             PhoneNumber = "4975549838",
-                            ProvinceId = "1",
                             Representative = "Sơn Nhung Ngải Phạm",
-                            TaxCode = "0987654321",
-                            WardId = "1"
+                            TaxCode = "0987654321"
                         });
                 });
 
@@ -290,7 +266,7 @@ namespace SI.Infrastructure.Migrations
                             Id = "1",
                             CategoryEntityType = "WAREHOUSE",
                             Code = "CATW001",
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 14, 19, 17, 59, 633, DateTimeKind.Unspecified).AddTicks(1380), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 19, 7, 22, 43, 188, DateTimeKind.Unspecified).AddTicks(5299), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "Danh mục 1"
                         },
                         new
@@ -298,7 +274,7 @@ namespace SI.Infrastructure.Migrations
                             Id = "2",
                             CategoryEntityType = "PRODUCT",
                             Code = "CATP002",
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 14, 19, 17, 59, 633, DateTimeKind.Unspecified).AddTicks(1949), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 19, 7, 22, 43, 188, DateTimeKind.Unspecified).AddTicks(5775), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "Danh mục 2"
                         },
                         new
@@ -306,7 +282,7 @@ namespace SI.Infrastructure.Migrations
                             Id = "3",
                             CategoryEntityType = "WAREHOUSE",
                             Code = "CATW003",
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 14, 19, 17, 59, 633, DateTimeKind.Unspecified).AddTicks(1951), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 19, 7, 22, 43, 188, DateTimeKind.Unspecified).AddTicks(5777), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "Danh mục 3"
                         });
                 });
@@ -347,21 +323,21 @@ namespace SI.Infrastructure.Migrations
                         {
                             Id = "huhuhu",
                             Code = "DEPART001",
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 14, 19, 17, 59, 633, DateTimeKind.Unspecified).AddTicks(5468), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 19, 7, 22, 43, 188, DateTimeKind.Unspecified).AddTicks(9389), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "Bộ phận quản lý kho"
                         },
                         new
                         {
                             Id = "sugar-town",
                             Code = "DEPART002",
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 14, 19, 17, 59, 633, DateTimeKind.Unspecified).AddTicks(5805), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 19, 7, 22, 43, 188, DateTimeKind.Unspecified).AddTicks(9718), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "Bộ phận quản lý sản xuất"
                         },
                         new
                         {
                             Id = "parrot-smell",
                             Code = "DEPART003",
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 14, 19, 17, 59, 633, DateTimeKind.Unspecified).AddTicks(5807), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 19, 7, 22, 43, 188, DateTimeKind.Unspecified).AddTicks(9720), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "Bộ phận quản lý bán hàng"
                         });
                 });
@@ -394,10 +370,6 @@ namespace SI.Infrastructure.Migrations
                     b.Property<string>("DepartmentId")
                         .HasColumnType("varchar(255)");
 
-                    b.Property<string>("DistrictId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(512)
@@ -426,14 +398,6 @@ namespace SI.Infrastructure.Migrations
                     b.Property<string>("PositionId")
                         .HasColumnType("varchar(255)");
 
-                    b.Property<string>("ProvinceId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("WardId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
                     b.Property<string>("WarehouseId")
                         .HasColumnType("varchar(255)");
 
@@ -443,13 +407,7 @@ namespace SI.Infrastructure.Migrations
 
                     b.HasIndex("DepartmentId");
 
-                    b.HasIndex("DistrictId");
-
                     b.HasIndex("PositionId");
-
-                    b.HasIndex("ProvinceId");
-
-                    b.HasIndex("WardId");
 
                     b.HasIndex("WarehouseId");
 
@@ -461,34 +419,28 @@ namespace SI.Infrastructure.Migrations
                             Id = "bonk",
                             Address = "Hà Nội",
                             Code = "ADMIN01",
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 14, 19, 17, 59, 634, DateTimeKind.Unspecified).AddTicks(759), new TimeSpan(0, 0, 0, 0, 0)),
-                            DateHired = new DateTime(2025, 5, 15, 2, 17, 59, 634, DateTimeKind.Local).AddTicks(2057),
-                            DistrictId = "1",
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 19, 7, 22, 43, 189, DateTimeKind.Unspecified).AddTicks(4411), new TimeSpan(0, 0, 0, 0, 0)),
+                            DateHired = new DateTime(2025, 5, 19, 14, 22, 43, 189, DateTimeKind.Local).AddTicks(5392),
                             Email = "VanC@gmail.com",
                             GenderType = "FEMALE",
                             Name = "Nguyễn Văn C",
                             PhoneNumber = "7894561230",
-                            PositionId = "1",
-                            ProvinceId = "1",
-                            WardId = "1"
+                            PositionId = "1"
                         },
                         new
                         {
                             Id = "hihihaha",
                             Address = "Hà Nội",
                             Code = "MANAGER01",
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 14, 19, 17, 59, 634, DateTimeKind.Unspecified).AddTicks(2225), new TimeSpan(0, 0, 0, 0, 0)),
-                            DateHired = new DateTime(2025, 5, 15, 2, 17, 59, 634, DateTimeKind.Local).AddTicks(2487),
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 19, 7, 22, 43, 189, DateTimeKind.Unspecified).AddTicks(5580), new TimeSpan(0, 0, 0, 0, 0)),
+                            DateHired = new DateTime(2025, 5, 19, 14, 22, 43, 189, DateTimeKind.Local).AddTicks(5856),
                             DepartmentId = "huhuhu",
-                            DistrictId = "1",
                             Email = "VanA@gmail.com",
                             GenderType = "OTHER",
                             IsManager = true,
                             Name = "Nguyễn Văn A",
                             PhoneNumber = "0123456789",
                             PositionId = "4",
-                            ProvinceId = "1",
-                            WardId = "1",
                             WarehouseId = "choi-da-time"
                         },
                         new
@@ -496,18 +448,15 @@ namespace SI.Infrastructure.Migrations
                             Id = "hihihaharamram",
                             Address = "Hà Nội",
                             Code = "EMPLOYEE01",
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 14, 19, 17, 59, 634, DateTimeKind.Unspecified).AddTicks(2613), new TimeSpan(0, 0, 0, 0, 0)),
-                            DateHired = new DateTime(2025, 5, 15, 2, 17, 59, 634, DateTimeKind.Local).AddTicks(2616),
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 19, 7, 22, 43, 189, DateTimeKind.Unspecified).AddTicks(5980), new TimeSpan(0, 0, 0, 0, 0)),
+                            DateHired = new DateTime(2025, 5, 19, 14, 22, 43, 189, DateTimeKind.Local).AddTicks(5983),
                             DepartmentId = "huhuhu",
-                            DistrictId = "1",
                             Email = "VanB@gmail.com",
                             GenderType = "MALE",
                             IsManager = false,
                             Name = "Nguyễn Văn B",
                             PhoneNumber = "0123456987",
                             PositionId = "5",
-                            ProvinceId = "1",
-                            WardId = "1",
                             WarehouseId = "choi-da-time"
                         },
                         new
@@ -515,18 +464,15 @@ namespace SI.Infrastructure.Migrations
                             Id = "bankmiramram",
                             Address = "Hà Nội",
                             Code = "EMPLOYEE02",
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 14, 19, 17, 59, 634, DateTimeKind.Unspecified).AddTicks(2618), new TimeSpan(0, 0, 0, 0, 0)),
-                            DateHired = new DateTime(2025, 5, 15, 2, 17, 59, 634, DateTimeKind.Local).AddTicks(2620),
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 19, 7, 22, 43, 189, DateTimeKind.Unspecified).AddTicks(5984), new TimeSpan(0, 0, 0, 0, 0)),
+                            DateHired = new DateTime(2025, 5, 19, 14, 22, 43, 189, DateTimeKind.Local).AddTicks(5986),
                             DepartmentId = "sugar-town",
-                            DistrictId = "1",
                             Email = "VanD@gmail.com",
                             GenderType = "OTHER",
                             IsManager = true,
                             Name = "Nguyễn Văn D",
                             PhoneNumber = "0123457953",
                             PositionId = "6",
-                            ProvinceId = "1",
-                            WardId = "1",
                             WarehouseId = "choi-da-time"
                         },
                         new
@@ -534,18 +480,15 @@ namespace SI.Infrastructure.Migrations
                             Id = "dainam",
                             Address = "Hà Nội",
                             Code = "EMPLOYEE03",
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 14, 19, 17, 59, 634, DateTimeKind.Unspecified).AddTicks(2620), new TimeSpan(0, 0, 0, 0, 0)),
-                            DateHired = new DateTime(2025, 5, 15, 2, 17, 59, 634, DateTimeKind.Local).AddTicks(2622),
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 19, 7, 22, 43, 189, DateTimeKind.Unspecified).AddTicks(5987), new TimeSpan(0, 0, 0, 0, 0)),
+                            DateHired = new DateTime(2025, 5, 19, 14, 22, 43, 189, DateTimeKind.Local).AddTicks(5988),
                             DepartmentId = "parrot-smell",
-                            DistrictId = "1",
                             Email = "VanE@gmail.com",
                             GenderType = "MALE",
                             IsManager = false,
                             Name = "Nguyễn Văn E",
                             PhoneNumber = "012548756",
-                            PositionId = "7",
-                            ProvinceId = "1",
-                            WardId = "1"
+                            PositionId = "7"
                         });
                 });
 
@@ -647,11 +590,6 @@ namespace SI.Infrastructure.Migrations
 
                     b.Property<decimal>("TotalAmount")
                         .HasColumnType("decimal(65,30)");
-
-                    b.Property<string>("TotalToText")
-                        .IsRequired()
-                        .HasMaxLength(1024)
-                        .HasColumnType("varchar(1024)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -760,11 +698,6 @@ namespace SI.Infrastructure.Migrations
 
                     b.Property<decimal>("TotalAmount")
                         .HasColumnType("decimal(65,30)");
-
-                    b.Property<string>("TotalToText")
-                        .IsRequired()
-                        .HasMaxLength(1024)
-                        .HasColumnType("varchar(1024)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -934,10 +867,6 @@ namespace SI.Infrastructure.Migrations
                     b.Property<DateTimeOffset?>("DeletedOn")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("DistrictId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(512)
@@ -960,10 +889,6 @@ namespace SI.Infrastructure.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("varchar(20)");
 
-                    b.Property<string>("ProvinceId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
                     b.Property<string>("Representative")
                         .IsRequired()
                         .HasMaxLength(512)
@@ -973,19 +898,9 @@ namespace SI.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
-                    b.Property<string>("WardId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("Code");
-
-                    b.HasIndex("DistrictId");
-
-                    b.HasIndex("ProvinceId");
-
-                    b.HasIndex("WardId");
 
                     b.ToTable("MATERIALSUPPLIER");
 
@@ -996,16 +911,13 @@ namespace SI.Infrastructure.Migrations
                             Address = "Hà Nội",
                             BusinessItem = "Vật liệu xây dựng",
                             Code = "SUPPLIER001",
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 14, 19, 17, 59, 634, DateTimeKind.Unspecified).AddTicks(6875), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 19, 7, 22, 43, 189, DateTimeKind.Unspecified).AddTicks(9767), new TimeSpan(0, 0, 0, 0, 0)),
                             CurrentDebt = 0m,
-                            DistrictId = "1",
                             Email = "A@gmail.com",
                             Name = "Nhà cung cấp 1",
                             PhoneNumber = "0123456789",
-                            ProvinceId = "1",
                             Representative = "Nguyễn Văn A",
-                            TaxCode = "123456789",
-                            WardId = "1"
+                            TaxCode = "123456789"
                         },
                         new
                         {
@@ -1013,16 +925,13 @@ namespace SI.Infrastructure.Migrations
                             Address = "Hà Nội",
                             BusinessItem = "Vật liệu điện",
                             Code = "SUPPLIER002",
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 14, 19, 17, 59, 634, DateTimeKind.Unspecified).AddTicks(8354), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 19, 7, 22, 43, 190, DateTimeKind.Unspecified).AddTicks(895), new TimeSpan(0, 0, 0, 0, 0)),
                             CurrentDebt = 0m,
-                            DistrictId = "1",
                             Email = "B@gmail.com",
                             Name = "Nhà cung cấp 2",
                             PhoneNumber = "0987654321",
-                            ProvinceId = "1",
                             Representative = "Nguyễn Văn B",
-                            TaxCode = "8877955549",
-                            WardId = "1"
+                            TaxCode = "8877955549"
                         });
                 });
 
@@ -1086,6 +995,9 @@ namespace SI.Infrastructure.Migrations
                     b.Property<DateTimeOffset?>("DeletedOn")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<decimal?>("Discount")
+                        .HasColumnType("decimal(65,30)");
+
                     b.Property<bool>("IsRefund")
                         .HasColumnType("tinyint(1)");
 
@@ -1098,11 +1010,20 @@ namespace SI.Infrastructure.Migrations
                     b.Property<decimal>("TotalAmount")
                         .HasColumnType("decimal(65,30)");
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<decimal?>("VAT")
+                        .HasColumnType("decimal(65,30)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AgencyId");
 
                     b.HasIndex("Code");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("ORDER");
                 });
@@ -1173,43 +1094,43 @@ namespace SI.Infrastructure.Migrations
                         new
                         {
                             Id = "1",
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 14, 19, 17, 59, 635, DateTimeKind.Unspecified).AddTicks(681), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 19, 7, 22, 43, 190, DateTimeKind.Unspecified).AddTicks(3196), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "Giám đốc"
                         },
                         new
                         {
                             Id = "2",
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 14, 19, 17, 59, 635, DateTimeKind.Unspecified).AddTicks(870), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 19, 7, 22, 43, 190, DateTimeKind.Unspecified).AddTicks(3391), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "Phó giám đốc"
                         },
                         new
                         {
                             Id = "3",
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 14, 19, 17, 59, 635, DateTimeKind.Unspecified).AddTicks(871), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 19, 7, 22, 43, 190, DateTimeKind.Unspecified).AddTicks(3393), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "Trưởng phòng"
                         },
                         new
                         {
                             Id = "4",
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 14, 19, 17, 59, 635, DateTimeKind.Unspecified).AddTicks(872), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 19, 7, 22, 43, 190, DateTimeKind.Unspecified).AddTicks(3394), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "Quản lý kho"
                         },
                         new
                         {
                             Id = "5",
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 14, 19, 17, 59, 635, DateTimeKind.Unspecified).AddTicks(873), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 19, 7, 22, 43, 190, DateTimeKind.Unspecified).AddTicks(3395), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "Nhân viên kho"
                         },
                         new
                         {
                             Id = "6",
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 14, 19, 17, 59, 635, DateTimeKind.Unspecified).AddTicks(876), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 19, 7, 22, 43, 190, DateTimeKind.Unspecified).AddTicks(3398), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "Quản lý sản xuất"
                         },
                         new
                         {
                             Id = "7",
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 14, 19, 17, 59, 635, DateTimeKind.Unspecified).AddTicks(877), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 19, 7, 22, 43, 190, DateTimeKind.Unspecified).AddTicks(3398), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "Nhân viên bán hàng"
                         });
                 });
@@ -1284,7 +1205,7 @@ namespace SI.Infrastructure.Migrations
                             Id = "1",
                             CategoryId = "2",
                             Code = "PROD001",
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 14, 19, 17, 59, 635, DateTimeKind.Unspecified).AddTicks(4907), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 19, 7, 22, 43, 190, DateTimeKind.Unspecified).AddTicks(7323), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "Mô tả sản phẩm 1",
                             HoldingCost = 50m,
                             Name = "Sản phẩm 1",
@@ -1298,7 +1219,7 @@ namespace SI.Infrastructure.Migrations
                             Id = "2",
                             CategoryId = "2",
                             Code = "PROD002",
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 14, 19, 17, 59, 635, DateTimeKind.Unspecified).AddTicks(6191), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 19, 7, 22, 43, 190, DateTimeKind.Unspecified).AddTicks(8547), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "Mô tả sản phẩm 2",
                             HoldingCost = 100m,
                             MaterialSupplierId = "bare",
@@ -1573,7 +1494,7 @@ namespace SI.Infrastructure.Migrations
                         new
                         {
                             Id = "0193e2ce-ee41-7fcb-9b52-5bba105dc0bd",
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 14, 19, 17, 59, 635, DateTimeKind.Unspecified).AddTicks(9020), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 19, 7, 22, 43, 191, DateTimeKind.Unspecified).AddTicks(1206), new TimeSpan(0, 0, 0, 0, 0)),
                             HashPassword = "27dee27aa573be269f95143a213fe18e29a90e1124b371d280a6c4b88f85f749",
                             IsLogin = true,
                             LoginName = "dev0",
@@ -1583,7 +1504,7 @@ namespace SI.Infrastructure.Migrations
                         new
                         {
                             Id = "123456789",
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 14, 19, 17, 59, 635, DateTimeKind.Unspecified).AddTicks(9589), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 19, 7, 22, 43, 191, DateTimeKind.Unspecified).AddTicks(1751), new TimeSpan(0, 0, 0, 0, 0)),
                             EmployeeId = "bonk",
                             HashPassword = "7ced44abd56279573d3e9730f7845fd68bb5e1d1b09dee076b066f53ca8e8247",
                             IsLogin = true,
@@ -1594,7 +1515,7 @@ namespace SI.Infrastructure.Migrations
                         new
                         {
                             Id = "987654321",
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 14, 19, 17, 59, 635, DateTimeKind.Unspecified).AddTicks(9719), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 19, 7, 22, 43, 191, DateTimeKind.Unspecified).AddTicks(1882), new TimeSpan(0, 0, 0, 0, 0)),
                             EmployeeId = "hihihaha",
                             HashPassword = "cfbff703c63d47180b95190dac7b4ca5e04e20af5b3c5ec515e4136710815d84",
                             IsLogin = true,
@@ -1605,7 +1526,7 @@ namespace SI.Infrastructure.Migrations
                         new
                         {
                             Id = "789456123",
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 14, 19, 17, 59, 635, DateTimeKind.Unspecified).AddTicks(9721), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 19, 7, 22, 43, 191, DateTimeKind.Unspecified).AddTicks(1884), new TimeSpan(0, 0, 0, 0, 0)),
                             EmployeeId = "bankmiramram",
                             HashPassword = "cfbff703c63d47180b95190dac7b4ca5e04e20af5b3c5ec515e4136710815d84",
                             IsLogin = true,
@@ -1616,7 +1537,7 @@ namespace SI.Infrastructure.Migrations
                         new
                         {
                             Id = "147894561230",
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 14, 19, 17, 59, 635, DateTimeKind.Unspecified).AddTicks(9722), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 19, 7, 22, 43, 191, DateTimeKind.Unspecified).AddTicks(1885), new TimeSpan(0, 0, 0, 0, 0)),
                             EmployeeId = "dainam",
                             HashPassword = "cfbff703c63d47180b95190dac7b4ca5e04e20af5b3c5ec515e4136710815d84",
                             IsLogin = true,
@@ -1653,10 +1574,6 @@ namespace SI.Infrastructure.Migrations
                     b.Property<DateTimeOffset?>("DeletedOn")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("DistrictId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
                     b.Property<string>("ManagerId")
                         .HasColumnType("varchar(255)");
 
@@ -1668,14 +1585,6 @@ namespace SI.Infrastructure.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("varchar(1024)");
 
-                    b.Property<string>("ProvinceId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("WardId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
                     b.Property<string>("WarehouseId")
                         .HasColumnType("varchar(255)");
 
@@ -1683,13 +1592,7 @@ namespace SI.Infrastructure.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.HasIndex("DistrictId");
-
                     b.HasIndex("ManagerId");
-
-                    b.HasIndex("ProvinceId");
-
-                    b.HasIndex("WardId");
 
                     b.HasIndex("WarehouseId");
 
@@ -1703,11 +1606,8 @@ namespace SI.Infrastructure.Migrations
                             Capacity = 999,
                             CategoryId = "1",
                             Code = "CDT001",
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 14, 19, 17, 59, 643, DateTimeKind.Unspecified).AddTicks(52), new TimeSpan(0, 0, 0, 0, 0)),
-                            DistrictId = "1",
-                            Name = "Jellyjellyjelly",
-                            ProvinceId = "1",
-                            WardId = "1"
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 19, 7, 22, 43, 197, DateTimeKind.Unspecified).AddTicks(5872), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Jellyjellyjelly"
                         },
                         new
                         {
@@ -1716,114 +1616,9 @@ namespace SI.Infrastructure.Migrations
                             Capacity = 999,
                             CategoryId = "3",
                             Code = "BASKET001",
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 14, 19, 17, 59, 643, DateTimeKind.Unspecified).AddTicks(1152), new TimeSpan(0, 0, 0, 0, 0)),
-                            DistrictId = "1",
-                            Name = "Basket",
-                            ProvinceId = "1",
-                            WardId = "1"
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 5, 19, 7, 22, 43, 197, DateTimeKind.Unspecified).AddTicks(6718), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Basket"
                         });
-                });
-
-            modelBuilder.Entity("SI.Domain.ValueObjeSI.Location.District", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(255)
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("ProvinceId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name");
-
-                    b.HasIndex("ProvinceId");
-
-                    b.ToTable("DISTRICT");
-                });
-
-            modelBuilder.Entity("SI.Domain.ValueObjeSI.Location.Province", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(255)
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name");
-
-                    b.ToTable("PROVINCE");
-                });
-
-            modelBuilder.Entity("SI.Domain.ValueObjeSI.Location.Ward", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(255)
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("DistrictId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DistrictId");
-
-                    b.HasIndex("Name");
-
-                    b.ToTable("WARD");
-                });
-
-            modelBuilder.Entity("SI.Domain.Entities.Agency", b =>
-                {
-                    b.HasOne("SI.Domain.ValueObjeSI.Location.District", "District")
-                        .WithMany()
-                        .HasForeignKey("DistrictId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("SI.Domain.ValueObjeSI.Location.Province", "Province")
-                        .WithMany()
-                        .HasForeignKey("ProvinceId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("SI.Domain.ValueObjeSI.Location.Ward", "Ward")
-                        .WithMany()
-                        .HasForeignKey("WardId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("District");
-
-                    b.Navigation("Province");
-
-                    b.Navigation("Ward");
                 });
 
             modelBuilder.Entity("SI.Domain.Entities.BOM.BillOfMaterial", b =>
@@ -1862,27 +1657,9 @@ namespace SI.Infrastructure.Migrations
                         .WithMany("Employees")
                         .HasForeignKey("DepartmentId");
 
-                    b.HasOne("SI.Domain.ValueObjeSI.Location.District", "District")
-                        .WithMany()
-                        .HasForeignKey("DistrictId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("SI.Domain.Entities.Position", "Position")
                         .WithMany()
                         .HasForeignKey("PositionId");
-
-                    b.HasOne("SI.Domain.ValueObjeSI.Location.Province", "Province")
-                        .WithMany()
-                        .HasForeignKey("ProvinceId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("SI.Domain.ValueObjeSI.Location.Ward", "Ward")
-                        .WithMany()
-                        .HasForeignKey("WardId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
 
                     b.HasOne("SI.Domain.Entities.Warehouse", "Warehouse")
                         .WithMany("Employees")
@@ -1890,13 +1667,7 @@ namespace SI.Infrastructure.Migrations
 
                     b.Navigation("Department");
 
-                    b.Navigation("District");
-
                     b.Navigation("Position");
-
-                    b.Navigation("Province");
-
-                    b.Navigation("Ward");
 
                     b.Navigation("Warehouse");
                 });
@@ -2050,33 +1821,6 @@ namespace SI.Infrastructure.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("SI.Domain.Entities.MaterialSupplier", b =>
-                {
-                    b.HasOne("SI.Domain.ValueObjeSI.Location.District", "District")
-                        .WithMany()
-                        .HasForeignKey("DistrictId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("SI.Domain.ValueObjeSI.Location.Province", "Province")
-                        .WithMany()
-                        .HasForeignKey("ProvinceId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("SI.Domain.ValueObjeSI.Location.Ward", "Ward")
-                        .WithMany()
-                        .HasForeignKey("WardId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("District");
-
-                    b.Navigation("Province");
-
-                    b.Navigation("Ward");
-                });
-
             modelBuilder.Entity("SI.Domain.Entities.Orders.Order", b =>
                 {
                     b.HasOne("SI.Domain.Entities.Agency", "Agency")
@@ -2085,7 +1829,15 @@ namespace SI.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("SI.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("Agency");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("SI.Domain.Entities.Orders.OrderDetail", b =>
@@ -2150,7 +1902,7 @@ namespace SI.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("SI.Domain.Entities.ProductionCommands.ProductionCommand", "ProductionCommand")
-                        .WithMany("ProductionCommandDetail")
+                        .WithMany("Details")
                         .HasForeignKey("ProductionCommandId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -2163,7 +1915,7 @@ namespace SI.Infrastructure.Migrations
             modelBuilder.Entity("SI.Domain.Entities.ProductionCommands.ProductionCommandProcess", b =>
                 {
                     b.HasOne("SI.Domain.Entities.ProductionCommands.ProductionCommand", "ProductionCommands")
-                        .WithMany()
+                        .WithMany("Processes")
                         .HasForeignKey("ProductionCommandId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -2197,28 +1949,10 @@ namespace SI.Infrastructure.Migrations
                         .WithMany()
                         .HasForeignKey("CategoryId");
 
-                    b.HasOne("SI.Domain.ValueObjeSI.Location.District", "District")
-                        .WithMany()
-                        .HasForeignKey("DistrictId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("SI.Domain.Entities.Employee", "Manager")
                         .WithMany()
                         .HasForeignKey("ManagerId")
                         .OnDelete(DeleteBehavior.SetNull);
-
-                    b.HasOne("SI.Domain.ValueObjeSI.Location.Province", "Province")
-                        .WithMany()
-                        .HasForeignKey("ProvinceId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("SI.Domain.ValueObjeSI.Location.Ward", "Ward")
-                        .WithMany()
-                        .HasForeignKey("WardId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
 
                     b.HasOne("SI.Domain.Entities.Warehouse", "MasterWarehouse")
                         .WithMany("SlaveWarehouses")
@@ -2226,37 +1960,9 @@ namespace SI.Infrastructure.Migrations
 
                     b.Navigation("Category");
 
-                    b.Navigation("District");
-
                     b.Navigation("Manager");
 
                     b.Navigation("MasterWarehouse");
-
-                    b.Navigation("Province");
-
-                    b.Navigation("Ward");
-                });
-
-            modelBuilder.Entity("SI.Domain.ValueObjeSI.Location.District", b =>
-                {
-                    b.HasOne("SI.Domain.ValueObjeSI.Location.Province", "Province")
-                        .WithMany("Districts")
-                        .HasForeignKey("ProvinceId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Province");
-                });
-
-            modelBuilder.Entity("SI.Domain.ValueObjeSI.Location.Ward", b =>
-                {
-                    b.HasOne("SI.Domain.ValueObjeSI.Location.District", "District")
-                        .WithMany("Wards")
-                        .HasForeignKey("DistrictId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("District");
                 });
 
             modelBuilder.Entity("SI.Domain.Entities.BOM.BillOfMaterial", b =>
@@ -2286,7 +1992,9 @@ namespace SI.Infrastructure.Migrations
 
             modelBuilder.Entity("SI.Domain.Entities.ProductionCommands.ProductionCommand", b =>
                 {
-                    b.Navigation("ProductionCommandDetail");
+                    b.Navigation("Details");
+
+                    b.Navigation("Processes");
                 });
 
             modelBuilder.Entity("SI.Domain.Entities.Warehouse", b =>
@@ -2294,16 +2002,6 @@ namespace SI.Infrastructure.Migrations
                     b.Navigation("Employees");
 
                     b.Navigation("SlaveWarehouses");
-                });
-
-            modelBuilder.Entity("SI.Domain.ValueObjeSI.Location.District", b =>
-                {
-                    b.Navigation("Wards");
-                });
-
-            modelBuilder.Entity("SI.Domain.ValueObjeSI.Location.Province", b =>
-                {
-                    b.Navigation("Districts");
                 });
 #pragma warning restore 612, 618
         }

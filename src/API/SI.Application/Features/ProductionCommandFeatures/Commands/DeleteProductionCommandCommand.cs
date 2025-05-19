@@ -42,7 +42,7 @@ public class DeleteProductionCommandCommandHandler(
         checkProductionCommandProcess.DeletedOn = DateTimeOffset.UtcNow;
         checkProductionCommandDetail.DeletedOn = DateTimeOffset.UtcNow;
         checkProductionCommand.DeletedOn = DateTimeOffset.UtcNow;
-        checkProductionCommand.Status = CommandStatus.CANCELLED;
+        checkProductionCommand.Status = CommandStatus.CANCELED;
 
         var ret = await unitOfWork.SaveChangeAsync(cancellationToken);
         if (ret <= 0)
