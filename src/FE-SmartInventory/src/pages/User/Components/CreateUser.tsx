@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { UserAddOutlined } from '@ant-design/icons';
-import { Button, Form, Input, Select, Space, Divider } from 'antd';
+import { Button, Form, Input, Select, Space, Divider, Tag } from 'antd';
 import { TCreateUser } from '@/interface/TUser';
 import { RoleEnumString, ROLE } from '@/Constant';
 import RoleTag from './RoleTag';
@@ -8,22 +8,26 @@ import { useQueryWarehouse } from '@/hook/useQueryWarehouse';
 import { useBuilderQuery } from '@/hook';
 import { toJoin, toOrderBy } from '@/utils';
 import { TBuilderQuery } from '@/interface';
+import { useQueryEmployee } from '@/pages/Employee/Hook/useEmployeePage';
 
 const { Option } = Select;
 
 const CreateUser = ({ handleCreateUser }: { handleCreateUser: (data: TCreateUser) => void }) => {
   const [form] = Form.useForm();
-  const [filter, setFilter] =useState<TBuilderQuery>( {
-    toJoin: ['users.*'],
-    isAsc: true,
-    orderBy: 'name',
-    toPaging: {
-      page: 1,
-      pageSize: 10,
-    },
-  });
-  const { getAllWarehouse } = useQueryWarehouse(useBuilderQuery(filter));
 
+  const [filter, setFilter] = useState<TBuilderQuery>({
+    appendQuery: [
+      {
+        deletedOn: {
+          value: 'null',
+          queryOperator: '$eq',
+          queryOperatorParent: '$and',
+        },
+      },
+    ],
+  });
+
+  const { getAllEmployee } = useQueryEmployee(useBuilderQuery(filter));
   const onFinish = (data: TCreateUser) => {
     console.log('data:', data);
     handleCreateUser(data);
@@ -33,11 +37,17 @@ const CreateUser = ({ handleCreateUser }: { handleCreateUser: (data: TCreateUser
   return (
     <Form form={form} layout="vertical" onFinish={onFinish}>
       <Form.Item
-        name="name"
-        label="Tên người dùng"
-        rules={[{ required: true, message: 'Vui lòng nhập tên người dùng' }]}
+        name="employeeId"
+        label="Nhân viên"
+        rules={[{ required: true, message: 'Vui lòng chọn nhân viên' }]}
       >
-        <Input placeholder="Nhập tên người dùng" />
+        <Select placeholder="Chọn nhân viên">
+          {getAllEmployee.data?.data.map((item) => (
+            <Select.Option key={item.id} value={item.id}>
+              {item.name}
+            </Select.Option>
+          ))}
+        </Select>
       </Form.Item>
       <Form.Item
         name="loginName"
@@ -65,7 +75,7 @@ const CreateUser = ({ handleCreateUser }: { handleCreateUser: (data: TCreateUser
         <Input.Password placeholder="Nhập mật khẩu" />
       </Form.Item>
       <Form.Item
-        name="userRoles"
+        name="userRole"
         label="Quyền"
         rules={[{ required: true, message: 'Vui lòng chọn quyền' }]}
       >
@@ -73,25 +83,12 @@ const CreateUser = ({ handleCreateUser }: { handleCreateUser: (data: TCreateUser
           {ROLE.filter(
             (role) => role.name !== RoleEnumString.DEV && role.name !== RoleEnumString.ADMIN
           ).map((role) => (
-            <Select.Option key={role.id} value={role.name}>
+            <Option key={role.id} value={role.name}>
               <RoleTag role={role.name} />
-            </Select.Option>
+            </Option>
           ))}
         </Select>
       </Form.Item>
-      {/* <Form.Item
-        name="unitId"
-        label="Đơn vị"
-        rules={[{ required: true, message: 'Vui lòng chọn đơn vị' }]}
-      >
-        <Select placeholder="Chọn đơn vị" virtual={false}>
-          {getAllUnit.data?.data.filter((unit) => unit.users.length < 10).map((unit) => (
-            <Select.Option key={unit.id} value={unit.id}>
-              {unit.name}
-            </Select.Option>
-          ))}
-        </Select>
-      </Form.Item> */}
 
       <Button
         type="primary"

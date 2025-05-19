@@ -40,4 +40,6 @@ export const userListApi = {
     const res = await axiosClient.put(url, data);
     return res.data;
   }
+
+  
 };

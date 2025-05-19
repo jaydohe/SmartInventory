@@ -12,11 +12,32 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Avatar, Badge, Button, Dropdown, MenuProps, Space, Tabs, TabsProps } from 'antd';
 import { Header } from 'antd/es/layout/layout';
 import { useState } from 'react';
-import { FaBox, FaChartBar, FaFileInvoiceDollar, FaHistory, FaInfoCircle, FaReceipt, FaSlidersH, FaTruck, FaTruckLoading, FaUsers, FaUserTie, FaWarehouse } from 'react-icons/fa';
-import { FaBuildingUser } from "react-icons/fa6";
-import { GiHandTruck } from "react-icons/gi";
-import { HiMiniBuildingOffice2 } from "react-icons/hi2";
-import { MdConveyorBelt, MdFactory, MdInventory, MdOutlineCategory, MdWarehouse, MdWork } from 'react-icons/md';
+import {
+  FaBox,
+  FaChartBar,
+  FaFileInvoiceDollar,
+  FaHistory,
+  FaInfoCircle,
+  FaReceipt,
+  FaSlidersH,
+  FaTruck,
+  FaTruckLoading,
+  FaUsers,
+  FaUserTie,
+  FaWarehouse,
+} from 'react-icons/fa';
+import { FaBuildingUser } from 'react-icons/fa6';
+import { GiHandTruck } from 'react-icons/gi';
+import { HiMiniBuildingOffice2 } from 'react-icons/hi2';
+import {
+  MdConveyorBelt,
+  MdFactory,
+  MdInventory,
+  MdOutlineCategory,
+  MdSwitchAccount,
+  MdWarehouse,
+  MdWork,
+} from 'react-icons/md';
 import { useLocation, useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 import { NavigateNotifyPage, SIZE_NOTIFY_ALL, TNotifyType } from '../../Constant/NotificationState';
@@ -32,57 +53,54 @@ const Admin: MenuItem[] = [
     key: 'dashboard',
     icon: <FaInfoCircle />,
     children: [
-        {
-            label: <span className="">Nhân sự</span>,
-            key: 'employee',
-            icon: <FaUserTie />,
-        },
-        {
-            label: <span className="">Phòng ban</span>,
-            key: 'department',
-            icon: <HiMiniBuildingOffice2 />,
-        },
-        {
-            label: <span className="">Danh mục</span>,
-            key: 'category',
-            icon: <MdOutlineCategory />,
-        },
-        {
-            label: <span className="">Chức vụ</span>,
-            key: 'position',
-            icon: <MdWork />,
-        },
-        {
-            label: <span className="">Đại lý</span>,
-            key: 'agency',
-            icon: <FaBuildingUser />,
-        },
-        {
-            label: <span className="">Nhà cung cấp NVL</span>,
-            key: 'material-supplier',
-            icon: <FaTruck />,
-        },
-        {
-            label: <span className="">Thiết lập thông số</span>,
-            key: 'set-parameter',
-            icon: <FaSlidersH />,
-        },
-        {
-          label: <span className="">Thông minh</span>,
-          key: 'smart-management',
-          icon: <FaChartBar />
-        },
+      {
+        label: <span className="">Danh mục</span>,
+        key: 'category',
+        icon: <MdOutlineCategory />,
+        children: [
+          {
+            label: <span className="">Sản phẩm</span>,
+            key: 'category/product',
+            icon: <FaBox />,
+          },
+          {
+            label: <span className="">Kho</span>,
+            key: 'category/warehouse',
+            icon: <MdWarehouse />,
+          },
+        ],
+      },
+      {
+        label: <span className="">Đại lý</span>,
+        key: 'agency',
+        icon: <FaBuildingUser />,
+      },
+      {
+        label: <span className="">Nhà cung cấp NVL</span>,
+        key: 'material-supplier',
+        icon: <FaTruck />,
+      },
+      {
+        label: <span className="">Thiết lập thông số</span>,
+        key: 'set-parameter',
+        icon: <FaSlidersH />,
+      },
+      {
+        label: <span className="">Thông minh</span>,
+        key: 'smart-management',
+        icon: <FaChartBar />,
+      },
     ],
   },
   {
     label: <span className="">Kho</span>,
     key: 'manage-warehouse',
-    icon: <FaWarehouse  />,
+    icon: <FaWarehouse />,
     children: [
       {
         label: <span className="">Kho, bãi</span>,
         key: 'warehouse',
-        icon: <MdWarehouse  />,
+        icon: <MdWarehouse />,
       },
       {
         label: <span className="">Nhập kho</span>,
@@ -102,9 +120,32 @@ const Admin: MenuItem[] = [
     ],
   },
   {
-    label: <span className="">Người dùng</span>,
+    label: <span className="">Quản lý nhân sự</span>,
     key: 'user',
     icon: <FaUsers />,
+    children: [
+      {
+        label: <span className="">Nhân sự</span>,
+        key: 'employee',
+        icon: <MdSwitchAccount />,
+      },
+      {
+        label: <span className="">Tài khoản</span>,
+        key: 'user',
+        icon: <FaUserTie />,
+      },
+      {
+        label: <span className="">Phòng ban</span>,
+        key: 'department',
+        icon: <HiMiniBuildingOffice2 />,
+      },
+
+      {
+        label: <span className="">Chức vụ</span>,
+        key: 'position',
+        icon: <MdWork />,
+      },
+    ],
   },
   {
     label: <span className="">Sản xuất</span>,
@@ -137,7 +178,7 @@ const Admin: MenuItem[] = [
     label: <span className="">Lịch Sử</span>,
     key: 'activity',
     icon: <FaHistory />,
-  }
+  },
 ];
 const Warehouse_staff: MenuItem[] = [
   {
@@ -145,47 +186,47 @@ const Warehouse_staff: MenuItem[] = [
     key: 'dashboard',
     icon: <FaInfoCircle />,
     children: [
-        {
-            label: <span className="">Nhân sự</span>,
-            key: 'employee',
-            icon: <FaUserTie />,
-        },
-        {
-            label: <span className="">Phòng ban</span>,
-            key: 'department',
-            icon: <HiMiniBuildingOffice2 />,
-        },
-        {
-            label: <span className="">Danh mục</span>,
-            key: 'category',
-            icon: <MdOutlineCategory />,
-        },
-        {
-            label: <span className="">Đại lý</span>,
-            key: 'agency',
-            icon: <FaBuildingUser />,
-        },
-        {
-            label: <span className="">Nhà cung cấp NVL</span>,
-            key: 'material-supplier',
-            icon: <FaTruck />,
-        },
-        {
-          label: <span className="">Thông minh</span>,
-          key: 'smart-management',
-          icon: <FaChartBar />
-        },
+      {
+        label: <span className="">Nhân sự</span>,
+        key: 'employee',
+        icon: <FaUserTie />,
+      },
+      {
+        label: <span className="">Phòng ban</span>,
+        key: 'department',
+        icon: <HiMiniBuildingOffice2 />,
+      },
+      {
+        label: <span className="">Danh mục</span>,
+        key: 'category',
+        icon: <MdOutlineCategory />,
+      },
+      {
+        label: <span className="">Đại lý</span>,
+        key: 'agency',
+        icon: <FaBuildingUser />,
+      },
+      {
+        label: <span className="">Nhà cung cấp NVL</span>,
+        key: 'material-supplier',
+        icon: <FaTruck />,
+      },
+      {
+        label: <span className="">Thông minh</span>,
+        key: 'smart-management',
+        icon: <FaChartBar />,
+      },
     ],
   },
   {
     label: <span className="">Kho</span>,
     key: 'manage-warehouse',
-    icon: <FaWarehouse  />,
+    icon: <FaWarehouse />,
     children: [
       {
         label: <span className="">Kho, bãi</span>,
         key: 'warehouse',
-        icon: <MdWarehouse  />,
+        icon: <MdWarehouse />,
       },
       {
         label: <span className="">Nhập kho</span>,
@@ -235,13 +276,13 @@ const Warehouse_staff: MenuItem[] = [
     label: <span className="">Lịch Sử</span>,
     key: 'activity',
     icon: <FaHistory />,
-  }
+  },
 ];
 const Warehouse_producer: MenuItem[] = [
   {
     label: <span className="">Kho</span>,
     key: 'manage-warehouse',
-    icon: <FaWarehouse  />,
+    icon: <FaWarehouse />,
     children: [
       {
         label: <span className="">Tồn kho</span>,
@@ -279,17 +320,17 @@ const Salesman: MenuItem[] = [
     key: 'dashboard',
     icon: <FaInfoCircle />,
     children: [
-        {
-            label: <span className="">Đại lý</span>,
-            key: 'agency',
-            icon: <FaBuildingUser />,
-        },
+      {
+        label: <span className="">Đại lý</span>,
+        key: 'agency',
+        icon: <FaBuildingUser />,
+      },
     ],
   },
   {
     label: <span className="">Kho</span>,
     key: 'manage-warehouse',
-    icon: <FaWarehouse  />,
+    icon: <FaWarehouse />,
     children: [
       {
         label: <span className="">Tồn kho</span>,
@@ -466,18 +507,18 @@ export default function HeaderV1({}: HeaderV1Props) {
       <img
         src={logo}
         alt=""
-        className="h-full w-auto pb-1 text-center object-scale-down cursor-pointer"
+        className="h-full w-autotext-center object-scale-down cursor-pointer px-4 py-3"
         onClick={() => navigate('/dashboard')}
       />
       <ResponsiveMenu
         items={
           role?.toLocaleUpperCase() === WAREHOUSE_STAFF.toLocaleUpperCase()
-          ? Warehouse_staff
-          : role?.toLocaleUpperCase() === WAREHOUSE_PRODUCER.toLocaleUpperCase()
-          ? Warehouse_producer
-          : role?.toLocaleUpperCase() === SALESMAN.toLocaleUpperCase()
-          ? Salesman
-          : Admin
+            ? Warehouse_staff
+            : role?.toLocaleUpperCase() === WAREHOUSE_PRODUCER.toLocaleUpperCase()
+            ? Warehouse_producer
+            : role?.toLocaleUpperCase() === SALESMAN.toLocaleUpperCase()
+            ? Salesman
+            : Admin
         }
       />
 
