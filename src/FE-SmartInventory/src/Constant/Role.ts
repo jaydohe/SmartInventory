@@ -17,13 +17,13 @@ export enum RoleEnumString {
   ADMIN = 'ADMIN',
   WAREHOUSE_STAFF = 'WAREHOUSE_STAFF', // nhân viên kho
   WAREHOUSE_PRODUCER = 'WAREHOUSE_PRODUCER', // nhân viên sản xuất
-  SALESMAN = 'SALESMAN' // nhân viên bán hàng
-};
+  SALESMAN = 'SALESMAN', // nhân viên bán hàng
+}
 
 export const USER_ROLES: RoleEnumString[] = [
-  RoleEnumString.WAREHOUSE_STAFF  ,
+  RoleEnumString.WAREHOUSE_STAFF,
   RoleEnumString.WAREHOUSE_PRODUCER,
-  RoleEnumString.SALESMAN
+  RoleEnumString.SALESMAN,
 ];
 
 export enum RoleEnum {
@@ -31,7 +31,7 @@ export enum RoleEnum {
   ADMIN = 1,
   WAREHOUSE_STAFF = 2,
   WAREHOUSE_PRODUCER = 3,
-  SALESMAN = 4
+  SALESMAN = 4,
 }
 
 export enum AccountOptionEnum {
@@ -45,7 +45,7 @@ export const ROLE: RoleObject[] = [
   { id: 1, name: RoleEnumString.ADMIN },
   { id: 2, name: RoleEnumString.WAREHOUSE_STAFF },
   { id: 3, name: RoleEnumString.WAREHOUSE_PRODUCER },
-  { id: 4, name: RoleEnumString.SALESMAN }
+  { id: 4, name: RoleEnumString.SALESMAN },
 ];
 
 // Define role hierarchy mapping
@@ -59,7 +59,7 @@ export const roleName = {
   [RoleEnumString.ADMIN]: 'Admin',
   [RoleEnumString.WAREHOUSE_STAFF]: 'Nhân viên kho',
   [RoleEnumString.WAREHOUSE_PRODUCER]: 'Nhân viên sản xuất',
-  [RoleEnumString.SALESMAN]: 'Nhân viên bán hàng'
+  [RoleEnumString.SALESMAN]: 'Nhân viên bán hàng',
 };
 
 export const roleNumToStr = {
@@ -67,12 +67,13 @@ export const roleNumToStr = {
   [RoleEnum.ADMIN]: RoleEnumString.ADMIN,
   [RoleEnum.WAREHOUSE_STAFF]: RoleEnumString.WAREHOUSE_STAFF,
   [RoleEnum.WAREHOUSE_PRODUCER]: RoleEnumString.WAREHOUSE_PRODUCER,
-  [RoleEnum.SALESMAN]: RoleEnumString.SALESMAN
+  [RoleEnum.SALESMAN]: RoleEnumString.SALESMAN,
 };
 
 export enum UserOptionEnum {
   CHANGE_PASSWORD = 'ChangPassWord',
   CHANGE_ROLE = 'ChangeRole',
   UPDATE_ACCOUNT = 'UpdateAccount',
-  CHANGE_STATUS = 'ChangeStatus',
+
+  DELETE_ACCOUNT = 'DeleteAccount',
 }

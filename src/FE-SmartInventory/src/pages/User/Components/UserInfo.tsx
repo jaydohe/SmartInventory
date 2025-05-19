@@ -4,6 +4,7 @@ import { TUpdatePassword, TUpdateUser } from '@/interface/TUser';
 import {
   CheckCircleOutlined,
   CloseCircleOutlined,
+  DeleteOutlined,
   EditOutlined,
   KeyOutlined,
   LockOutlined,
@@ -15,18 +16,26 @@ import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useQueryDetailUser, useQueryUser } from '../Hook/useQueryUser';
 import ChangeRole from './ChangeRole';
-import ChangeStatus from './ChangeStatus';
+import ChangeStatus from './DeleteAccount';
 import RoleTag from './RoleTag';
 import UpdatePassword from './UpdatePassword';
 import UpdateUser from './UpdateUser';
+import DeleteAccount from './DeleteAccount';
+import { toast } from 'react-toastify';
 
-export default function UserInfo({ userId }: { userId: string }) {
+export default function UserInfo({
+  handleCloseDrawer,
+  userId,
+}: {
+  handleCloseDrawer: () => void;
+  userId: string;
+}) {
   const [form] = Form.useForm();
   const [action, setAction] = useState<UserOptionEnum | null>(null);
   const queryClient = useQueryClient();
 
   const { data: getInfo } = useQueryDetailUser(userId);
-  const { updateUser, updateRole, updatePassword } = useQueryUser('');
+  const { updateUser, updateRole, updatePassword, deleteUser } = useQueryUser('');
 
   useEffect(() => {
     if (getInfo?.data) {
@@ -77,30 +86,24 @@ export default function UserInfo({ userId }: { userId: string }) {
     );
   };
 
-  // const handleChangeStatus = () => {
-  //   changeStatus.mutate(userId, {
-  //     onSuccess: () => {
-  //       queryClient.invalidateQueries({ queryKey: [QueryKeys.DETAIL_USER, userId] });
-  //       setAction(null);
-  //     },
-  //   });
-  // };
+  const handleDeleteUser = () => {
+    deleteUser.mutate(userId, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: [QueryKeys.DETAIL_USER, userId] });
+        setAction(null);
+        handleCloseDrawer();
+      },
+      onError: () => {},
+    });
+  };
 
   const renderLockStatusTag = (isLogin: boolean) => {
     return isLogin ? (
-      <Tag
-        icon={<CheckCircleOutlined />}
-        color="green"
-        className="text-sm border-none py-1 px-2 rounded-md"
-      >
+      <Tag icon={<CheckCircleOutlined />} color="green" className="text-sm   px-2 ">
         Hoạt động
       </Tag>
     ) : (
-      <Tag
-        icon={<CloseCircleOutlined />}
-        color="red"
-        className="text-sm border-none py-1 px-2 rounded-md"
-      >
+      <Tag icon={<CloseCircleOutlined />} color="red" className="text-sm   px-2 ">
         Bị khóa
       </Tag>
     );
@@ -192,22 +195,18 @@ export default function UserInfo({ userId }: { userId: string }) {
             </Button>
 
             <Button
-              danger={getInfo?.data?.isLogin}
+              danger={true}
               type="primary"
-              icon={getInfo?.data?.isLogin ? <LockOutlined /> : <UnlockOutlined />}
-              onClick={() => setAction(UserOptionEnum.CHANGE_STATUS)}
-              className={`flex items-center transition-colors font-medium ${
-                getInfo?.data?.isLogin
-                  ? 'hover:border-red-400 hover:text-red-400'
-                  : 'hover:border-green-400 hover:bg-green-500'
-              }`}
+              icon={<DeleteOutlined />}
+              onClick={() => setAction(UserOptionEnum.DELETE_ACCOUNT)}
+              className={`flex items-center transition-colors font-medium ${'hover:border-red-400 hover:text-red-400'}`}
               style={{
-                backgroundColor: getInfo?.data?.isLogin ? '#ff4d4f' : '#1890ff',
-                borderColor: getInfo?.data?.isLogin ? '#ff4d4f' : '#1890ff',
+                backgroundColor: '#ff4d4f',
+                borderColor: '#ff4d4f',
               }}
               block
             >
-              {getInfo?.data?.isLogin ? 'Khóa tài khoản' : 'Mở khóa tài khoản'}
+              Xoá tài khoản
             </Button>
           </div>
         </Form>
@@ -266,25 +265,19 @@ export default function UserInfo({ userId }: { userId: string }) {
       <Modal
         centered
         title={
-          getInfo?.data.isLogin ? (
-            <Typography.Title level={4} className="uppercase" type="danger">
-              Khóa tài khoản
-            </Typography.Title>
-          ) : (
-            <Typography.Title level={4} className="uppercase" style={{ color: '#1890ff' }}>
-              Mở khóa tài khoản
-            </Typography.Title>
-          )
+          <Typography.Title level={4} className="uppercase" type="danger">
+            Xoá tài khoản
+          </Typography.Title>
         }
-        open={action === UserOptionEnum.CHANGE_STATUS}
+        open={action === UserOptionEnum.DELETE_ACCOUNT}
         footer={null}
         onCancel={() => setAction(null)}
       >
-        {/* <ChangeStatus
+        <DeleteAccount
           isLogin={getInfo?.data.isLogin}
-          handleChangeStatus={handleChangeStatus}
+          handleDeleteAccount={handleDeleteUser}
           handleCancel={() => setAction(null)}
-        /> */}
+        />
       </Modal>
     </div>
   );

@@ -1,30 +1,33 @@
-// interface TProduct định nghĩa đầy đủ những gì ở backend trả về
+import { ProductTypes } from "@/Constant/ProductTypes";
+
 export type TProduct = {
-  id: string;                // duy nhất, do backend sinh
-  code: string;              // mã sản phẩm
+  id: string; 
+  code: string; // mã sản phẩm
   name: string;
   description: string;
   unit: string;
-  productType: string;
+  productType: ProductTypes;
   purchasePrice: number;
   sellingPrice: number;
   holdingCost: number;
   materialSupplierId?: string; // nullable
   warehouseId: string;
   categoryId: string;
+  createdAt: string;
 };
 
 export type TCreateProduct = {
   name: string;
   description: string;
   unit: string;
-  productType: string;
+  productType: ProductTypes;
   purchasePrice: number;
   sellingPrice: number;
   holdingCost: number;
   materialSupplierId?: string; // nullable
   warehouseId: string;
   categoryId: string;
+
 };
 
 export type TUpdateProduct = {

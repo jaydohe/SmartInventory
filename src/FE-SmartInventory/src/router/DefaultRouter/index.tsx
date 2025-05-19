@@ -12,7 +12,12 @@ import { PrivateRouters } from '../PrivateRouters';
 import SelfRouter from '../Self.Router';
 import UserRouter from '../User.router';
 import ActivityRouter from '../Activity.Router';
-
+import PositionPage from '@/pages/PositionPage';
+import DepartmentPage from '@/pages/DepartmentPage';
+import EmployeePage from '@/pages/Employee';
+import CateloryRouter from '../Category.Router';
+import CategoryRouter from '../Category.Router';
+import WarehousePage from '@/pages/Warehouse';
 export const DefaultRouter = () => {
   return (
     <Suspense fallback={<SkeletonComponent />}>
@@ -32,6 +37,9 @@ export const DefaultRouter = () => {
             }
           >
             <Route path="/self" element={<SelfRouter />}></Route>
+            <Route path="/position" element={<PositionPage />}></Route>
+            <Route path="/department" element={<DepartmentPage />}></Route>
+            <Route path="/category/*" element={<CategoryRouter />}></Route>
           </Route>
 
           <Route
@@ -41,9 +49,11 @@ export const DefaultRouter = () => {
               </Suspense>
             }
           >
-            <Route path="/self" element={<SelfRouter />}></Route>
+            <Route path="/warehouse" element={<WarehousePage />}></Route>
+
             <Route path="/activity/*" element={<ActivityRouter />}></Route>
             <Route path="/user/*" element={<UserRouter />}></Route>
+            <Route path="/employee/*" element={<EmployeePage />}></Route>
           </Route>
 
           <Route
@@ -53,10 +63,8 @@ export const DefaultRouter = () => {
               </Suspense>
             }
           >
-            <Route path="/self" element={<SelfRouter />}></Route>
             <Route path="/activity/*" element={<ActivityRouter />}></Route>
           </Route>
-          
         </Route>
 
         <Route path="*" element={<NotFound />}></Route>
