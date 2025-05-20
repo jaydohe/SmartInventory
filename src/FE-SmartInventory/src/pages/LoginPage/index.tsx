@@ -58,7 +58,7 @@ const LoginNew: React.FC = () => {
         <div className="w-full items-center flex justify-center rounded-2xl px-6 py-8 xl:gap-12">
           <div className="w-full xl:w-[55%] xl:flex xl:flex-col xl:items-center xl:justify-center hidden">
             <h2 className="text-3xl 2xl:text-4xl text-center text-pretty font-[900] text-primary">
-              Quản Lý Hàng Hóa Thông Minh
+              Quản Lý Hàng Hóa Thông Minh 
             </h2>
             <img src={introLogo} alt="" className="object-cover text-center" />
           </div>
