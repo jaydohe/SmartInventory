@@ -26,6 +26,7 @@ public class ProductionCommandEndpoint : IEndpoint
         productionCommandGR.MapPost("/create", CreateProductionCommandAsync).RequireAuthorization(APIPolicies.STAFFFULL);
         productionCommandGR.MapPost("/request", RequestProductionCommandAsync).RequireAuthorization(APIPolicies.SALESFULL);
         productionCommandGR.MapPatch("/update/{id}", UpdateProductionCommandAsync).RequireAuthorization(APIPolicies.PRODUCERFULL);
+        productionCommandGR.MapPatch("/update-status/{id}", UpdateStatusProductionCommandAsync).RequireAuthorization(APIPolicies.STAFFFULL);
         productionCommandGR.MapDelete("/delete/{id}", DelProductionCommandAsync).RequireAuthorization(APIPolicies.STAFFFULL);
         
         return endpoints;
@@ -55,6 +56,11 @@ public class ProductionCommandEndpoint : IEndpoint
     private async Task<IResult> UpdateProductionCommandAsync(
         [FromServices] IMediator mediator, string id, [FromBody] UpdateProductionCommandProcessArg arg)
         => (await mediator.Send(new UpdateProductionProcessCommand(id, arg)))
+            .ToOk(e => Results.Ok(e));
+
+    private async Task<IResult> UpdateStatusProductionCommandAsync(
+        [FromServices] IMediator mediator, string id, [FromBody] UpdateProductionStatusArg arg)
+        => (await mediator.Send(new UpdateProductionStatusCommand(id, arg)))
             .ToOk(e => Results.Ok(e));
 
     private async Task<IResult> DelProductionCommandAsync(

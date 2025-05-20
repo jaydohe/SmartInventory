@@ -17,5 +17,5 @@ public readonly struct ProductTypes
     // <summary>
     // Sản phẩm hoàn thành
     // </summary>
-    public const string FINISHED_PRODUCT = "FINISHED_PRODUCT"; // Sản phẩm hoàn thành
+    public const string FINISHED_PRODUCT = "FINISHED_PRODUCT";
 }
