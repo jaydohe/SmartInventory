@@ -44,10 +44,10 @@ public class LoginCommandHandler(
             .ThenInclude(e => e.Warehouse)
             .FirstOrDefaultAsync(e => e.LoginName == request.Arg.LoginName, cancellationToken);
         if (getUser is null)
-            return CTBaseResult.NotFound("User");
+            return CTBaseResult.NotFound("Người dùng");
 
         if (getUser.IsLogin == false)
-            return CTBaseResult.UnProcess("Your account has been blocked login.");
+            return CTBaseResult.UnProcess("Tài khoản của bạn đã bị khóa.");
 
         if (iconfiguration["Salt"] is null)
             return CTBaseResult.ErrorServer("Invalid salt.");
@@ -56,7 +56,7 @@ public class LoginCommandHandler(
 
         var isUserValid = getUser.HashPassword == hashPassword;
         if (!isUserValid)
-            return CTBaseResult.UnProcess("Wrong password.");
+            return CTBaseResult.UnProcess("Sai mật khẩu.");
 
         var createToken = getUser.CreateToken();
 
@@ -90,17 +90,17 @@ public class LoginCommandValidator : AbstractValidator<LoginCommand>
     {
         RuleFor(e => e.Arg.LoginName)
             .NotEmpty()
-            .WithMessage("Login name is required.")
+            .WithMessage("Tên đăng nhập là bắt buộc.")
             .MaximumLength(512)
-            .WithMessage("Login Name is too long. Only up to 512 characters.")
+            .WithMessage("Tên đăng nhập tối đa 512 ký tự.")
             .Must(LoginName => LoginName != null && LoginName.All(c => char.IsLetterOrDigit(c) || c == '-' || c == '_'))
-            .WithMessage("Login name can only contain letters, digits, dashes and underscores.");
+            .WithMessage("Tên đăng nhập chứa chữ cái, số và ký tự gạch ngang.");
         RuleFor(e => e.Arg.Password)
             .NotEmpty()
-            .WithMessage("Password is required.")
+            .WithMessage("Mật khẩu là bắt buộc..")
             .Length(4, 32)
-            .WithMessage("Password length must be between 4 and 32 characters.")
+            .WithMessage("Mật khẩu ít nhất 4 ký tự và tối đa 32 ký tự.")
             .Must(pass => pass != null && pass.All(c => char.IsLetterOrDigit(c) || char.IsPunctuation(c)))
-            .WithMessage("Password must contain only letters, digits, and punctuation.");
+            .WithMessage("Mật khẩu chứa chữ cái, số và ký tự đặc biệt.");
     }
 }

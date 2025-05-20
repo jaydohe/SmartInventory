@@ -29,7 +29,7 @@ public class GetCategoryQueryHandler(
                 queryContext.ToCacheKey())
             .FirstOrDefaultAsync(cancellationToken);
         if (category is null)
-            return CTBaseResult.NotFound("Category");
+            return CTBaseResult.NotFound("Danh mục");
 
         return CTBaseResult.Success(category);
     }

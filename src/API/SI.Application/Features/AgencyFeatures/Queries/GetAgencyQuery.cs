@@ -28,7 +28,7 @@ public class GetAgencyQueryHandler(
                 request.QueryContext.ToCacheKey())
             .FirstOrDefaultAsync(cancellationToken);
         if (agency is null)
-            return CTBaseResult.NotFound("Agency");
+            return CTBaseResult.NotFound("Đại lý");
 
         return CTBaseResult.Success(agency);
     }

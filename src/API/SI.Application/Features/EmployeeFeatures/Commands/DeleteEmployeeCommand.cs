@@ -21,12 +21,12 @@ public class DeleteEmployeeCommandHandler(
         var checkEmp = await employeeRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Id == request.Id && x.DeletedOn == null, cancellationToken);
         if (checkEmp is null)
-            return CTBaseResult.NotFound("Employee");
+            return CTBaseResult.NotFound("Nhân viên");
 
         var checkUser = await userRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.EmployeeId == request.Id && x.DeletedOn == null, cancellationToken);
         if (checkUser != null)
-            return CTBaseResult.UnProcess("Employee had account.");
+            return CTBaseResult.UnProcess("Nhân viên đã có tài khoản không thể xóa.");
 
         checkEmp.DeletedOn = DateTimeOffset.UtcNow;
 

@@ -9,45 +9,45 @@ using Microsoft.EntityFrameworkCore;
 using SI.Domain.Common.Authenticate;
 using SI.Domain.Entities;
 
-namespace SI.Application.Features.EmployeeFeatures.Queries;
+namespace SI.Application.Features.ProductFeatures.Queries;
 
-public class GetAllEmployeeQuery(QueryPageRequestV3 query)
+public class GetAllMaterialQuery(QueryPageRequestV3 query)
     : CTBaseQuery<QueryPageRequestV3, OkDynamicPageResponse>(query)
 { }
 
-public class GetAllEmployeeQueryHandler(
+public class GetAllMaterialQueryHandler(
+    IRepository<Product> productRepos,
     IRepository<Employee> employeeRepos,
     IMapper mapper,
-    IUserIdentifierProvider identifierProvider) : IQueryHandler<GetAllEmployeeQuery, OkDynamicPageResponse>
+    IUserIdentifierProvider identifierProvider) : IQueryHandler<GetAllMaterialQuery, OkDynamicPageResponse>
 {
-    public async Task<CTBaseResult<OkDynamicPageResponse>> Handle(GetAllEmployeeQuery request, CancellationToken cancellationToken)
+    public async Task<CTBaseResult<OkDynamicPageResponse>> Handle(GetAllMaterialQuery request, CancellationToken cancellationToken)
     {
         var warehouseId = identifierProvider.WarehouseId;
         var role = identifierProvider.Role;
         var employeeId = identifierProvider.EmployeeId;
 
         var queryContext = request.QueryContext;
-        var employeeQuery = employeeRepos.HandleLinqQueryRequestV2(request.QueryContext);
-        if (role is "WAREHOUSE_STAFF")
+        var productQuery = productRepos.HandleLinqQueryRequestV2(request.QueryContext);
+        if (role is "WAREHOUSE_PRODUCER")
         {
             var checkManager = await employeeRepos.BuildQuery
                 .FirstOrDefaultAsync(x => x.Id == employeeId && x.IsManager == true, cancellationToken);
             if (checkManager is null)
-                return CTBaseResult.UnProcess("Chỉ có quản lý kho được truy cập.");
-
-            employeeQuery = employeeQuery.Where(x => x.WarehouseId == warehouseId);
+                return CTBaseResult.UnProcess("Chỉ có quản lý sản xuất được truy cập.");
         }
+        productQuery = productQuery.Where(x => x.MaterialSupplierId != null && x.DeletedOn == null);
+
 
         var (executeQuery, totalRecords, totalPages) =
-            employeeQuery.HandleLinqQueryPageRequestV2(
+            productQuery.HandleLinqQueryPageRequestV2(
             queryContext,
             queryContext.IsAscending,
             queryContext.OrderBy);
-
         if (queryContext.Populate.Any(e => e.Count(s => s == '.') >= 3))
-            executeQuery = employeeQuery.AsSplitQuery();
+            executeQuery = productQuery.AsSplitQuery();
 
-        var data = await executeQuery.ProjectDynamic<Employee>
+        var data = await executeQuery.ProjectDynamic<Product>
             (mapper, new(request.QueryContext.Populate), request.QueryContext.ToCacheKey())
             .ToArrayAsync(cancellationToken);
 
