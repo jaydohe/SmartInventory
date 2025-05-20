@@ -21,12 +21,12 @@ public class DeleteDepartmentCommandHandler(
         var checkDepart = await departmentRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Id == request.Id && x.DeletedOn == null, cancellationToken);
         if (checkDepart is null)
-            return CTBaseResult.NotFound("Department");
+            return CTBaseResult.NotFound("Phòng ban");
 
         var checkEmp = await employeeRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.DepartmentId == checkDepart.Id && x.DeletedOn == null, cancellationToken);
         if (checkEmp != null)
-            return CTBaseResult.UnProcess("Department is used employees.");
+            return CTBaseResult.UnProcess("Phòng ban đang được dùng không thể xóa.");
 
         checkDepart.DeletedOn = DateTimeOffset.UtcNow;
 

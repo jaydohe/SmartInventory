@@ -30,7 +30,7 @@ public class GetDepartmentQueryHandler(
                 queryContext.ToCacheKey())
             .FirstOrDefaultAsync(cancellationToken);
         if (department is null)
-            return CTBaseResult.NotFound("Department");
+            return CTBaseResult.NotFound("Phòng ban");
 
         return CTBaseResult.Success(department);
     }

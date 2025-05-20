@@ -29,7 +29,7 @@ public class GetMeQueryHandler(
         var getUserId = await userRepos.BuildQuery
             .FirstOrDefaultAsync(e => e.Id == userId, cancellationToken);
         if (getUserId is null)
-            return CTBaseResult.NotFound($"User {userId}");
+            return CTBaseResult.NotFound($"Người dùng {userId}");
 
         var getWareName = await wareRepos.BuildQuery
             .Where(e => e.Id == warehouseId)

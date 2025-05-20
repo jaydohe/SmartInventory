@@ -36,46 +36,46 @@ public class UpdateEmployeeCommandHandler(
             return CTBaseResult.BadRequest(checkValid.Errors);
 
         if (request.Arg.Name != null && request.Arg.Name.Trim() == "")
-            return CTBaseResult.UnProcess("Name cannot consist only of whitespace.");
+            return CTBaseResult.UnProcess("Tên nhân viên không được chỉ bao gồm khoảng trắng.");
         if (request.Arg.PhoneNumber != null && request.Arg.PhoneNumber.Trim() == "")
-            return CTBaseResult.UnProcess("Phone Number cannot consist only of whitespace.");
+            return CTBaseResult.UnProcess("Số điện thoại không được chỉ bao gồm khoảng trắng.");
         if (request.Arg.Email != null && request.Arg.Email.Trim() == "")
-            return CTBaseResult.UnProcess("Email cannot consist only of whitespace.");
+            return CTBaseResult.UnProcess("Email không được chỉ bao gồm khoảng trắng.");
         if (request.Arg.Address != null && request.Arg.Address.Trim() == "")
-            return CTBaseResult.UnProcess("Address cannot consist only of whitespace.");
+            return CTBaseResult.UnProcess("Địa chỉ không được chỉ bao gồm khoảng trắng.");
 
         if (request.Arg.Gender != null && request.Arg.Gender != GenderTypes.FEMALE &&
             request.Arg.Gender != GenderTypes.MALE &&
             request.Arg.Gender != GenderTypes.OTHER)
-            return CTBaseResult.NotFound("Gender Type");
+            return CTBaseResult.NotFound("Loại giới tính");
 
         var checkEmp = await employeeRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Id == request.Id && x.DeletedOn == null, cancellationToken);
         if (checkEmp is null)
-            return CTBaseResult.NotFound("Employee");
+            return CTBaseResult.NotFound("Nhân viên");
         if (request.Arg.Name != null && checkEmp.Name == request.Arg.Name)
-            return CTBaseResult.UnProcess("Warehouse name has not been changed.");
+            return CTBaseResult.UnProcess("Kho không có thay đổi.");
         if (request.Arg.PhoneNumber != null && checkEmp.PhoneNumber == request.Arg.PhoneNumber)
-            return CTBaseResult.UnProcess("Phone Number has not been changed.");
+            return CTBaseResult.UnProcess("Số điện thoại không có thay đổi.");
         if (request.Arg.Email != null && checkEmp.Email == request.Arg.Email)
-            return CTBaseResult.UnProcess("Email has not been changed.");
+            return CTBaseResult.UnProcess("Email không có thay đổi.");
         if (request.Arg.Address != null && checkEmp.Address == request.Arg.Address)
-            return CTBaseResult.UnProcess("Address has not been changed.");
+            return CTBaseResult.UnProcess("Địa chỉ không có thay đổi.");
 
         var checkDepartment = await departmentRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Id == request.Arg.DepartmentId && x.DeletedOn == null, cancellationToken);
         if (request.Arg.DepartmentId != null && checkDepartment is null)
-            return CTBaseResult.NotFound("Department");
+            return CTBaseResult.NotFound("Phòng ban");
 
         var checkPosition = await positionRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Id == request.Arg.PositionId && x.DeletedOn == null, cancellationToken);
         if (request.Arg.PositionId != null && checkPosition is null)
-            return CTBaseResult.NotFound("Position");
+            return CTBaseResult.NotFound("Chức vụ");
 
         var checkWarehouse = await wareRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Id == request.Arg.WarehouseId && x.DeletedOn == null, cancellationToken);
         if (request.Arg.WarehouseId != null && checkWarehouse is null)
-            return CTBaseResult.NotFound("Warehouse");
+            return CTBaseResult.NotFound("Kho");
 
         if (request.Arg.WarehouseId != null && checkEmp.IsManager == true)
         {
@@ -93,7 +93,7 @@ public class UpdateEmployeeCommandHandler(
             var updateUser = await userRepos.BuildQuery
                 .FirstOrDefaultAsync(x => x.EmployeeId == checkEmp.Id && x.DeletedOn == null, cancellationToken);
             if (updateUser is null)
-                return CTBaseResult.NotFound("User");
+                return CTBaseResult.NotFound("Người dùng");
 
             updateUser.Name = request.Arg.Name ?? updateUser.Name;
             updateUser.ModifiedOn = DateTimeOffset.UtcNow;
@@ -124,15 +124,15 @@ public class UpdateEmployeeCommandValidator : AbstractValidator<UpdateEmployeeCo
     {
         RuleFor(x => x.Arg.Name)
             .MaximumLength(1024)
-            .WithMessage("Name is too long. Only up to 1024 characters.");
+            .WithMessage("Tên nhân viên tối đa 1024 ký tự.");
         RuleFor(x => x.Arg.PhoneNumber)
             .MaximumLength(20)
-            .WithMessage("Phone Number is too long. Only up to 20 characters.");
+            .WithMessage("Số điện thoại tối đa 20 ký tự.");
         RuleFor(x => x.Arg.Email)
             .MaximumLength(512)
-            .WithMessage("Email is too long. Only up to 512 characters.");
+            .WithMessage("Email tối đa 512 ký tự.");
         RuleFor(x => x.Arg.Address)
             .MaximumLength(1024)
-            .WithMessage("Address is too long. Only up to 1024 characters.");
+            .WithMessage("Địa chỉ tối đa 1024 ký tự.");
     }
 }

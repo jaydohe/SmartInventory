@@ -32,19 +32,19 @@ public class UpdateCategoryCommandHandler(
             return CTBaseResult.BadRequest(checkValid.Errors);
 
         if (request.Arg.Name != null && request.Arg.Name.Trim() == "")
-            return CTBaseResult.UnProcess("Name cannot consist only of whitespace.");
+            return CTBaseResult.UnProcess("Tên danh mục không được chỉ bao gồm khoảng trắng.");
 
         var checkCategory = await categoryRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Id == request.Id && x.DeletedOn == null, cancellationToken);
         if (checkCategory is null)
-            return CTBaseResult.NotFound("Category");
+            return CTBaseResult.NotFound("Danh mục");
         if (checkCategory.Name == request.Arg.Name)
-            return CTBaseResult.UnProcess("Category name has not been changed.");
+            return CTBaseResult.UnProcess("Tên danh mục không có thay đổi.");
 
         var checkExisted = await categoryRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Name == request.Arg.Name && x.CategoryEntityType == checkCategory.CategoryEntityType && x.DeletedOn == null, cancellationToken);
         if (checkExisted != null)
-            return CTBaseResult.UnProcess($"Category is existed.");
+            return CTBaseResult.UnProcess($"Danh mục đã tồn tại.");
 
         if (request.Arg.Name != null)
         {
@@ -67,6 +67,6 @@ public class UpdateCategoryCommandValidator : AbstractValidator<UpdateCategoryCo
     {
         RuleFor(e => e.Arg.Name)
             .MaximumLength(512)
-            .WithMessage("Name is too long. Only up to 512 characters.");
+            .WithMessage("Tên danh mục tối đa 512 ký tự.");
     }
 }

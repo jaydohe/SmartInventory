@@ -23,13 +23,13 @@ public class DeleteAgencyCommandHandler(
         var checkAgency = await agencyRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Id == request.Id && x.DeletedOn == null, cancellationToken);
         if (checkAgency is null)
-            return CTBaseResult.NotFound("Agency");
+            return CTBaseResult.NotFound("Đại lý");
 
         var checkOrder = await orderRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.OrderStatus != OrderStatus.DELIVERED
                 && x.AgencyId == checkAgency.Id && x.DeletedOn == null, cancellationToken);
         if (checkOrder != null)
-            return CTBaseResult.UnProcess("Agency is used in Order");
+            return CTBaseResult.UnProcess("Đại lý đang có đơn hàng chưa hoàn thành.");
 
         checkAgency.DeletedOn = DateTimeOffset.UtcNow;
 

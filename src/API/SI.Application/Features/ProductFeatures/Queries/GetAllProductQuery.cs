@@ -35,9 +35,9 @@ public class GetAllProductQueryHandler(
                 .FirstOrDefaultAsync(x => x.Id == employeeId && x.IsManager == true, cancellationToken);
             if (checkManager is null)
                 return CTBaseResult.UnProcess("Just manager can access.");
-
-            productQuery = productQuery.Where(x => x.DeletedOn == null);
         }
+        productQuery = productQuery.Where(x => x.MaterialSupplierId == null && x.DeletedOn == null);
+
 
         var (executeQuery, totalRecords, totalPages) =
             productQuery.HandleLinqQueryPageRequestV2(

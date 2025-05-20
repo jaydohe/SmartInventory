@@ -22,17 +22,17 @@ public class DeleteCategoryCommandHandler(
         var checkCat = await categoryRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Id == request.Id && x.DeletedOn == null, cancellationToken);
         if (checkCat is null)
-            return CTBaseResult.NotFound("Category");
+            return CTBaseResult.NotFound("Danh mục");
 
         var checkWare = await wareRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.CategoryId == checkCat.Id && x.DeletedOn == null, cancellationToken);
         if (checkWare != null)
-            return CTBaseResult.UnProcess("Category is used in Warehouse.");
+            return CTBaseResult.UnProcess("Danh mục kho đang được dùng không thể xóa.");
 
         var checkProd = await prodRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.CategoryId == checkCat.Id && x.DeletedOn == null, cancellationToken);
         if (checkProd != null)
-            return CTBaseResult.UnProcess("Category is used in Product.");
+            return CTBaseResult.UnProcess("Danh mục hàng hóa đang được dùng không thể xóa.");
 
         checkCat.DeletedOn = DateTimeOffset.UtcNow;
 

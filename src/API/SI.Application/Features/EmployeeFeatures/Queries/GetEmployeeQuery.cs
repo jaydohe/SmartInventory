@@ -29,7 +29,7 @@ public class GetEmployeeQueryHandler(
                 queryContext.ToCacheKey())
             .FirstOrDefaultAsync(cancellationToken);
         if (employee is null)
-            return CTBaseResult.NotFound("Employee");
+            return CTBaseResult.NotFound("Nhân viên");
 
         return CTBaseResult.Success(employee);
     }

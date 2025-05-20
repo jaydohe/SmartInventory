@@ -21,7 +21,8 @@ public class ProductEndpoint : IEndpoint
             .WithApiVersionSet(version)
             .HasApiVersion(1);
 
-        productGR.MapGet("/get-all", GetAllProductAsync).RequireAuthorization(APIPolicies.FULL);
+        productGR.MapGet("/get-all-product", GetAllProductAsync).RequireAuthorization(APIPolicies.FULL);
+        productGR.MapGet("/get-all-material", GetAllMaterialAsync).RequireAuthorization(APIPolicies.FULL);
         productGR.MapGet("/get-by-id/{id}", GetProductAsync).RequireAuthorization(APIPolicies.FULL);
         productGR.MapPost("/create", CreateProductAsync).RequireAuthorization(APIPolicies.STAFFFULL);
         productGR.MapPatch("/update/{id}", UpdateProductAsync).RequireAuthorization(APIPolicies.STAFFFULL);
@@ -34,6 +35,11 @@ public class ProductEndpoint : IEndpoint
     private async Task<IResult> GetAllProductAsync(
         [FromServices] IMediator mediator, BaseAPIPageRequest request)
         => (await mediator.Send(new GetAllProductQuery(request.ToQueryContext())))
+            .ToOk(e => Results.Ok(e));
+
+    private async Task<IResult> GetAllMaterialAsync(
+        [FromServices] IMediator mediator, BaseAPIPageRequest request)
+        => (await mediator.Send(new GetAllMaterialQuery(request.ToQueryContext())))
             .ToOk(e => Results.Ok(e));
 
     private async Task<IResult> GetProductAsync(

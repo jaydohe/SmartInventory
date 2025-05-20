@@ -34,7 +34,7 @@ public class CreateCategoryWarehouseCommandHandler(
         var checkCategory = await categoryRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Name == request.Arg.Name && x.CategoryEntityType == CategoryEntityTypes.WAREHOUSE && x.DeletedOn == null, cancellationToken);
         if (checkCategory != null)
-            return CTBaseResult.UnProcess($"Category is existed.");
+            return CTBaseResult.UnProcess($"Tên danh mục kho đã tồn tại.");
 
         var newCategory = new Category
         {
@@ -58,8 +58,8 @@ public class CreateCategoryWarehouseCommandValidator : AbstractValidator<CreateC
     {
         RuleFor(e => e.Arg.Name)
             .NotEmpty()
-            .WithMessage("Name is required.")
+            .WithMessage("Tên danh mục là bắt buộc.")
             .MaximumLength(512)
-            .WithMessage("Name is too long. Only up to 512 characters.");
+            .WithMessage("Tên danh mục tối đa 512 ký tự.");
     }
 }

@@ -33,7 +33,7 @@ public class CreateDepartmentCommandHandler(
         var checkDepartment = await departmentRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Name == request.Arg.Name && x.DeletedOn == null, cancellationToken);
         if (checkDepartment != null)
-            return CTBaseResult.UnProcess("Department is existed.");
+            return CTBaseResult.UnProcess("Phòng ban đã tồn tại.");
 
         var newDepartment = new Department
         {
@@ -56,8 +56,8 @@ public class CreateDepartmentCommandValidator : AbstractValidator<CreateDepartme
     {
         RuleFor(x => x.Arg.Name)
             .NotEmpty()
-            .WithMessage("Name is required.")
+            .WithMessage("Tên phònng ban là bắt buộc.")
             .MaximumLength(1024)
-            .WithMessage("Name is too long. Only up to 1024 characters.");
+            .WithMessage("Tên phòng ban tối đa 1024 ký tự.");
     }
 }
