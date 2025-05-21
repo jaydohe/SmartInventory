@@ -1,19 +1,20 @@
-import { ProductTypes } from "@/Constant/ProductTypes";
+import { ProductTypes } from '@/Constant/ProductTypes';
 
 export type TProduct = {
-  id: string; 
-  code: string; // mã sản phẩm
-  name: string;
-  description: string;
-  unit: string;
-  productType: ProductTypes;
-  purchasePrice: number;
-  sellingPrice: number;
-  holdingCost: number;
-  materialSupplierId?: string; // nullable
-  warehouseId: string;
+  materialSupplierId: any;
   categoryId: string;
+  code: string;
+  name: string; // tên của mặt hàng hoặc NVL
+  description: string;
+  unit: string; // đơn vị tính
+  productType: ProductTypes; // loại của hàng hóa (enum)
+  purchasePrice: number; // giá mua
+  sellingPrice: number; // giá bán
+  holdingCost: number; // chi phí lưu kho
   createdAt: string;
+  modifiedOn: string;
+  deletedOn: any;
+  id: string;
 };
 
 export type TCreateProduct = {
@@ -24,19 +25,9 @@ export type TCreateProduct = {
   purchasePrice: number;
   sellingPrice: number;
   holdingCost: number;
-  materialSupplierId?: string; // nullable
+  materialSupplierId?: string; // nếu có thì sẽ được hiểu đây là nguyên vật liệu và ngược lại là mặt hàng
   warehouseId: string;
   categoryId: string;
-
 };
 
-export type TUpdateProduct = {
-  id: string; // cần để biết đang cập nhật sản phẩm nào
-  name?: string;
-  description?: string;
-  unit?: string;
-  purchasePrice?: number;
-  sellingPrice?: number;
-  holdingCost?: number;
-  categoryId?: string;
-};
+export type TUpdateProduct = Omit<TCreateProduct, 'warehouseId' | 'productType'>;

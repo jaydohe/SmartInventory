@@ -162,7 +162,7 @@ export default function PositionPage() {
       render: (_, record, index) => <p>{index + 1}</p>,
     },
     {
-      title: 'Tên vị trí',
+      title: 'Tên chức vụ',
       dataIndex: 'name',
       key: 'name',
       ellipsis: {
@@ -196,7 +196,9 @@ export default function PositionPage() {
             variant="solid"
             shape="round"
             icon={<DeleteOutlined />}
-            onClick={() => showConfirmNotify('Xóa vị trí', 'Bạn có muốn xóa vị trí này ?', record)}
+            onClick={() =>
+              showConfirmNotify('Xóa chức vụ', 'Bạn có muốn xóa chức vụ này ?', record)
+            }
             className={'font-medium'}
           >
             Xoá
@@ -212,7 +214,7 @@ export default function PositionPage() {
         <div className="flex items-center justify-center flex-wrap gap-3">
           <h2 className=" flex items-center gap-1 font-bold text-xl md:text-2xl drop-shadow-sm text-inherit text-pretty   uppercase text-primary">
             <UnorderedListOutlined className="text-xl font-medium" />
-            Danh sách vị trí
+            Danh sách chức vụ
           </h2>
           <Button
             variant="solid"
@@ -220,15 +222,12 @@ export default function PositionPage() {
             onClick={() => handleOpenCreateModal()}
             className="rounded-2xl w-full sm:w-fit"
           >
-            Thêm vị trí
+            Thêm chức vụ
           </Button>
         </div>
 
         <div className="w-full sm:w-1/3 justify-end">
-          <SearchInput
-            placeholder="Nhập tên chức vụ"
-            handleSearchValue={handleSearchValue}
-          />
+          <SearchInput placeholder="Nhập tên chức vụ" handleSearchValue={handleSearchValue} />
         </div>
       </div>
 
@@ -253,7 +252,7 @@ export default function PositionPage() {
       </div>
 
       <Modal
-        title={<h4 className="font-bold text-2xl text-center uppercase ">TẠO vị trí MỚI</h4>}
+        title={<h4 className="font-bold text-2xl text-center uppercase ">TẠO chức vụ MỚI</h4>}
         className="w-11/12  md:w-1/2 xl:w-1/3"
         open={isOpenCreateModal}
         onCancel={handleCloseCreateModal}
@@ -264,7 +263,7 @@ export default function PositionPage() {
       </Modal>
 
       <Modal
-        title={<h4 className="font-bold text-2xl text-center ">SỬA vị trí</h4>}
+        title={<h4 className="font-bold text-2xl text-center ">SỬA chức vụ</h4>}
         className="w-11/12  md:w-1/2 xl:w-1/3"
         open={isOpenEditModal.isOpen}
         onCancel={handleCloseEditModal}

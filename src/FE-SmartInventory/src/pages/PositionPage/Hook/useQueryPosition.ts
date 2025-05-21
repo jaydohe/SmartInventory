@@ -29,10 +29,10 @@ export const useQueryPosition = (params: string, options?: useQueryPositionOptio
     mutationFn: (data: TCreatePosition) => positionApi.createPosition(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QueryKeys.POSITION] });
-      toast.success('Thêm vị trí mới thành công');
+      toast.success('Thêm chức vụ mới thành công');
     },
     onError: () => {
-      toast.error('Thêm vị trí thất bại');
+      toast.error('Thêm chức vụ thất bại');
     },
   });
   // Xóa Employee
@@ -40,16 +40,16 @@ export const useQueryPosition = (params: string, options?: useQueryPositionOptio
     mutationFn: (id: string) => positionApi.deletePosition(id),
     onSuccess: (_) => {
       queryClient.invalidateQueries({ queryKey: [QueryKeys.POSITION] });
-      toast.success('Xóa vị trí thành công');
+      toast.success('Xóa chức vụ thành công');
     },
   });
-  // Cập nhật vị trí
+  // Cập nhật chức vụ
   const updatePosition = useMutation({
     mutationFn: ({ id, data }: { id: string; data: TCreatePosition }) =>
       positionApi.updatePosition(id, data),
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: [QueryKeys.POSITION] });
-      toast.success('Cập nhật thông tin vị trí thành công');
+      toast.success('Cập nhật thông tin chức vụ thành công');
     },
   });
 

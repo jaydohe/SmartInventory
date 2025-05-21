@@ -3,32 +3,24 @@ import { TBuilderQuery } from '@/interface';
 import {
   DeleteOutlined,
   EditOutlined,
-  EyeOutlined,
   ExclamationCircleFilled,
-  HomeOutlined,
+  UnorderedListOutlined,
 } from '@ant-design/icons';
-import { Button, Modal, Space, Table, Tag, Typography } from 'antd';
+import { Button, Modal, Space, Table, Typography } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { useState } from 'react';
 
-import { TCreateWarehouse, TWarehouse } from '@/interface/TWarehouse';
-import { useQueryWarehousePage } from './Hook/useQueryWarehouse';
-import EditWarehouse from './Components/EditWarehouse';
-import CreateWarehouse from './Components/CreateWarehouse';
-import DetailWarehouse from './Components/DetailWarehouse';
+import { TAgency, TCreateAgency } from '@/interface/TAgency';
+import { useQueryAgency } from './Hook/useQueryAgency';
+import EditAgency from './Components/EditAgency';
+import CreateAgency from './Components/CreateAgency';
 import SearchInput from '@/Components/SearchInput';
 
-export default function WarehousePage() {
+export default function AgencyPage() {
   const [isOpenCreateModal, setIsOpenCreateModal] = useState<boolean>(false);
   const [isOpenEditModal, setIsOpenEditModal] = useState<{
     isOpen: boolean;
-    warehouse?: TWarehouse;
-  }>({
-    isOpen: false,
-  });
-  const [isOpenDetailModal, setIsOpenDetailModal] = useState<{
-    isOpen: boolean;
-    warehouseId?: string;
+    agency?: TAgency;
   }>({
     isOpen: false,
   });
@@ -62,24 +54,22 @@ export default function WarehousePage() {
         },
       },
     ],
-    toJoin: ['category.*'],
   });
 
   const params = useBuilderQuery(filter);
-  const { getAllWarehouse, createWarehouse, deleteWarehouse, updateWarehouse } =
-    useQueryWarehousePage(params);
-  const { data: listWarehouse, isLoading } = getAllWarehouse;
+  const { getAllAgency, createAgency, deleteAgency, updateAgency } = useQueryAgency(params);
+  const { data: listAgency } = getAllAgency;
 
-  const handleCreateWarehouse = (data: TCreateWarehouse) => {
-    createWarehouse.mutate(data, {
+  const handleCreateAgency = (data: TCreateAgency) => {
+    createAgency.mutate(data, {
       onSuccess: () => {
         handleCloseCreateModal();
       },
     });
   };
 
-  const handleUpdateWarehouse = (id: string, data: TCreateWarehouse) => {
-    updateWarehouse.mutate(
+  const handleUpdateAgency = (id: string, data: TCreateAgency) => {
+    updateAgency.mutate(
       { id, data },
       {
         onSuccess: () => {
@@ -101,10 +91,6 @@ export default function WarehousePage() {
     setIsOpenEditModal({ isOpen: false });
   };
 
-  const handleCloseDetailModal = () => {
-    setIsOpenDetailModal({ isOpen: false });
-  };
-
   const handlePageChange = (page: number, pageSize: number) => {
     setFilter({
       ...filter,
@@ -115,15 +101,11 @@ export default function WarehousePage() {
     });
   };
 
-  const handleEditWarehouse = (warehouse: TWarehouse) => {
-    setIsOpenEditModal({ isOpen: true, warehouse: warehouse });
+  const handleEditAgency = (agency: TAgency) => {
+    setIsOpenEditModal({ isOpen: true, agency: agency });
   };
 
-  const handleViewDetail = (warehouseId: string) => {
-    setIsOpenDetailModal({ isOpen: true, warehouseId: warehouseId });
-  };
-
-  const showConfirmDelete = (title: string, desc: string, warehouse: TWarehouse) => {
+  const showConfirmNotify = (title: string, desc: string, agency: TAgency) => {
     Modal.confirm({
       title: title,
       icon: <ExclamationCircleFilled style={{ fontSize: '22px', color: 'red' }} />,
@@ -135,7 +117,7 @@ export default function WarehousePage() {
       autoFocusButton: 'cancel',
 
       onOk: async () => {
-        deleteWarehouse.mutate(warehouse.id);
+        deleteAgency.mutate(agency.id);
       },
       onCancel() {
         console.log('Cancel');
@@ -147,21 +129,20 @@ export default function WarehousePage() {
     setFilter((pre) => {
       // Tạo appendQuery mới bằng cách map qua mảng cũ
       const newAppendQuery = pre.appendQuery?.map((item) => {
-        // Nếu object có key là 'name'
+        // Nếu object có key là 'name' hoặc 'code'
         if ('name' in item) {
           return {
             name: {
               ...item.name,
-              value: valueSearch,
+              value: valueSearch, // Cập nhật giá trị search cho name
             },
           };
         }
-        // Nếu object có key là 'code'
         if ('code' in item) {
           return {
             code: {
               ...item.code,
-              value: valueSearch,
+              value: valueSearch, // Cập nhật giá trị search cho code
             },
           };
         }
@@ -180,16 +161,15 @@ export default function WarehousePage() {
     });
   };
 
-  const columns: ColumnsType<TWarehouse> = [
+  const columns: ColumnsType<TAgency> = [
     {
       title: 'STT',
       dataIndex: 'index',
       key: 'index',
-      width: 80,
       render: (_, record, index) => <p>{index + 1}</p>,
     },
     {
-      title: 'Mã kho',
+      title: 'Mã đại lý',
       dataIndex: 'code',
       key: 'code',
       ellipsis: {
@@ -200,7 +180,7 @@ export default function WarehousePage() {
       ),
     },
     {
-      title: 'Tên kho',
+      title: 'Tên đại lý',
       dataIndex: 'name',
       key: 'name',
       ellipsis: {
@@ -211,6 +191,27 @@ export default function WarehousePage() {
       ),
     },
     {
+      title: 'Người đại diện',
+      dataIndex: 'representative',
+      key: 'representative',
+      ellipsis: {
+        showTitle: true,
+      },
+    },
+    {
+      title: 'Số điện thoại',
+      dataIndex: 'phoneNumber',
+      key: 'phoneNumber',
+    },
+    {
+      title: 'Email',
+      dataIndex: 'email',
+      key: 'email',
+      ellipsis: {
+        showTitle: true,
+      },
+    },
+    {
       title: 'Địa chỉ',
       dataIndex: 'address',
       key: 'address',
@@ -219,54 +220,30 @@ export default function WarehousePage() {
       },
     },
     {
-      title: 'Sức chứa',
-      dataIndex: 'capacity',
-      key: 'capacity',
-      render: (capacity) => <span>{capacity.toLocaleString()} m3</span>,
-    },
-    {
-      title: 'Loại kho',
-      dataIndex: 'warehouseId',
-      key: 'warehouseType',
-      render: (warehouseId) =>
-        warehouseId ? <Tag color="blue">Kho con</Tag> : <Tag color="green">Kho cha</Tag>,
-    },
-    {
       title: 'Thao tác',
       key: 'action',
       align: 'center',
-      width: 250,
       render: (_, record) => (
         <Space size="middle">
-          <Button
-            color="cyan"
-            variant="solid"
-            shape="round"
-            icon={<EyeOutlined />}
-            onClick={() => handleViewDetail(record.id)}
-            className={'font-medium'}
-          >
-            {/* Chi tiết */}
-          </Button>
           <Button
             color="gold"
             variant="solid"
             shape="round"
             icon={<EditOutlined />}
-            onClick={() => handleEditWarehouse(record)}
+            onClick={() => handleEditAgency(record)}
             className={'font-medium'}
           >
-            {/* Cập nhật */}
+            Cập nhật
           </Button>
           <Button
             color="red"
             variant="solid"
             shape="round"
             icon={<DeleteOutlined />}
-            onClick={() => showConfirmDelete('Xóa kho', 'Bạn có muốn xóa kho này?', record)}
+            onClick={() => showConfirmNotify('Xóa đại lý', 'Bạn có muốn xóa đại lý này?', record)}
             className={'font-medium'}
           >
-            {/* Xoá */}
+            Xoá
           </Button>
         </Space>
       ),
@@ -278,8 +255,8 @@ export default function WarehousePage() {
       <div className="flex items-center justify-between flex-wrap gap-4 mb-4">
         <div className="flex items-center justify-center flex-wrap gap-3">
           <h2 className="flex items-center gap-1 font-bold text-xl md:text-2xl drop-shadow-sm text-inherit text-pretty uppercase text-primary">
-            <HomeOutlined className="text-xl font-medium" />
-            Danh sách kho
+            <UnorderedListOutlined className="text-xl font-medium" />
+            Danh sách đại lý
           </h2>
           <Button
             variant="solid"
@@ -287,12 +264,15 @@ export default function WarehousePage() {
             onClick={() => handleOpenCreateModal()}
             className="rounded-2xl w-full sm:w-fit"
           >
-            Thêm kho
+            Thêm đại lý
           </Button>
         </div>
 
         <div className="w-full sm:w-1/3 justify-end">
-          <SearchInput placeholder="Nhập tên hoặc mã kho" handleSearchValue={handleSearchValue} />
+          <SearchInput
+            placeholder="Nhập tên hoặc mã đại lý"
+            handleSearchValue={handleSearchValue}
+          />
         </div>
       </div>
 
@@ -300,59 +280,46 @@ export default function WarehousePage() {
         <Table
           rowKey={(record) => record.id}
           columns={columns}
+          dataSource={listAgency?.data}
           tableLayout={'auto'}
-          scroll={{
-            x: 'max-content',
-          }}
-          dataSource={listWarehouse?.data || []}
-          loading={isLoading}
+          scroll={{ x: 1000 }}
+          className="rounded-md bg-white"
           pagination={{
-            total: listWarehouse?.totalPage,
+            position: ['bottomCenter'],
+            defaultCurrent: 1,
+            showSizeChanger: true,
+            onChange: handlePageChange,
+            total: listAgency?.totalRecords,
             current: filter.toPaging?.page,
             pageSize: filter.toPaging?.pageSize,
-            onChange: handlePageChange,
-            showSizeChanger: true,
-            position: ['bottomCenter'],
           }}
         />
       </div>
 
       <Modal
-        title="Thêm kho mới"
+        title={<h4 className="font-bold text-2xl text-center uppercase">TẠO ĐẠI LÝ MỚI</h4>}
+        className="w-11/12 md:w-2/3 xl:w-1/2"
         open={isOpenCreateModal}
         onCancel={handleCloseCreateModal}
         footer={null}
       >
-        <CreateWarehouse handleCreateWarehouse={handleCreateWarehouse} />
+        <CreateAgency handleCreateAgency={handleCreateAgency} />
       </Modal>
 
       <Modal
-        title="Cập nhật thông tin kho"
+        title={<h4 className="font-bold text-2xl text-center">Cập nhật đại lý</h4>}
+        className="w-11/12 md:w-2/3 xl:w-1/2"
         open={isOpenEditModal.isOpen}
         onCancel={handleCloseEditModal}
         footer={null}
+        centered={true}
       >
-        {isOpenEditModal.warehouse && (
-          <EditWarehouse
-            handleUpdateWarehouse={handleUpdateWarehouse}
-            warehouse={isOpenEditModal.warehouse}
+        {isOpenEditModal.agency && (
+          <EditAgency
+            key={isOpenEditModal.agency.id}
+            handleUpdateAgency={handleUpdateAgency}
+            agency={isOpenEditModal.agency}
           />
-        )}
-      </Modal>
-
-      <Modal
-        title="Chi tiết kho"
-        open={isOpenDetailModal.isOpen}
-        onCancel={handleCloseDetailModal}
-        footer={[
-          <Button key="close" onClick={handleCloseDetailModal}>
-            Đóng
-          </Button>,
-        ]}
-        width={700}
-      >
-        {isOpenDetailModal.warehouseId && (
-          <DetailWarehouse warehouseId={isOpenDetailModal.warehouseId} />
         )}
       </Modal>
     </div>

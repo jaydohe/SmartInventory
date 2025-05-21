@@ -86,10 +86,10 @@ const EditEmployee: React.FC<EditEmployeeProps> = ({ handleUpdateEmployee, emplo
         <Col span={12}>
           <Form.Item
             name="positionId"
-            label="Vị trí"
-            rules={[{ required: true, message: 'Vui lòng chọn vị trí' }]}
+            label="chức vụ"
+            rules={[{ required: true, message: 'Vui lòng chọn chức vụ' }]}
           >
-            <Select placeholder="Chọn vị trí">
+            <Select placeholder="Chọn chức vụ">
               {getAllPosition.data?.data.map((item) => (
                 <Select.Option key={item.id} value={item.id}>
                   {item.name}
