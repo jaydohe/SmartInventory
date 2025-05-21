@@ -19,7 +19,7 @@ import SearchInput from '@/Components/SearchInput';
 import { GenderTypes, genGenderTypes } from '@/Constant/EmployeeTypes';
 import dayjs from 'dayjs';
 
-// Giả lập danh sách phòng ban, vị trí và kho
+// Giả lập danh sách phòng ban, chức vụ và kho
 // Trong thực tế, bạn cần lấy từ API
 const mockDepartments = [
   { id: '1', name: 'Phòng nhân sự' },

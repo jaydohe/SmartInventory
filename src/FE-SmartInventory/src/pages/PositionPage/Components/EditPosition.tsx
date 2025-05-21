@@ -31,15 +31,15 @@ const EditPositon: React.FC<EditPositonProps> = ({ handleUpdatePosition, positio
       <Form form={form} layout="vertical" onFinish={onFinish}>
         <Form.Item
           name="name"
-          label="Tên vị trí"
+          label="Tên chức vụ"
           className="font-medium"
-          rules={[{ required: true, message: 'Vui lòng nhập tên vị trí' }]}
+          rules={[{ required: true, message: 'Vui lòng nhập tên chức vụ' }]}
         >
-          <Input placeholder="Nhập tên vị trí" className="w-full" />
+          <Input placeholder="Nhập tên chức vụ" className="w-full" />
         </Form.Item>
 
         <Button type="primary" htmlType="submit" className="w-full font-semibold text-base">
-          Cập nhật vị trí
+          Cập nhật chức vụ
         </Button>
       </Form>
     </>

@@ -18,12 +18,15 @@ export const QueryKeys = {
   // Agency
   GET_ALL_AGENCY: 'getAllAgency',
   DETAIL_AGENCY: 'detailAgency',
+  AGENCY: 'agency',
   // WAREHOUSE
   GET_ALL_WAREHOUSE: 'getAllWarehouse',
   DETAIL_WAREHOUSE: 'detailWarehouse',
   // Product
   GET_ALL_PRODUCT: 'getAllPRODUCT',
   DETAIL_PRODUCT: 'detailPRODUCT',
+  PRODUCT: 'product',
+  PRODUCT_MATERIAL: 'productMaterial',
   // Oders
   GET_ALL_ORDERS: 'getAllOrders',
   DETAIL_ORDER: 'detailOrder',
@@ -38,4 +41,6 @@ export const QueryKeys = {
   // CATEGORY
   CATEGORY_PRODUCT: 'categoryProduct',
   CATEGORY_WAREHOUSE: 'categoryWarehouse',
+  // MATERIAL SUPPLIER
+  MATERIAL_SUPPLIER: 'materialSupplier',
 };

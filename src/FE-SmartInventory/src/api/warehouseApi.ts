@@ -9,7 +9,7 @@ export const warehouseApi = {
     return res.data;
   },
 
-  getWarehouseById: async (id: string, params?: string): Promise<TWarehouse> => {
+  getWarehouseById: async (id: string, params?: string): Promise<TResponse<TWarehouse>> => {
     const url = params ? `/api/v1/warehouse/get-by-id/${id}?${params}` : `/api/v1/warehouse/get-by-id/${id}`;
     const res = await axiosClient.get(url);
     return res.data;
