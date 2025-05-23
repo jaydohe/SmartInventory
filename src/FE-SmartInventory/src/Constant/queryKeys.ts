@@ -43,4 +43,20 @@ export const QueryKeys = {
   CATEGORY_WAREHOUSE: 'categoryWarehouse',
   // MATERIAL SUPPLIER
   MATERIAL_SUPPLIER: 'materialSupplier',
+
+  // INVENTORY
+  INVENTORY: 'inventory',
+  INVENTORY_DETAIL: 'inventoryDetail',
+
+  GOODS_RECEIPT: 'goodsReceipt',
+  GOODS_ISSUE: 'goodsIssue',
+  GOODS_RECEIPT_DETAIL: 'goodsReceiptDetail',
+  GOODS_ISSUE_DETAIL: 'goodsIssueDetail',
+
+  // PRODUCTION COMMAND
+  PRODUCTION_COMMAND: 'productionCommand',
+  PRODUCTION_COMMAND_DETAIL: 'productionCommandDetail',
+
+  ORDER_DETAIL: 'orderDetail',
+  ORDER: 'order',
 };
