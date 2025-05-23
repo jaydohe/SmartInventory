@@ -4,7 +4,6 @@ using CTCore.DynamicQuery.Core.Primitives;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
-using SI.Contract.AgencyContract;
 using SI.Contract.GoodsIssueContract;
 using SI.Domain.Common.Authenticate;
 using SI.Domain.Common.Utils;
@@ -94,8 +93,8 @@ public class CreateGoodsIssueCommandHandler(
             var goodsIssueDetail = new GoodsIssueDetail
             {
                 GoodsIssueId = goodsIssue.Id,
-                ProductId = checkOrderDetail.ProductId,
-                QuantityRequested = checkOrderDetail.Quantity,
+                ProductId = item.ProductId ?? checkOrderDetail.ProductId,
+                QuantityRequested = item.QuantityRequested > 0 ? item.QuantityRequested : checkOrderDetail.Quantity,
                 QuantityIssued = item.QuantityIssued,
                 TotalPrice = item.QuantityIssued * checkOrderDetail.UnitPrice
             };

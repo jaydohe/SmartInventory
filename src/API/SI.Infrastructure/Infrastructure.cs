@@ -6,7 +6,6 @@ using SI.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using CTCore.DynamicQuery.Core.Domain.Interfaces;
-using SI.Infrastructure.Integrations.OpenXML;
 //using SI.Infrastructure.Integrations.CronJob;
 using Quartz;
 
@@ -32,8 +31,6 @@ public static class Infrastructure
 
         IMapper mapper = mapperConfig.CreateMapper();
         services.AddSingleton(mapper);
-
-        services.AddScoped<TicketStatisticETE>();
 
         // Quartz.NET configuration
         services.AddQuartz(q =>

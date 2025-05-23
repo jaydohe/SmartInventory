@@ -84,8 +84,8 @@ public class CreateGoodsReceiptCommandHandler(
             var goodsReceiptDetail = new GoodsReceiptDetail
             {
                 GoodsReceiptId = goodsReceipt.Id,
-                ProductId = checkProductionCommandDetail.ProductId,
-                QuantityOrdered = checkProductionCommandDetail.Quantity,
+                ProductId = item.ProductId ?? checkProductionCommandDetail.ProductId,
+                QuantityOrdered = item.QuantityOrdered > 0 ? item.QuantityOrdered : checkProductionCommandDetail.Quantity,
                 QuantityReceived = item.QuantityReceived,
                 TotalPrice = item.QuantityReceived * checkProductionCommandDetail.Price
             };

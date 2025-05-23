@@ -9,6 +9,7 @@ using SI.Domain.Common.Authenticate;
 using SI.Domain.Common.Utils;
 using SI.Domain.Entities;
 using SI.Domain.Entities.Orders;
+using SI.Domain.Enums;
 
 namespace SI.Application.Features.OrderFeatures.Commands;
 
@@ -37,6 +38,7 @@ public class CreateOrderCommandHandler(
             return CTBaseResult.BadRequest(checkValid.Errors);
 
         var userId = identifierProvider.UserId;
+        var warehouseId = identifierProvider.WarehouseId;
 
         var checkAgency = await agencyRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Id == request.Arg.AgencyId && x.DeletedOn == null, cancellationToken);
@@ -73,6 +75,7 @@ public class CreateOrderCommandHandler(
 
         var newOrder = new Order
         {
+            WarehouseId = warehouseId is "null" ? warehouseId : request.Arg.WarehouseId,
             Code = CodeGenerationUtils.GenerateCodeFromName(checkAgency.Name),
             UserId = userId,
             AgencyId = request.Arg.AgencyId,

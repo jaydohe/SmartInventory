@@ -2,6 +2,7 @@
 
 public class CreateOrderArg
 {
+    public string? WarehouseId { get; set; }
     public string AgencyId { get; set; } = null!;
     public bool IsRefund { get; set; }
     public decimal? VAT { get; set; }

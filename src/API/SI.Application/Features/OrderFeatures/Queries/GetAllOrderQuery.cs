@@ -37,10 +37,7 @@ public class GetAllOrderQueryHandler(
         if (role is "WAREHOUSE_STAFF")
         {
             orderQuery = orderQuery
-                .Include(x => x.User)
-                .ThenInclude(x => x.Employee)
-                .ThenInclude(x => x.Warehouse)
-                .Where(x => x.User.Employee.WarehouseId == warehouseId);
+                .Where(x => x.WarehouseId == warehouseId);
         }
         else if (role is "SALESMAN")
         {

@@ -24,10 +24,10 @@ public class UpdateOrderStatusCommandHandler(
             .FirstOrDefaultAsync(x => x.Id == request.Id && x.DeletedOn == null, cancellationToken);
         if (checkOrder is null)
             return CTBaseResult.NotFound("Order");
-        if (checkOrder.OrderStatus == request.Arg.Status)
+        if (checkOrder.OrderStatus == request.Arg.OrderStatus)
             return CTBaseResult.UnProcess("Order status is same");
 
-        if (request.Arg.Status == OrderStatus.NEW)
+        if (request.Arg.OrderStatus == OrderStatus.NEW)
             return CTBaseResult.UnProcess("Can not update Order status is new.");
 
         if (checkOrder.OrderStatus == OrderStatus.CANCELED)
@@ -36,7 +36,7 @@ public class UpdateOrderStatusCommandHandler(
         if (checkOrder.OrderStatus == OrderStatus.DELIVERED)
             return CTBaseResult.UnProcess("Order has been delivered.");
 
-        checkOrder.OrderStatus = request.Arg.Status;
+        checkOrder.OrderStatus = request.Arg.OrderStatus ?? checkOrder.OrderStatus;
 
         var ret = await unitOfWork.SaveChangeAsync(cancellationToken);
         if (ret <= 0)

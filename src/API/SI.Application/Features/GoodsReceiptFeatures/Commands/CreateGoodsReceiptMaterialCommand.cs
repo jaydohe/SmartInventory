@@ -75,9 +75,9 @@ public class CreateGoodsReceiptMaterialCommandHandler(
         // Create Goods Receipt Details
         foreach (var item in request.Arg.Details)
         {
-            var product = await productRepos.BuildQuery
-                .FirstOrDefaultAsync(x => x.Id == item.ProductId && x.DeletedOn == null, cancellationToken);
-            if (product is null)
+            var material = await productRepos.BuildQuery
+                .FirstOrDefaultAsync(x => x.Id == item.ProductId && x.MaterialSupplierId == null && x.DeletedOn == null, cancellationToken);
+            if (material is null)
                 return CTBaseResult.NotFound("Product");
 
             var goodsReceiptDetail = new GoodsReceiptDetail
@@ -86,7 +86,7 @@ public class CreateGoodsReceiptMaterialCommandHandler(
                 ProductId = item.ProductId,
                 QuantityOrdered = item.QuantityReceived,
                 QuantityReceived = item.QuantityReceived,
-                TotalPrice = item.QuantityReceived * product.PurchasePrice
+                TotalPrice = item.QuantityReceived * material.PurchasePrice
             };
             goodsReceiptDetailRepos.Add(goodsReceiptDetail);
 

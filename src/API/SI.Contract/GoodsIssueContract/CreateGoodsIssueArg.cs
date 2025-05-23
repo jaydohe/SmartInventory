@@ -9,5 +9,7 @@ public class CreateGoodsIssueArg
 
 public class GoodsIssueDetailArg
 {
+    public string ProductId { get; set; } = null!;
+    public int QuantityRequested { get; set; }
     public int QuantityIssued { get; set; }
 }

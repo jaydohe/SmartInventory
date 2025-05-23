@@ -15,6 +15,9 @@ public class Order : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
     [ForeignKey(nameof(Agency))]
     public string AgencyId { get; set; } = null!;
 
+    [ForeignKey(nameof(Warehouse))]
+    public string? WarehouseId { get; set; }
+
     // <summary>
     // Mã đơn hàng
     // </summary>
@@ -54,6 +57,7 @@ public class Order : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
 
     public virtual User? User { get; set; }
     public virtual Agency? Agency { get; set; }
+    public virtual Warehouse? Warehouse { get; set; }
     public virtual ICollection<OrderDetail>? OrderDetails { get; set; }
 
     public void SendNotifRequestProductionCommand(string userId, string code, params string[] userIds)
