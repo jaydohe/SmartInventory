@@ -7,12 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SI.CoreLib\SI.CoreLib.csproj" />
+    <Compile Remove="Integrations\**" />
+    <Compile Remove="ValueObject\**" />
+    <EmbeddedResource Remove="Integrations\**" />
+    <EmbeddedResource Remove="ValueObject\**" />
+    <None Remove="Integrations\**" />
+    <None Remove="ValueObject\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Integrations\" />
-    <Folder Include="ValueObject\" />
+    <ProjectReference Include="..\SI.CoreLib\SI.CoreLib.csproj" />
   </ItemGroup>
 
 </Project>

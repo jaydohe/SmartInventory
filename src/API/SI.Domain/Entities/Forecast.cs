@@ -9,6 +9,9 @@ public class Forecast : AggregateRoot
     [ForeignKey(nameof(Product))]
     public string? ProductId { get; set; }
 
+    [ForeignKey(nameof(Warehouse))]
+    public string WarehouseId { get; set; } = null!;
+
     /// <summary>
     /// Giá trị dự báo (forecasted quantity)
     /// </summary>
@@ -80,4 +83,5 @@ public class Forecast : AggregateRoot
     public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
 
     public virtual Product? Product { get; set; }
+    public virtual Warehouse? Warehouse { get; set; }
 }

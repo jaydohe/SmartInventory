@@ -1,5 +1,7 @@
 ﻿using SI.Domain.Common.Abstractions;
 using SI.Domain.Common.Primitives;
+using SI.Domain.Common.Utils;
+using SI.Domain.Events;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SI.Domain.Entities;
@@ -23,4 +25,15 @@ public class Inventory : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
 
     public virtual Product? Product { get; set; }
     public virtual Warehouse? Warehouse { get; set; }
+
+    public void SendNotifLowInventory(string productName, string wareName, params string[] userIds)
+    {
+        var payload = new NotifPayload(
+            this.Id,
+            NotifType.FORECAST,
+            "Tồn kho thấp",
+            $"Sản phẩm {productName} tại kho {wareName} đã thấp hơn mức tối thiểu vào lúc {DateTimeOffset.UtcNow.ToLocal():dd/MM/yyyy HH:mm:ss}"
+        );
+        this.Raise(new SendNotificationEvent("Dự báo", true, Notification.Create(payload, userIds)));
+    }
 }
