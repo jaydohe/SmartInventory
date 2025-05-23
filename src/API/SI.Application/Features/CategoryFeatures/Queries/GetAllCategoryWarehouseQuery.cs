@@ -18,7 +18,6 @@ public class GetAllCategoryProductQuery(QueryPageRequestV3 query)
 
 public class GetAllCategoryProductQueryHandler(
     IRepository<Category> repository,
-    IRepository<Employee> empRepos,
     IMapper mapper,
     IUserIdentifierProvider identifierProvider) : IQueryHandler<GetAllCategoryProductQuery, OkDynamicPageResponse>
 {

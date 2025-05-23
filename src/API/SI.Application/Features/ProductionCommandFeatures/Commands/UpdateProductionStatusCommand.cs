@@ -16,8 +16,7 @@ public class UpdateProductionStatusCommand(string id, UpdateProductionStatusArg 
 
 public class UpdateProductionStatusCommandHandler(
     IUnitOfWork unitOfWork,
-    IRepository<ProductionCommand> productionCommandRepos,
-    IRepository<ProductionCommandProcess> productionProcessRepos) : ICommandHandler<UpdateProductionStatusCommand, OkResponse>
+    IRepository<ProductionCommand> productionCommandRepos) : ICommandHandler<UpdateProductionStatusCommand, OkResponse>
 {
     public async Task<CTBaseResult<OkResponse>> Handle(UpdateProductionStatusCommand request, CancellationToken cancellationToken)
     {
