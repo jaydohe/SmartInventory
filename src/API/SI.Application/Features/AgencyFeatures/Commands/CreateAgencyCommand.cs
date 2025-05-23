@@ -23,8 +23,7 @@ public class CreateAgencyCommand(CreateAgencyArg arg) : ICommand<OkResponse>
 
 public class CreateAgencyCommandHandler(
     IUnitOfWork unitOfWork,
-    IRepository<Agency> agencyRepos,
-    HybridCache hybridCache) : ICommandHandler<CreateAgencyCommand, OkResponse>
+    IRepository<Agency> agencyRepos) : ICommandHandler<CreateAgencyCommand, OkResponse>
 {
     public async Task<CTBaseResult<OkResponse>> Handle(CreateAgencyCommand request, CancellationToken cancellationToken)
     {

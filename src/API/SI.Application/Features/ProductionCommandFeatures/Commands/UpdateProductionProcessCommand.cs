@@ -23,8 +23,7 @@ public class UpdateProductionProcessCommand(string id, UpdateProductionCommandPr
 
 public class UpdateProductionProcessCommandHandler(
     IUnitOfWork unitOfWork,
-    IRepository<ProductionCommandProcess> productionCommandProcessRepos,
-    IRepository<ProductionCommand> productionCommandRepos) : ICommandHandler<UpdateProductionProcessCommand, OkResponse>
+    IRepository<ProductionCommandProcess> productionCommandProcessRepos) : ICommandHandler<UpdateProductionProcessCommand, OkResponse>
 {
     public async Task<CTBaseResult<OkResponse>> Handle(UpdateProductionProcessCommand request, CancellationToken cancellationToken)
     {
@@ -33,6 +32,7 @@ public class UpdateProductionProcessCommandHandler(
             return CTBaseResult.BadRequest(checkValid.Errors);
 
         var checkProductionCommandProcess = await productionCommandProcessRepos.BuildQuery
+            .Include(x => x.ProductionCommands)
             .FirstOrDefaultAsync(x => x.ProductionCommandId == request.Id && x.DeletedOn == null, cancellationToken);
         if (checkProductionCommandProcess is null)
             return CTBaseResult.NotFound("Production Command");
