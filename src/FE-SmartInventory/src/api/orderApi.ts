@@ -14,12 +14,12 @@ export const orderApi = {
     return res.data;
   },
   createOrder: async (data: TCreateOrder) => {
-    const url = 'api/v1/order/create';
+    const url = '/api/v1/order/create';
     const res = await axiosClient.post(url, data);
     return res.data;
   },
   updateOrderStatus: async (id: string, data: TUpdateOrderStatus) => {
-    const url = `/api/v1/order/update-status/${id}`;
+    const url = `/api/v1/order/update/${id}`;
     const res = await axiosClient.patch(url, data);
     return res.data;
   },
