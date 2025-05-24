@@ -37,9 +37,6 @@ public class UpdateProductionProcessCommandHandler(
         if (checkProductionCommandProcess is null)
             return CTBaseResult.NotFound("Production Command");
 
-        if (checkProductionCommandProcess.ActualStart != null && request.Arg.ActualStart != null)
-            return CTBaseResult.UnProcess("Actual start has been set and cannot be updated.");
-
         if (request.Arg.Percentage > 100 || request.Arg.Percentage < 0)
             return CTBaseResult.UnProcess("Percentage must be between 0 and 100");
 
