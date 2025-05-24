@@ -114,7 +114,9 @@ public class CreateProductionCommandCommandHandler(
         {
             ProductionCommandId = newProductionCommand.Id,
             Percentage = 0,
-            Status = ProcessProductionStatus.PREPARATION
+            Status = ProcessProductionStatus.PREPARATION,
+            ActualStart = null,
+            ActualEnd = null
         };
         productionCommandProcessRepos.Add(newProcess);
 
