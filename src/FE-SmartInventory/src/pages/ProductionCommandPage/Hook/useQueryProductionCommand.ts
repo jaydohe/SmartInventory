@@ -7,7 +7,7 @@ import {
   TProductionCommandCreate,
   TProductionCommandProcessUpdate,
   TProductionCommandRequest,
-  TProductionCommandUpdate,
+  TProductionCommandStatusUpdate,
 } from '@/interface/TProductionCommand';
 import { productionCommandApi } from '@/api/productionCommandApi';
 
@@ -29,8 +29,8 @@ export const useQueryProductionCommand = (
     queryFn: () => productionCommandApi.getAllProductionCommand(params),
     enabled: !!params,
     placeholderData: (prevData) => prevData,
-    retry: 3,
-    staleTime: 5 * 60 * 1000,
+    retry: 1,
+    staleTime: 3 * 60 * 1000,
   });
 
   // Lấy chi tiết lệnh sản xuất
@@ -72,7 +72,7 @@ export const useQueryProductionCommand = (
 
   // Cập nhật trạng thái lệnh sản xuất
   const updateProductionCommandStatus = useMutation({
-    mutationFn: ({ id, data }: { id: string; data: TProductionCommandUpdate }) =>
+    mutationFn: ({ id, data }: { id: string; data: TProductionCommandStatusUpdate }) =>
       productionCommandApi.updateProductionCommandStatus(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QueryKeys.PRODUCTION_COMMAND] });

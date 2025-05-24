@@ -6,7 +6,7 @@ import {
   TProductionCommandCreate,
   TProductionCommandProcessUpdate,
   TProductionCommandRequest,
-  TProductionCommandUpdate,
+  TProductionCommandStatusUpdate,
 } from '@/interface/TProductionCommand';
 
 export const productionCommandApi = {
@@ -33,14 +33,14 @@ export const productionCommandApi = {
     return res.data;
   },
   //Cập nhật tiến độ lệnh sản xuất
-  updateProductionCommandStatus: async (id: string, data: TProductionCommandUpdate) => {
+  updateProductionCommandProcess: async (id: string, data: TProductionCommandProcessUpdate) => {
     const url = `/api/v1/production-command/update/${id}`;
     const res = await axiosClient.patch(url, data);
     return res.data;
   },
 
   //Cập nhật trạng thái lệnh sản xuất
-  updateProductionCommandProcess: async (id: string, data: TProductionCommandProcessUpdate) => {
+  updateProductionCommandStatus: async (id: string, data: TProductionCommandStatusUpdate) => {
     const url = `/api/v1/production-command/update-status/${id}`;
     const res = await axiosClient.patch(url, data);
     return res.data;

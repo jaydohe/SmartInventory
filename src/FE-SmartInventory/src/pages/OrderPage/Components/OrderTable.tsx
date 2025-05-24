@@ -36,6 +36,19 @@ const OrderTable = ({
       render: (text) => <span className="font-medium text-blue-600">{text}</span>,
     },
     {
+      title: 'Loại đơn hàng',
+      dataIndex: 'isRefund',
+      key: 'isRefund',
+      width: '15%',
+      render: (isRefund) => (
+        <span className="font-medium text-blue-600">
+          <Tag color={isRefund ? 'volcano' : 'green'}>
+            {isRefund ? 'Hoàn trả hàng' : 'Đơn hàng '}
+          </Tag>
+        </span>
+      ),
+    },
+    {
       title: 'Tổng tiền',
       dataIndex: 'totalAmount',
       key: 'totalAmount',

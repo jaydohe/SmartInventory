@@ -1,18 +1,17 @@
+import SearchInput from '@/Components/SearchInput';
+import { genOrderStatus, OrderStatus } from '@/Constant/OderStatus';
+import { genProductTypes } from '@/Constant/ProductTypes';
 import { useBuilderQuery } from '@/hook';
 import { TBuilderQuery } from '@/interface';
-import { ExclamationCircleFilled, ShoppingOutlined, ShoppingCartOutlined } from '@ant-design/icons';
+import { TCreateOrder, TOrder, TUpdateOrderStatus } from '@/interface/TOder';
+import { ExclamationCircleFilled, ShoppingCartOutlined } from '@ant-design/icons';
 import { Button, Descriptions, List, Modal, Select, Tabs, TabsProps, Tag } from 'antd';
 import { useEffect, useState } from 'react';
-import SearchInput from '@/Components/SearchInput';
-import { useQueryOrder } from './Hook/useQueryOrder';
-import OrderTable from './Components/OrderTable';
-import { TCreateOrder, TOrder, TUpdateOrderStatus } from '@/interface/TOder';
-import CreateOrder from './Components/CreateOrder';
-import { OrderStatus, genOrderStatus } from '@/Constant/OderStatus';
-import { TProduct } from '@/interface/TProduct';
 import { useQueryAgency } from '../AgencyPage/Hook/useQueryAgency';
 import { useQueryProduct } from '../ProductPage/Hook/useQueryProduct';
-import { genProductTypes, ProductTypes } from '@/Constant/ProductTypes';
+import CreateOrder from './Components/CreateOrder';
+import OrderTable from './Components/OrderTable';
+import { useQueryOrder } from './Hook/useQueryOrder';
 
 export default function OrderPage() {
   const [activeTab, setActiveTab] = useState<string>('all'); // Tab "Tất cả" là tab mặc định
@@ -196,11 +195,6 @@ export default function OrderPage() {
               selectedStatus = value;
             }}
           >
-            <Select.Option value={OrderStatus.NEW}>
-              <Tag color={genOrderStatus[OrderStatus.NEW].color}>
-                {genOrderStatus[OrderStatus.NEW].label}
-              </Tag>
-            </Select.Option>
             <Select.Option value={OrderStatus.INPROCESS}>
               <Tag color={genOrderStatus[OrderStatus.INPROCESS].color}>
                 {genOrderStatus[OrderStatus.INPROCESS].label}
@@ -451,36 +445,51 @@ export default function OrderPage() {
               column={{ xs: 1, sm: 2 }}
               items={[
                 {
+                  span: 2,
                   key: '1',
                   label: 'Mã đơn hàng',
                   children: isOpenDetailModal.order.code,
                 },
                 {
+                  span: 2,
                   key: '2',
                   label: 'Đại lý',
                   children: isOpenDetailModal.order.agencyId,
                 },
                 {
+                  span: 2,
+
                   key: '3',
                   label: 'VAT',
                   children: `${isOpenDetailModal.order.vat || 0}%`,
                 },
                 {
+                  span: 2,
+
                   key: '4',
                   label: 'Giảm giá',
                   children: `${isOpenDetailModal.order.discount || 0}%`,
                 },
                 {
+                  span: 2,
+
                   key: '5',
                   label: 'Tổng giá trị',
                   children: `${isOpenDetailModal.order.totalAmount?.toLocaleString('vi-VN')} đ`,
                 },
                 {
+                  span: 2,
+
                   key: '6',
-                  label: 'Thu hồi hàng',
-                  children: isOpenDetailModal.order.isRefund ? 'Có' : 'Không',
+                  label: 'Loại đơn hàng',
+                  children: (
+                    <Tag color={isOpenDetailModal.order.isRefund ? 'volcano' : 'green'}>
+                      {isOpenDetailModal.order.isRefund ? 'Hoàn trả hàng' : 'Đơn hàng mới'}
+                    </Tag>
+                  ),
                 },
                 {
+                  span: 2,
                   key: '7',
                   label: 'Trạng thái',
                   children: (
