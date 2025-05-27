@@ -45,12 +45,12 @@ public class Forecast : AggregateRoot
     public double? Seasonal { get; set; }
 
     /// <summary>
-    /// Lower bound (ví dụ 95% CI) cho giá trị dự báo
+    /// Lower bound cho giá trị dự báo
     /// </summary>
     public double? LowerBound { get; set; }
 
     /// <summary>
-    /// Upper bound (ví dụ 95% CI) cho giá trị dự báo
+    /// Upper bound cho giá trị dự báo
     /// </summary>
     public double? UpperBound { get; set; }
 

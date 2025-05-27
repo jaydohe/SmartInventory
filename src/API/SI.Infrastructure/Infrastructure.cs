@@ -6,8 +6,8 @@ using SI.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using CTCore.DynamicQuery.Core.Domain.Interfaces;
-//using SI.Infrastructure.Integrations.CronJob;
 using Quartz;
+using SI.Infrastructure.Integrations.CronJob;
 
 namespace SI.Infrastructure;
 
@@ -35,21 +35,28 @@ public static class Infrastructure
         // Quartz.NET configuration
         services.AddQuartz(q =>
         {
-            // Register your jobs here
-            //q.AddJob<HoltWintersJob>(opts => opts.WithIdentity("HoltWintersJob"));
-            //q.AddTrigger(opts => opts
-            //    .ForJob("HoltWintersJob")
-            //    .WithIdentity("HoltWintersTrigger")
-            //    .WithCronSchedule("0 0 4 * * ?")); // "0 * * * * ?" : 1 minute
-            //                                       // "0 0/5 * * * ?" : 5 minute
-            //                                       // "0 0 4 * * ?" : 4AM every day
-            //                                       // "0 0 0 1 * *" : 1st day of every month
-            //                                       // "0 0 * * 0" : every Sunday
-            //q.AddJob<EOQSafetyStockJob>(opts => opts.WithIdentity("EOQSafetyStockJob"));
-            //q.AddTrigger(opts => opts
-            //    .ForJob("EOQSafetyStockJob")
-            //    .WithIdentity("EOQSafetyStockTrigger")
-            //    .WithCronSchedule("0 0 4 * * ?")); // "0 0 4 * * ?" : 4AM every day
+            //Register your jobs here
+            q.AddJob<HoltWintersJob>(opts => opts.WithIdentity("HoltWintersJob"));
+            q.AddTrigger(opts => opts
+                .ForJob("HoltWintersJob")
+                .WithIdentity("HoltWintersTrigger")
+                .WithCronSchedule("0 0 0 1 * ?")); // "0 * * * * ?" : 1 minute
+                                                   // "0 0/5 * * * ?" : 5 minute
+                                                   // "0 0 4 * * ?" : 4AM every day
+                                                   // "0 0 0 1 * ?" : 1st day of every month
+                                                   // "0 0 * * 0" : every Sunday
+
+            q.AddJob<EOQSafetyStockJob>(opts => opts.WithIdentity("EOQSafetyStockJob"));
+            q.AddTrigger(opts => opts
+                .ForJob("EOQSafetyStockJob")
+                .WithIdentity("EOQSafetyStockTrigger")
+                .WithCronSchedule("0 0 4 ? * SUN")); // "0 0 4 ? * SUN" : 4AM every sunday
+
+            q.AddJob<LowInventoryJob>(opts => opts.WithIdentity("LowInventoryJob"));
+            q.AddTrigger(opts => opts
+                .ForJob("LowInventoryJob")
+                .WithIdentity("LowInventoryTrigger")
+                .WithCronSchedule("0 0 4 * * ?")); // "0 0 4 * * ?" : 4AM every day
         });
 
         // Quartz.NET hosted service
