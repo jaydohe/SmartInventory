@@ -44,7 +44,10 @@ public class UpdateProductionProcessCommandHandler(
             request.Arg.Percentage == 100 && request.Arg.Status != ProcessProductionStatus.COMPLETED)
             return CTBaseResult.UnProcess("Status and Percentage must be completed and 100%");
 
-        checkProductionCommandProcess.ProductionCommands.Status = CommandStatus.INPROGRESS;
+        if (checkProductionCommandProcess.ProductionCommands != null)
+        {
+            checkProductionCommandProcess.ProductionCommands.Status = CommandStatus.INPROGRESS;
+        }
         checkProductionCommandProcess.Percentage = request.Arg.Percentage ?? checkProductionCommandProcess.Percentage;
         checkProductionCommandProcess.Note = request.Arg.Note ?? checkProductionCommandProcess.Note;
         checkProductionCommandProcess.Status = request.Arg.Status ?? checkProductionCommandProcess.Status;

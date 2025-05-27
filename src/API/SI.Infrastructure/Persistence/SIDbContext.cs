@@ -6,6 +6,8 @@ using SI.Domain.Entities.GoodsIssues;
 using SI.Domain.Entities.GoodsReceipts;
 using SI.Domain.Entities.ProductionCommands;
 using SI.Domain.Entities.BOM;
+using System.Reflection;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 
 namespace SI.Infrastructure.Persistence;
 
@@ -60,8 +62,26 @@ public class SIDbContext : DbContext
     public DbSet<ProductionCommandDetail> ProductionCommandDetails { get; set; }
     public DbSet<ProductionCommandProcess> ProductionCommandProcesses { get; set; }
 
+    public static int WeekOfYear(DateTimeOffset date)
+        => throw new InvalidOperationException("Cannot be called client side.");
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        var weekMethod = typeof(SIDbContext)
+            .GetMethod(nameof(WeekOfYear), BindingFlags.Public | BindingFlags.Static);
+                modelBuilder
+                    .HasDbFunction(weekMethod)
+                    .HasTranslation(args =>
+                        new SqlFunctionExpression(
+                        "WEEK",
+                        new[] { args[0], new SqlFragmentExpression("3") },  // mode 3 = ISO-8601
+                        nullable: false,                                    // non-nullable
+                        argumentsPropagateNullability: new[] { true, false },
+                        typeof(int),
+                        null
+                        )
+                    );
+
         var cascadeFKs = modelBuilder.Model
             .GetEntityTypes()
             .SelectMany(t => t.GetForeignKeys())
