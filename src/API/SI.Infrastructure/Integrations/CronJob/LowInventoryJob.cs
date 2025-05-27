@@ -11,7 +11,6 @@ public class LowInventoryJob(
     IRepository<User> userRepository,
     IRepository<Inventory> inventoryRepository,
     IRepository<Setup> setupRepository,
-    IRepository<Notification> notificationRepository,
     IUnitOfWork unitOfWork,
     ILogger<LowInventoryJob> logger) : IJob
 {

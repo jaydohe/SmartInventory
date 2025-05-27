@@ -22,13 +22,13 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.ProductId,
                         opt => opt.MapFrom(src => src.ProductId ?? string.Empty))
             .ForMember(dest => dest.ProductName,
-                       opt => opt.MapFrom(src => src.Product.Name ?? string.Empty))
+                       opt => opt.MapFrom(src => src.Product!.Name ?? string.Empty))
             .ForMember(dest => dest.ProductUnit,
-                       opt => opt.MapFrom(src => src.Product.Unit ?? string.Empty))
+                       opt => opt.MapFrom(src => src.Product!.Unit ?? string.Empty))
             .ForMember(dest => dest.WarehouseId,
                        opt => opt.MapFrom(src => src.WarehouseId))
             .ForMember(dest => dest.WarehouseName,
-                       opt => opt.MapFrom(src => src.Warehouse.Name ?? string.Empty))
+                       opt => opt.MapFrom(src => src.Warehouse!.Name ?? string.Empty))
             .ForMember(dest => dest.Method,
                         opt => opt.MapFrom(src => src.Method))
             .ForMember(dest => dest.CreatedAt,
