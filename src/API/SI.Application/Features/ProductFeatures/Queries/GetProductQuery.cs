@@ -31,7 +31,7 @@ public class GetProductQueryHandler(
                 queryContext.ToCacheKey())
             .FirstOrDefaultAsync(cancellationToken);
         if (product is null)
-            return CTBaseResult.NotFound("Product");
+            return CTBaseResult.NotFound("Mặt hàng");
 
         return CTBaseResult.Success(product);
     }

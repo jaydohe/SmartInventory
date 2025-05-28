@@ -48,7 +48,7 @@ public class CreateProductionCommandCommandHandler(
             var product = await prodRepos.BuildQuery
                 .FirstOrDefaultAsync(x => x.Id == item.ProductId && x.DeletedOn == null, cancellationToken);
             if (product is null)
-                return CTBaseResult.NotFound("Product");
+                return CTBaseResult.NotFound("Mặt hàng");
             totalAmount += item.Quantity * product.PurchasePrice;
         }
 
@@ -79,7 +79,7 @@ public class CreateProductionCommandCommandHandler(
                     .Include(x => x.Product)
                     .FirstOrDefaultAsync(x => x.OrderId == request.Arg.OrderId && x.ProductId == item.ProductId && x.DeletedOn == null, cancellationToken);
                 if (checkOrderDetail is null)
-                    return CTBaseResult.NotFound("OrderDetail");
+                    return CTBaseResult.NotFound("Chi tiết của đơn hàng");
 
                 var newDetail = new ProductionCommandDetail
                 {
@@ -96,7 +96,7 @@ public class CreateProductionCommandCommandHandler(
                 var checkProduct = await prodRepos.BuildQuery
                     .FirstOrDefaultAsync(x => x.Id == item.ProductId && x.DeletedOn == null, cancellationToken);
                 if (checkProduct is null)
-                    return CTBaseResult.NotFound("Product");
+                    return CTBaseResult.NotFound("Mặt hàng");
 
                 var newDetail = new ProductionCommandDetail
                 {
@@ -134,16 +134,18 @@ public class CreateProductionCommandCommandValidator : AbstractValidator<CreateP
     {
         RuleFor(x => x.Arg.Description)
             .MaximumLength(1024)
-            .WithMessage("Description is too long. Only up to 1024 characters.");
-        RuleFor(x => x.Arg.ProductionCommandDetails)
-            .NotEmpty()
-            .WithMessage("ProductionCommandDetails is required.");
+            .WithMessage("Mô tả tối đa 1024 ký tự.");
         RuleForEach(x => x.Arg.ProductionCommandDetails)
-            .NotEmpty()
-            .WithMessage("Production CommandDetails is required.")
-            .Must(x => !string.IsNullOrEmpty(x.ProductId))
-            .WithMessage("ProductId is required.")
-            .Must(x => x.Quantity > 0)
-            .WithMessage("Quantity must be greater than 0.");
+            .ChildRules(details =>
+            {
+                details.RuleFor(x => x.ProductId)
+                    .NotEmpty()
+                    .WithMessage("Id của mặt hàng là bắt buộc.");
+                details.RuleFor(x => x.Quantity)
+                    .NotEmpty()
+                    .WithMessage("Số lượng là bắt buộc.")
+                    .GreaterThan(0)
+                    .WithMessage("Số lượng phải lớn hơn 0.");
+            });
     }
 }

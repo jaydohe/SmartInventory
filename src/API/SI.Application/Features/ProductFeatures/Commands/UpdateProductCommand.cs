@@ -44,34 +44,34 @@ public class UpdateProductCommandHandler(
             var checkManager = await employeeRepos.BuildQuery
                 .FirstOrDefaultAsync(x => x.Id == employeeId && x.IsManager == true, cancellationToken);
             if (checkManager is null)
-                return CTBaseResult.UnProcess("Just manager can access.");
+                return CTBaseResult.UnProcess("Chỉ có quản lý được truy cập.");
         }
 
         if (request.Arg.Name != null && request.Arg.Name.Trim() == "")
-            return CTBaseResult.UnProcess("Name cannot consist only of whitespace.");
+            return CTBaseResult.UnProcess("Tên hàng hóa không được chỉ bao gồm khoảng trắng.");
         if (request.Arg.Description != null && request.Arg.Description.Trim() == "")
-            return CTBaseResult.UnProcess("Description cannot consist only of whitespace.");
+            return CTBaseResult.UnProcess("Mô tả không được chỉ bao gồm khoảng trắng.");
         if (request.Arg.Unit != null && request.Arg.Unit.Trim() == "")
-            return CTBaseResult.UnProcess("Unit cannot consist only of whitespace.");
+            return CTBaseResult.UnProcess("Đơn vị không được chỉ bao gồm khoảng trắng.");
 
         var checkProduct = await productRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Id == request.Id && x.DeletedOn == null, cancellationToken);
         if (checkProduct is null)
-            return CTBaseResult.NotFound("Product");
+            return CTBaseResult.NotFound("Hàng hóa");
 
         var checkExisted = await productRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Name == request.Arg.Name && x.DeletedOn == null, cancellationToken);
         if (checkExisted != null && checkExisted.CategoryId == checkProduct.CategoryId)
-            return CTBaseResult.UnProcess("Product already exists.");
+            return CTBaseResult.UnProcess("Hàng hóa đã tồn tại.");
 
         if (request.Arg.CategoryId != null)
         {
             var checkCategory = await categoryRepos.BuildQuery
                 .FirstOrDefaultAsync(x => x.Id == request.Arg.CategoryId && x.DeletedOn == null, cancellationToken);
             if (checkCategory is null)
-                return CTBaseResult.NotFound("Category");
+                return CTBaseResult.NotFound("Danh mục hàng hóa");
             if (checkCategory.CategoryEntityType != CategoryEntityTypes.PRODUCT)
-                return CTBaseResult.UnProcess("Category must be product type.");
+                return CTBaseResult.UnProcess("Bắt buộc phải là danh mục hàng hóa.");
         }
 
         if (request.Arg.Name != null)
@@ -99,21 +99,21 @@ public class UpdateProductCommandValidator : AbstractValidator<UpdateProductComm
     {
         RuleFor(x => x.Arg.Name)
             .MaximumLength(1024)
-            .WithMessage("Name is too long. Only up to 1024 characters.");
+            .WithMessage("Tên hàng hóa tối đa 1024 ký tự.");
         RuleFor(x => x.Arg.Description)
             .MaximumLength(1024)
-            .WithMessage("Description is too long. Only up to 1024 characters.");
+            .WithMessage("Mô tả tối đa 1024 ký tự.");
         RuleFor(x => x.Arg.Unit)
             .MaximumLength(512)
-            .WithMessage("Unit is too long. Only up to 512 characters.");
+            .WithMessage("Đơn vị tối đa 512 ký tự.");
         RuleFor(x => x.Arg.PurchasePrice)
             .GreaterThan(0)
-            .WithMessage("PurchasePrice must be greater than 0.");
+            .WithMessage("Giá mua phải lớn hơn 0.");
         RuleFor(x => x.Arg.SellingPrice)
             .GreaterThan(0)
-            .WithMessage("SellingPrice must be greater than 0.");
+            .WithMessage("Giá bán phải lớn hơn 0.");
         RuleFor(x => x.Arg.HoldingCost)
             .GreaterThanOrEqualTo(0)
-            .WithMessage("HoldingCost must be greater than or equal to 0.");
+            .WithMessage("Chi phí lưu kho phải lớn hơn hoặc bằng 0.");
     }
 }

@@ -20,7 +20,7 @@ public class DeleteMaterialSupplierCommandHandler(
         var checkMaterialSupplier = await materialSupplierRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Id == request.Id && x.DeletedOn == null, cancellationToken);
         if (checkMaterialSupplier is null)
-            return CTBaseResult.NotFound("Material Supplier");
+            return CTBaseResult.NotFound("Nhà cung cấp NVL");
 
         checkMaterialSupplier.DeletedOn = DateTimeOffset.UtcNow;
 

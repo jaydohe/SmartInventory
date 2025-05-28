@@ -22,7 +22,7 @@ public class UpdateIsLoginCommandHandler(
         var checkUser = await userRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Id == request.Id && x.DeletedOn == null, cancellationToken);
         if (checkUser is null)
-            return CTBaseResult.NotFound("User");
+            return CTBaseResult.NotFound("Người dùng");
 
         checkUser.IsLogin = request.Arg.IsLogin ?? checkUser.IsLogin;
         checkUser.ModifiedOn = DateTimeOffset.UtcNow;

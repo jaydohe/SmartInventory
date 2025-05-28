@@ -19,7 +19,7 @@ public class GetZscoreQueryHandler(
         var zscore = await setupRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.DeletedOn == null, cancellationToken);
         if (zscore is null)
-            return CTBaseResult.NotFound("ZScore/Min stock level configuration");
+            return CTBaseResult.NotFound("Mức độ dịch vụ / Ngưỡng tồn kho thấp chung");
 
         return new SetupDetailResponse()
         {

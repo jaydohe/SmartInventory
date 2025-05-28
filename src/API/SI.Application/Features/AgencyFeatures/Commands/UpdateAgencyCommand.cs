@@ -36,7 +36,7 @@ public class UpdateAgencyCommandHandler(
         if (request.Arg.Representative != null && request.Arg.Representative.Trim() == "")
             return CTBaseResult.UnProcess("Người đại diện không được chỉ bao gồm khoảng trắng.");
         if (request.Arg.PhoneNumber != null && request.Arg.PhoneNumber.Trim() == "")
-            return CTBaseResult.UnProcess("Số điẹn thoại không được chỉ bao gồm khoảng trắng.");
+            return CTBaseResult.UnProcess("Số điện thoại không được chỉ bao gồm khoảng trắng.");
         if (request.Arg.Email != null && request.Arg.Email.Trim() == "")
             return CTBaseResult.UnProcess("Email không được chỉ bao gồm khoảng trắng.");
         if (request.Arg.Address != null && request.Arg.Address.Trim() == "")

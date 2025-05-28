@@ -31,7 +31,7 @@ public class GetProductionCommandQueryHandler(
                 queryContext.ToCacheKey())
             .FirstOrDefaultAsync(cancellationToken);
         if (productionCommand is null)
-            return CTBaseResult.NotFound("Production Command");
+            return CTBaseResult.NotFound("Lệnh sản xuất");
 
         return CTBaseResult.Success(productionCommand);
     }

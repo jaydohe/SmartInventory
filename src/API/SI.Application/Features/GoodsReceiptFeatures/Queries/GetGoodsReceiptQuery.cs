@@ -29,7 +29,7 @@ public class GetGoodsReceiptQueryHandler(
                 queryContext.ToCacheKey())
             .FirstOrDefaultAsync(cancellationToken);
         if (goodsReceipt is null)
-            return CTBaseResult.NotFound("Goods Receipt");
+            return CTBaseResult.NotFound("Phiếu nhập hàng");
 
         return CTBaseResult.Success(goodsReceipt);
     }
