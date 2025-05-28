@@ -35,7 +35,7 @@ public class GetAllGoodsIssueQueryHandler(
         var checkManager = await employeeRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Id == employeeId, cancellationToken);
         if (checkManager is null)
-            return CTBaseResult.NotFound("Employee");
+            return CTBaseResult.NotFound("Nhân viên");
 
         if (role is "WAREHOUSE_STAFF" && checkManager.IsManager == true)
         {

@@ -104,7 +104,7 @@ public class CreateGoodsIssueCommandHandler(
             var inventory = await inventoryRepos.BuildQuery
                 .FirstOrDefaultAsync(x => x.ProductId == checkOrderDetail.ProductId && x.WarehouseId == warehouseId, cancellationToken);
             if (inventory is null)
-                return CTBaseResult.UnProcess("Hàng hóa trong kho chưa tồn tại.");
+                return CTBaseResult.UnProcess("Hàng hóa chưa có tồn kho");
 
             inventory.Quantity -= item.QuantityIssued;
             inventory.ModifiedOn = DateTimeOffset.UtcNow;
@@ -124,7 +124,7 @@ public class CreateGoodsIssueCommandValidator : AbstractValidator<CreateGoodsIss
     {
         RuleFor(x => x.Arg.OrderId)
             .NotEmpty()
-            .WithMessage("Id của đơn hàng là bắt buộc.");
+            .WithMessage("OrderId is required");
         RuleFor(x => x.Arg.Note)
             .MaximumLength(1024)
             .WithMessage("Ghi chú tối đa 1024 ký tự.");
@@ -136,9 +136,9 @@ public class CreateGoodsIssueCommandValidator : AbstractValidator<CreateGoodsIss
             {
                 details.RuleFor(x => x.QuantityIssued)
                     .NotEmpty()
-                    .WithMessage("Số lượng xuất là bắt buộc.")
+                    .WithMessage("Quantity Issued is required")
                     .GreaterThanOrEqualTo(0)
-                    .WithMessage("Số lượng xuất phải lớn hơn hoặc bằng 0.");
+                    .WithMessage("Quantity Issued must be greater than or equal to 0");
             });
     }
 }
