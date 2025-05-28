@@ -8,6 +8,7 @@ using AutoMapper;
 using CTCore.DynamicQuery.Core.Domain.Interfaces;
 using Quartz;
 using SI.Infrastructure.Integrations.CronJob;
+using Pomelo.EntityFrameworkCore.MySql.Internal;
 
 namespace SI.Infrastructure;
 
@@ -17,7 +18,12 @@ public static class Infrastructure
     {
         var connectionString = configuration.GetConnectionString("MySql");
         services.AddDbContext<DbContext, SIDbContext>(options => options
-            .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
+            .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString),
+            sqlOptions =>
+            {
+                sqlOptions.EnablePrimitiveCollectionsSupport(true);
+                sqlOptions.TranslateParameterizedCollectionsToConstants();
+            })
             .EnableSensitiveDataLogging());
 
         services.AddScoped<IUnitOfWork, UnitOfWork<SIDbContext>>();
