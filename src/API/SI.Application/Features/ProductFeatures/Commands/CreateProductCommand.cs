@@ -37,33 +37,33 @@ public class CreateProductCommandHandler(
             request.Arg.ProductType != ProductTypes.RAW_MATERIAL &&
             request.Arg.ProductType != ProductTypes.SEMI_FINISHED_PRODUCT &&
             request.Arg.ProductType != ProductTypes.FINISHED_PRODUCT)
-            return CTBaseResult.NotFound("Product Type");
+            return CTBaseResult.NotFound("Loại hàng hóa");
 
         var checkExisted = await productRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Name == request.Arg.Name && x.DeletedOn == null, cancellationToken);
         if (checkExisted != null && checkExisted.CategoryId == request.Arg.CategoryId)
-            return CTBaseResult.UnProcess("Product already exists.");
+            return CTBaseResult.UnProcess("Tên hàng hóa đã tồn tại.");
 
         if (request.Arg.MaterialSupplierId != null)
         {
             var checkMaterialSupplier = await supplierRepos.BuildQuery
                 .FirstOrDefaultAsync(x => x.Id == request.Arg.MaterialSupplierId && x.DeletedOn == null, cancellationToken);
             if (checkMaterialSupplier is null)
-                return CTBaseResult.NotFound("Material Supplier");
+                return CTBaseResult.NotFound("Nhà cung cấp NVL");
 
             if (request.Arg.ProductType != ProductTypes.RAW_MATERIAL)
-                return CTBaseResult.UnProcess("Product Type must be RAW MATERIAL.");
+                return CTBaseResult.UnProcess("Loại hàng hóa phải là nguyên vật liệu.");
         }
 
         if (request.Arg.ProductType == ProductTypes.RAW_MATERIAL && request.Arg.MaterialSupplierId == null)
-            return CTBaseResult.UnProcess("Product Type must not be RAW MATERIAL.");
+            return CTBaseResult.UnProcess("Loại hàng hóa không phải là nguyên vật liệu.");
 
         var checkCategory = await categoryRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Id == request.Arg.CategoryId && x.DeletedOn == null, cancellationToken);
         if (checkCategory is null)
-            return CTBaseResult.NotFound("Category");
+            return CTBaseResult.NotFound("Danh mục hàng hóa");
         if (checkCategory.CategoryEntityType != CategoryEntityTypes.PRODUCT)
-            return CTBaseResult.UnProcess("Category must be product type.");
+            return CTBaseResult.UnProcess("Bắt buộc phải là danh mục hàng hóa.");
 
         var newProduct = new Product
         {
@@ -94,33 +94,33 @@ public class CreateProductCommandValidator : AbstractValidator<CreateProductComm
     {
         RuleFor(x => x.Arg.CategoryId)
             .NotEmpty()
-            .WithMessage("CategoryId is required.");
+            .WithMessage("Id của danh mục hàng hóa là bắt buộc.");
         RuleFor(x => x.Arg.Name)
             .NotEmpty()
-            .WithMessage("Name is required.")
+            .WithMessage("Tên hàng hóa là bắt buộc.")
             .MaximumLength(1024)
-            .WithMessage("Name is too long. Only up to 1024 characters.");
+            .WithMessage("Tên hàng hóa tối đa 1024 ký tự.");
         RuleFor(x => x.Arg.Description)
             .NotEmpty()
-            .WithMessage("Description is required.")
+            .WithMessage("Mô tả là bắt buộc.")
             .MaximumLength(1024)
-            .WithMessage("Description is too long. Only up to 1024 characters.");
+            .WithMessage("Mô tả tối đa 1024 ký tự.");
         RuleFor(x => x.Arg.Unit)
             .NotEmpty()
-            .WithMessage("Unit is required.")
+            .WithMessage("Đơn vị là bắt buộc.")
             .MaximumLength(512)
-            .WithMessage("Unit is too long. Only up to 512 characters.");
+            .WithMessage("Đơn vị tối đa 512 ký tự.");
         RuleFor(x => x.Arg.ProductType)
             .NotEmpty()
-            .WithMessage("ProductType is required.");
+            .WithMessage("Loại hàng hóa là bắt buộc.");
         RuleFor(x => x.Arg.PurchasePrice)
             .GreaterThan(0)
-            .WithMessage("PurchasePrice must be greater than 0.");
+            .WithMessage("Giá mua phải lớn hơn 0.");
         RuleFor(x => x.Arg.SellingPrice)
             .GreaterThan(0)
-            .WithMessage("SellingPrice must be greater than 0.");
+            .WithMessage("Giá bán phải lớn hơn 0.");
         RuleFor(x => x.Arg.HoldingCost)
             .GreaterThanOrEqualTo(0)
-            .WithMessage("HoldingCost must be greater than or equal to 0.");
+            .WithMessage("Chi phí lưu kho phải lớn hơn hoặc bằng 0.");
     }
 }

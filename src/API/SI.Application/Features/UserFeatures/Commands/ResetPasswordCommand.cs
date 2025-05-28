@@ -40,10 +40,10 @@ public class ResetPasswordCommandHandler(
 
         var checkUser = await userRepos.BuildQuery.FirstOrDefaultAsync(e => e.Id == request.Id, cancellationToken);
         if (checkUser == null)
-            return CTBaseResult.NotFound("User");
+            return CTBaseResult.NotFound("Người dùng");
 
         if (request.Arg.Password != request.Arg.RePassword)
-            return CTBaseResult.UnProcess("Confirm password does not match.");
+            return CTBaseResult.UnProcess("Xác nhận lại mật khẩu không đúng.");
 
         var hashPassword = request.Arg.Password.ToSHA256(iconfiguration["Salt"]!);
 
@@ -63,19 +63,19 @@ public class ResetPasswordCommandValidator : AbstractValidator<ResetPasswordComm
 {
     public ResetPasswordCommandValidator()
     {
-        RuleFor(e => e.Arg.Password)
-           .NotEmpty()
-           .WithMessage("Password is required.")
-           .Length(4, 32)
-           .WithMessage("Password length must be between 4 and 32 characters")
-           .Must(pass => pass != null && pass.All(c => char.IsLetterOrDigit(c) || char.IsPunctuation(c)))
-           .WithMessage("Password must contain only letters, digits, and punctuation.");
+        RuleFor(x => x.Arg.Password)
+            .NotEmpty()
+            .WithMessage("Mật khẩu là bắt buộc.")
+            .Length(4, 32)
+            .WithMessage("Mật khẩu chỉ từ 4 đến 32 ký tự.")
+            .Must(pass => pass != null && pass.All(c => char.IsLetterOrDigit(c) || char.IsPunctuation(c)))
+            .WithMessage("Mật khẩu chỉ chứa chữ, số và ký tự đặc biệt.");
         RuleFor(e => e.Arg.RePassword)
            .NotEmpty()
-           .WithMessage("Re-enter Password is required.")
+            .WithMessage("Mật khẩu xác nhận là bắt buộc.")
            .Length(4, 32)
-           .WithMessage("Re-enter Password length must be between 4 and 32 characters")
+            .WithMessage("Mật khẩu xác nhận chỉ từ 4 đến 32 ký tự.")
            .Must(repass => repass != null && repass.All(c => char.IsLetterOrDigit(c) || char.IsPunctuation(c)))
-           .WithMessage("Re-enter Password must contain only letters, digits, and punctuation.");
+            .WithMessage("Mật khẩu xác nhận chỉ chứa chữ, số và ký tự đặc biệt.");
     }
 }

@@ -29,26 +29,26 @@ public class UpdateUserRoleCommandHandler
         var loginRole = Enum.Parse<UserRoles>(role);
         var checkUser = await userRepos.BuildQuery.FirstOrDefaultAsync(e => e.Id == request.Id, cancellationToken);
         if (checkUser == null)
-            return CTBaseResult.NotFound("User");
+            return CTBaseResult.NotFound("Người dùng");
 
         if (!Enum.TryParse<UserRoles>(request.UserRoles, out var userRole) || !Enum.IsDefined(typeof(UserRoles), userRole))
         {
-            return CTBaseResult.NotFound("User Role");
+            return CTBaseResult.NotFound("Quyền");
         }
 
         if (loginRole == UserRoles.ADMIN)
         {
             if (checkUser.Role == UserRoles.ADMIN)
-                return CTBaseResult.UnProcess("You do not permission to update role this user");
+                return CTBaseResult.UnProcess("Không có quyền cập nhật thành quyền này.");
 
             if (userRole == UserRoles.DEV || userRole == UserRoles.ADMIN)
-                return CTBaseResult.UnProcess("You do not permission to update this role");
+                return CTBaseResult.UnProcess("Không có quyền cập nhật thành quyền này.");
         }
 
         if (loginRole == UserRoles.DEV)
         {
             if (userRole == UserRoles.DEV)
-                return CTBaseResult.UnProcess("You do not permission to update this role");
+                return CTBaseResult.UnProcess("Không có quyền cập nhật thành quyền này.");
         }
 
 

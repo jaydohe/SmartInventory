@@ -35,14 +35,14 @@ public class UpdateProductionProcessCommandHandler(
             .Include(x => x.ProductionCommands)
             .FirstOrDefaultAsync(x => x.ProductionCommandId == request.Id && x.DeletedOn == null, cancellationToken);
         if (checkProductionCommandProcess is null)
-            return CTBaseResult.NotFound("Production Command");
+            return CTBaseResult.NotFound("Lệnh sản xuất");
 
         if (request.Arg.Percentage > 100 || request.Arg.Percentage < 0)
-            return CTBaseResult.UnProcess("Percentage must be between 0 and 100");
+            return CTBaseResult.UnProcess("Phần trăm từ 0% đến 100%");
 
         if (request.Arg.Status == ProcessProductionStatus.COMPLETED && request.Arg.Percentage <= 99.99 ||
             request.Arg.Percentage == 100 && request.Arg.Status != ProcessProductionStatus.COMPLETED)
-            return CTBaseResult.UnProcess("Status and Percentage must be completed and 100%");
+            return CTBaseResult.UnProcess("Trạng thái và phần trăm phải cùng là hoàn thành và 100%.");
 
         if (checkProductionCommandProcess.ProductionCommands != null)
         {
@@ -68,6 +68,6 @@ public class UpdateProductionProcessCommandValidator : AbstractValidator<UpdateP
     {
         RuleFor(x => x.Arg.Note)
             .MaximumLength(1024)
-            .WithMessage("Note is too long. Only up to 1024 characters.");
+            .WithMessage("Ghi chú tối đa 1024 ký tự.");
     }
 }

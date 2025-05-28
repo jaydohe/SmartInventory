@@ -40,7 +40,7 @@ public class CreateBOMCommandHandler(
         var checkProduct = await prodRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Id == request.Arg.ProductId && x.DeletedOn == null, cancellationToken);
         if (checkProduct is null)
-            return CTBaseResult.NotFound("Hàng hóa");
+            return CTBaseResult.NotFound("Mặt hàng");
         if (checkProduct.MaterialSupplierId != null)
             return CTBaseResult.UnProcess("Nguyên vật liệu không phải hàng hóa.");
 
@@ -85,9 +85,6 @@ public class CreateBOMCommandValidator : AbstractValidator<CreateBOMCommand>
         RuleFor(x => x.Arg.ProductId)
             .NotEmpty()
             .WithMessage("Hàng hóa là bắt buộc.");
-        RuleFor(x => x.Arg.BOMDetails)
-            .NotEmpty()
-            .WithMessage("Chi tiết định mức nguyên vật liệu là bắt buộc.");
         RuleForEach(x => x.Arg.BOMDetails)
             .ChildRules(bomDetail =>
             {

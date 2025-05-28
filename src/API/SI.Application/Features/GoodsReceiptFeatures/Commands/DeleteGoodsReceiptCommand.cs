@@ -28,14 +28,14 @@ public class DeleteGoodsReceiptCommandHandler(
             .ThenInclude(x => x.Employee)
             .FirstOrDefaultAsync(x => x.Id == request.Id && x.DeletedOn == null, cancellationToken);
         if (checkGoodsReceipt is null)
-            return CTBaseResult.NotFound("Goods Receipt");
+            return CTBaseResult.NotFound("Phiếu nhập hàng");
         if (checkGoodsReceipt.Status != GoodsStatus.CANCELED)
-            return CTBaseResult.UnProcess("Goods Receipt is not CANCELED, so can not delete.");
+            return CTBaseResult.UnProcess("Trạng thái của phiếu nhập hàng không phải là hủy.");
 
         if (checkGoodsReceipt.User.Employee.IsManager == false &&
             checkGoodsReceipt.Status == GoodsStatus.CANCELED &&
             checkGoodsReceipt.UserId != userId)
-            return CTBaseResult.UnProcess("Goods Receipt is not your created, so can not delete.");
+            return CTBaseResult.UnProcess("Phiếu nhập hàng không phải do bạn tạo.");
 
         var checkGoodsReceiptDetail = await goodsReceiptDetailRepos.BuildQuery
             .Where(x => x.GoodsReceiptId == checkGoodsReceipt.Id && x.DeletedOn == null)

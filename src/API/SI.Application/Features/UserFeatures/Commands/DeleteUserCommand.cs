@@ -20,7 +20,7 @@ public class DeleteUserCommandHandler(
         var checkUser = await userRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Id == request.Id && x.DeletedOn == null, cancellationToken);
         if (checkUser is null)
-            return CTBaseResult.NotFound("User");
+            return CTBaseResult.NotFound("Người dùng");
 
         checkUser.IsLogin = false;
         checkUser.DeletedOn = DateTimeOffset.UtcNow;

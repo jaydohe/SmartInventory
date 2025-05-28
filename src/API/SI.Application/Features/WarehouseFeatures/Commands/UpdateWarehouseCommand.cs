@@ -44,38 +44,38 @@ public class UpdateWarehouseCommandHandler(
             var checkAccess = await empRepos.BuildQuery
                 .FirstOrDefaultAsync(x => x.Id == employeeId && x.IsManager == true, cancellationToken);
             if (checkAccess is null)
-                return CTBaseResult.UnProcess("Just manager can access.");
+                return CTBaseResult.UnProcess("Chỉ có quản lý được truy cập.");
         }
 
         if (request.Arg.Name != null && request.Arg.Name.Trim() == "")
-            return CTBaseResult.UnProcess("Name cannot consist only of whitespace.");
+            return CTBaseResult.UnProcess("Tên kho không được chỉ bao gồm khoảng trắng.");
         if (request.Arg.Address != null && request.Arg.Address.Trim() == "")
-            return CTBaseResult.UnProcess("Address cannot consist only of whitespace.");
+            return CTBaseResult.UnProcess("Địa chỉ không được chỉ bao gồm khoảng trắng.");
 
         var checkWarehouse = await warehouseRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Id == request.Id && x.DeletedOn == null, cancellationToken);
         if (checkWarehouse is null)
-            return CTBaseResult.NotFound("Warehouse");
+            return CTBaseResult.NotFound("Kho, bãi");
         if (request.Arg.Name != null && checkWarehouse.Name == request.Arg.Name)
-            return CTBaseResult.UnProcess("Warehouse name has not been changed.");
+            return CTBaseResult.UnProcess("Tên kho không có gì thay đổi.");
         if (request.Arg.Address != null && checkWarehouse.Address == request.Arg.Address)
-            return CTBaseResult.UnProcess("Warehouse address has not been changed.");
+            return CTBaseResult.UnProcess("Địa chỉ kho không có gì thay đổi.");
         if (request.Arg.Capacity > 0 && checkWarehouse.Capacity == request.Arg.Capacity)
-            return CTBaseResult.UnProcess("Warehouse capacity has not been changed.");
+            return CTBaseResult.UnProcess("Sức chứa không có gì thay đổi.");
 
         var checkMasterWarehouse = await warehouseRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Id == request.Arg.WarehouseId && x.DeletedOn == null, cancellationToken);
         if (request.Arg.WarehouseId != null && checkMasterWarehouse is null)
-            return CTBaseResult.NotFound("Master Warehouse");
+            return CTBaseResult.NotFound("Kho cha");
 
         var checkExisted = await warehouseRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Name == request.Arg.Name && x.DeletedOn == null, cancellationToken);
         if (checkExisted != null && checkExisted.CategoryId == request.Arg.CategoryId)
         {
             if (checkExisted.ManagerId == request.Arg.ManagerId)
-                return CTBaseResult.UnProcess("The manager is already managing another warehouse.");
+                return CTBaseResult.UnProcess("Đang quản lý tại kho, bãi khác.");
 
-            return CTBaseResult.UnProcess("Warehouse already exists.");
+            return CTBaseResult.UnProcess("Kho đã tồn tại.");
         }
 
         if (request.Arg.CategoryId != null)
@@ -83,9 +83,9 @@ public class UpdateWarehouseCommandHandler(
             var checkCate = await cateRepos.BuildQuery
                 .FirstOrDefaultAsync(x => x.Id == request.Arg.CategoryId && x.DeletedOn == null, cancellationToken);
             if (checkCate is null)
-                return CTBaseResult.NotFound("Category");
+                return CTBaseResult.NotFound("Danh mục kho");
             if (checkCate?.CategoryEntityType != CategoryEntityTypes.WAREHOUSE)
-                return CTBaseResult.UnProcess("Category is not warehouse type.");
+                return CTBaseResult.UnProcess("Bắt buộc là danh mục kho.");
         }
 
         if (request.Arg.ManagerId != null)
@@ -93,11 +93,11 @@ public class UpdateWarehouseCommandHandler(
             var checkManager = await empRepos.BuildQuery
                 .FirstOrDefaultAsync(x => x.Id == request.Arg.ManagerId && x.DeletedOn == null, cancellationToken);
             if (checkManager is null)
-                return CTBaseResult.NotFound("Employee");
+                return CTBaseResult.NotFound("Nhân viên");
             if (checkManager?.IsManager != true)
-                return CTBaseResult.UnProcess("Only managers can manage the warehouse.");
+                return CTBaseResult.UnProcess("Chỉ có quản lý mới được quản lý kho.");
             if (checkManager?.WarehouseId != null && checkManager?.WarehouseId != checkWarehouse.Id)
-                return CTBaseResult.UnProcess("Manager had in another warehouse.");
+                return CTBaseResult.UnProcess("Đang quản lý tại kho, bãi khác.");
             if (checkManager?.WarehouseId is null)
             {
                 checkManager.WarehouseId = request.Arg.WarehouseId;
@@ -131,12 +131,12 @@ public class UpdateWarehouseCommandValidator : AbstractValidator<UpdateWarehouse
     {
         RuleFor(x => x.Arg.Name)
             .MaximumLength(1024)
-            .WithMessage("Name is too long. Only up to 1024 characters.");
+            .WithMessage("Tên kho tối đa 1024 ký tự.");
         RuleFor(x => x.Arg.Address)
             .MaximumLength(1024)
-            .WithMessage("Address is too long. Only up to 1024 characters.");
+            .WithMessage("Địa chỉ tối đa 1024 ký tự.");
         RuleFor(x => x.Arg.Capacity)
             .GreaterThan(0)
-            .WithMessage("Capacity must be greater than 0.");
+            .WithMessage("Sức chứa phải lớn hơn 0.");
     }
 }
