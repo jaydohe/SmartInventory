@@ -21,22 +21,22 @@ public class SmartEndpoint : IEndpoint
             .RequireAuthorization(APIPolicies.STAFFFULL);
 
         smartGR.MapGet("/get-all-demand", GetAllDemandForecastAsync);
-        smartGR.MapGet("/get-demand-by-id/{prodId}/{wareId}", GetDemandForecastAsync);
+        smartGR.MapGet("/get-demand-by-period/{wareId}/{from}/{to}", GetDemandForecastAsync);
         smartGR.MapGet("/get-all-optimize", GetAllInventoryOptimizationAsync);
-        smartGR.MapGet("/get-optimize-by-id/{prodId}/{wareId}", GetInventoryOptimizationAsync);
+        smartGR.MapGet("/get-optimize-by-ware/{wareId}", GetInventoryOptimizationAsync);
 
         return endpoints;
     }
 
     // private method
     private async Task<IResult> GetAllDemandForecastAsync(
-        [FromServices] IMediator mediator)
-        => (await mediator.Send(new GetAllDemandForecastQuery()))
+        [FromServices] IMediator mediator, BaseAPIPageRequest request)
+        => (await mediator.Send(new GetAllDemandForecastQuery(request.ToQueryContext())))
             .ToOk(e => Results.Ok(e));
 
     private async Task<IResult> GetDemandForecastAsync(
-        [FromServices] IMediator mediator, string prodId, string wareId)
-            => (await mediator.Send(new GetDemandForecastQuery(prodId, wareId)))
+        [FromServices] IMediator mediator, string wareId, string from, string to)
+            => (await mediator.Send(new GetDemandForecastQuery(wareId, from, to)))
                 .ToOk(e => Results.Ok(e));
 
     private async Task<IResult> GetAllInventoryOptimizationAsync(
@@ -45,7 +45,7 @@ public class SmartEndpoint : IEndpoint
             .ToOk(e => Results.Ok(e));
 
     private async Task<IResult> GetInventoryOptimizationAsync(
-        [FromServices] IMediator mediator, string prodId, string wareId)
-            => (await mediator.Send(new GetInventoryOptimizationQuery(prodId, wareId)))
+        [FromServices] IMediator mediator, string wareId)
+            => (await mediator.Send(new GetInventoryOptimizationQuery(wareId)))
                 .ToOk(e => Results.Ok(e));
 }
