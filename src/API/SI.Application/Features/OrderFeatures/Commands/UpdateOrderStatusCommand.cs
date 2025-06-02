@@ -23,20 +23,20 @@ public class UpdateOrderStatusCommandHandler(
         var checkOrder = await orderRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Id == request.Id && x.DeletedOn == null, cancellationToken);
         if (checkOrder is null)
-            return CTBaseResult.NotFound("Order");
-        if (checkOrder.OrderStatus == request.Arg.Status)
-            return CTBaseResult.UnProcess("Order status is same");
+            return CTBaseResult.NotFound("Đơn hàng");
+        if (checkOrder.OrderStatus == request.Arg.OrderStatus)
+            return CTBaseResult.UnProcess("Trạng thái của đơn hàng không thay đổi.");
 
-        if (request.Arg.Status == OrderStatus.NEW)
-            return CTBaseResult.UnProcess("Can not update Order status is new.");
+        if (request.Arg.OrderStatus == OrderStatus.NEW)
+            return CTBaseResult.UnProcess("Trạng thái của đơn hàng không được cập nhật thành mới tạo.");
 
         if (checkOrder.OrderStatus == OrderStatus.CANCELED)
-            return CTBaseResult.UnProcess("Order has been canceled.");
+            return CTBaseResult.UnProcess("Đơn hàng đã hủy.");
 
         if (checkOrder.OrderStatus == OrderStatus.DELIVERED)
-            return CTBaseResult.UnProcess("Order has been delivered.");
+            return CTBaseResult.UnProcess("Đơn hàng đã được giao.");
 
-        checkOrder.OrderStatus = request.Arg.Status;
+        checkOrder.OrderStatus = request.Arg.OrderStatus ?? checkOrder.OrderStatus;
 
         var ret = await unitOfWork.SaveChangeAsync(cancellationToken);
         if (ret <= 0)

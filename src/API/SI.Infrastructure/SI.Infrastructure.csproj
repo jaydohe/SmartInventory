@@ -26,6 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Integrations\OpenXML\Types\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
 	

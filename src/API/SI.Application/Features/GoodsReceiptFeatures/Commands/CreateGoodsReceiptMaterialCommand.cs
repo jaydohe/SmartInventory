@@ -44,7 +44,7 @@ public class CreateGoodsReceiptMaterialCommandHandler(
         var checkMaterialSupplier = await materialSupplierRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Id == request.Arg.MaterialSupplierId && x.DeletedOn == null, cancellationToken);
         if (checkMaterialSupplier is null)
-            return CTBaseResult.NotFound("Material Supplier");
+            return CTBaseResult.NotFound("Nhà cung cấp NVL");
 
         // Calculate total amount
         decimal totalAmount = 0;
@@ -53,7 +53,7 @@ public class CreateGoodsReceiptMaterialCommandHandler(
             var product = await productRepos.BuildQuery
                 .FirstOrDefaultAsync(x => x.Id == item.ProductId && x.DeletedOn == null, cancellationToken);
             if (product is null)
-                return CTBaseResult.NotFound("Product");
+                return CTBaseResult.NotFound("Nguyên vật liệu");
 
             totalAmount += item.QuantityReceived * product.PurchasePrice;
         }
@@ -75,10 +75,10 @@ public class CreateGoodsReceiptMaterialCommandHandler(
         // Create Goods Receipt Details
         foreach (var item in request.Arg.Details)
         {
-            var product = await productRepos.BuildQuery
-                .FirstOrDefaultAsync(x => x.Id == item.ProductId && x.DeletedOn == null, cancellationToken);
-            if (product is null)
-                return CTBaseResult.NotFound("Product");
+            var material = await productRepos.BuildQuery
+                .FirstOrDefaultAsync(x => x.Id == item.ProductId && x.MaterialSupplierId == null && x.DeletedOn == null, cancellationToken);
+            if (material is null)
+                return CTBaseResult.NotFound("Nguyên vật liệu");
 
             var goodsReceiptDetail = new GoodsReceiptDetail
             {
@@ -86,7 +86,7 @@ public class CreateGoodsReceiptMaterialCommandHandler(
                 ProductId = item.ProductId,
                 QuantityOrdered = item.QuantityReceived,
                 QuantityReceived = item.QuantityReceived,
-                TotalPrice = item.QuantityReceived * product.PurchasePrice
+                TotalPrice = item.QuantityReceived * material.PurchasePrice
             };
             goodsReceiptDetailRepos.Add(goodsReceiptDetail);
 
@@ -125,24 +125,26 @@ public class CreateGoodsReceiptMaterialCommandValidator : AbstractValidator<Crea
     {
         RuleFor(x => x.Arg.MaterialSupplierId)
             .NotEmpty()
-            .WithMessage("MaterialSupplierId is required.");
+            .WithMessage("Id của nhà cung cấp NVL là bắt buộc.");
         RuleFor(x => x.Arg.ShipperName)
             .NotEmpty()
-            .WithMessage("ShipperName is required");
-        RuleFor(x => x.Arg.Details)
-            .NotEmpty()
-            .WithMessage("Details is required");
+            .WithMessage("Tên tài xế giao hàng là bắt buộc.").
+            MaximumLength(512)
+            .WithMessage("Tên tài xế tối đa 512 ký tự.");
+        RuleFor(x => x.Arg.Note)
+            .MaximumLength(1024)
+            .WithMessage("Ghi chú tối đa 1024 ký tự.");
         RuleForEach(x => x.Arg.Details)
             .ChildRules(details =>
             {
                 details.RuleFor(x => x.ProductId)
                     .NotEmpty()
-                    .WithMessage("ProductId is required.");
+                    .WithMessage("Id của mặt hàng là bắt buộc.");
                 details.RuleFor(x => x.QuantityReceived)
                     .NotEmpty()
-                    .WithMessage("Quantity received is required.")
+                    .WithMessage("Số lượng nhận là bắt buộc.")
                     .GreaterThanOrEqualTo(0)
-                    .WithMessage("Quantity received must be greater than or equal to 0.");
+                    .WithMessage("Số lượng nhận phải lớn hơn hoặc bằng 0.");
             });
     }
 }

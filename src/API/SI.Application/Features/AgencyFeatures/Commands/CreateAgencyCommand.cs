@@ -4,7 +4,9 @@ using CTCore.DynamicQuery.Core.Primitives;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Hybrid;
 using SI.Contract.AgencyContract;
+using SI.Domain.Common.Authenticate;
 using SI.Domain.Common.Utils;
 using SI.Domain.Entities;
 
@@ -22,7 +24,8 @@ public class CreateAgencyCommand(CreateAgencyArg arg) : ICommand<OkResponse>
 
 public class CreateAgencyCommandHandler(
     IUnitOfWork unitOfWork,
-    IRepository<Agency> agencyRepos) : ICommandHandler<CreateAgencyCommand, OkResponse>
+    IRepository<Agency> agencyRepos,
+    IUserIdentifierProvider identifierProvider) : ICommandHandler<CreateAgencyCommand, OkResponse>
 {
     public async Task<CTBaseResult<OkResponse>> Handle(CreateAgencyCommand request, CancellationToken cancellationToken)
     {
@@ -33,12 +36,12 @@ public class CreateAgencyCommandHandler(
         var checkExist = await agencyRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Name == request.Arg.Name && x.DeletedOn == null, cancellationToken);
         if (checkExist != null)
-            return CTBaseResult.UnProcess("Agency name already exists.");
+            return CTBaseResult.UnProcess("Đại lý đã tồn tại.");
 
         var checkAgency = await agencyRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.TaxCode == request.Arg.TaxCode && x.DeletedOn == null, cancellationToken);
         if (checkAgency != null)
-            return CTBaseResult.UnProcess("Agency tax code already exists.");
+            return CTBaseResult.UnProcess("Mã số thuế của đại lý đã tồn tại.");
 
         var newAgency = new Agency
         {
@@ -54,6 +57,8 @@ public class CreateAgencyCommandHandler(
         };
         agencyRepos.Add(newAgency);
 
+        newAgency.ActivityCreateAgency(identifierProvider.Name, identifierProvider.Role, identifierProvider.WarehouseId);
+
         var ret = await unitOfWork.SaveChangeAsync(cancellationToken);
         if (ret <= 0)
             return CTBaseResult.UnProcess(new DbUpdateException("err " + ret.ToString()));
@@ -68,34 +73,34 @@ public class CreateAgencyCommandValidator : AbstractValidator<CreateAgencyComman
     {
         RuleFor(x => x.Arg.Name)
             .NotEmpty()
-            .WithMessage("Name is required.")
+            .WithMessage("Tên là bắt buộc.")
             .MaximumLength(1024)
-            .WithMessage("Name is too long. Only up to 1024 characters.");
+            .WithMessage("Tên tối đa 1024 ký tự.");
         RuleFor(x => x.Arg.Representative)
             .NotEmpty()
-            .WithMessage("Representative is required.")
+            .WithMessage("Người đại diện là bắt buộc.")
             .MaximumLength(512)
-            .WithMessage("Representative is too long. Only up to 512 characters.");
+            .WithMessage("Người đại diện tối đa 512 ký tự.");
         RuleFor(x => x.Arg.TaxCode)
             .MaximumLength(100)
-            .WithMessage("TaxCode is too long. Only up to 100 characters.");
+            .WithMessage("Mã số thuế tối đa 100 ký tự.");
         RuleFor(x => x.Arg.PhoneNumber)
             .NotEmpty()
-            .WithMessage("PhoneNumber is required.")
+            .WithMessage("Số điện thoại là bắt buộc.")
             .MaximumLength(20)
-            .WithMessage("PhoneNumber is too long. Only up to 20 characters.");
+            .WithMessage("Số điện thoại tối đa 20 ký tự.");
         RuleFor(x => x.Arg.Email)
             .NotEmpty()
-            .WithMessage("Email is required.")
+            .WithMessage("Email là bắt buộc.")
             .MaximumLength(512)
-            .WithMessage("Email is too long. Only up to 512 characters.");
+            .WithMessage("Email tối đa 512 ký tự.");
         RuleFor(x => x.Arg.Address)
             .NotEmpty()
-            .WithMessage("Address is required.")
+            .WithMessage("Địa chỉ là bắt buộc.")
             .MaximumLength(1024)
-            .WithMessage("Address is too long. Only up to 1024 characters.");
+            .WithMessage("Địa chỉ tối đa 1024 ký tự.");
         RuleFor(x => x.Arg.Note)
             .MaximumLength(1024)
-            .WithMessage("Note is too long. Only up to 1024 characters.");
+            .WithMessage("Ghi chú tối đa 1024 ký tự.");
     }
 }

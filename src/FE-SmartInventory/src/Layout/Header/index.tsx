@@ -153,7 +153,7 @@ const Admin: MenuItem[] = [
     icon: <MdFactory />,
     children: [
       {
-        label: <span className="">Hàng hóa</span>,
+        label: <span className="">Sản phẩm</span>,
         key: 'product',
         icon: <FaBox />,
       },
@@ -251,7 +251,7 @@ const Warehouse_staff: MenuItem[] = [
     icon: <MdFactory />,
     children: [
       {
-        label: <span className="">Hàng hóa</span>,
+        label: <span className="">Sản phẩm</span>,
         key: 'product',
         icon: <FaBox />,
       },
@@ -297,7 +297,7 @@ const Warehouse_producer: MenuItem[] = [
     icon: <MdFactory />,
     children: [
       {
-        label: <span className="">Hàng hóa</span>,
+        label: <span className="">Sản phẩm</span>,
         key: 'product',
         icon: <FaBox />,
       },
@@ -345,7 +345,7 @@ const Salesman: MenuItem[] = [
     icon: <MdFactory />,
     children: [
       {
-        label: <span className="">Hàng hóa</span>,
+        label: <span className="">Sản phẩm</span>,
         key: 'product',
         icon: <FaBox />,
       },

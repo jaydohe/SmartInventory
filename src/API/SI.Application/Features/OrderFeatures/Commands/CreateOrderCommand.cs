@@ -9,6 +9,7 @@ using SI.Domain.Common.Authenticate;
 using SI.Domain.Common.Utils;
 using SI.Domain.Entities;
 using SI.Domain.Entities.Orders;
+using SI.Domain.Enums;
 
 namespace SI.Application.Features.OrderFeatures.Commands;
 
@@ -37,11 +38,12 @@ public class CreateOrderCommandHandler(
             return CTBaseResult.BadRequest(checkValid.Errors);
 
         var userId = identifierProvider.UserId;
+        var warehouseId = identifierProvider.WarehouseId;
 
         var checkAgency = await agencyRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Id == request.Arg.AgencyId && x.DeletedOn == null, cancellationToken);
         if (checkAgency is null)
-            return CTBaseResult.NotFound("Agency");
+            return CTBaseResult.NotFound("Đại lý");
 
         // Calculate subtotal by fetching unit prices for each product
         decimal subTotal = 0;
@@ -50,7 +52,7 @@ public class CreateOrderCommandHandler(
             var product = await prodRepos.BuildQuery
                 .FirstOrDefaultAsync(x => x.Id == item.ProductId && x.DeletedOn == null, cancellationToken);
             if (product is null)
-                return CTBaseResult.NotFound("Product");
+                return CTBaseResult.NotFound("Mặt hàng");
 
             subTotal += item.Quantity * product.SellingPrice;
         }
@@ -73,6 +75,7 @@ public class CreateOrderCommandHandler(
 
         var newOrder = new Order
         {
+            WarehouseId = warehouseId is "null" ? warehouseId : request.Arg.WarehouseId,
             Code = CodeGenerationUtils.GenerateCodeFromName(checkAgency.Name),
             UserId = userId,
             AgencyId = request.Arg.AgencyId,
@@ -88,7 +91,7 @@ public class CreateOrderCommandHandler(
             var checkProduct = await prodRepos.BuildQuery
                 .FirstOrDefaultAsync(x => x.Id == item.ProductId && x.DeletedOn == null, cancellationToken);
             if (checkProduct is null)
-                return CTBaseResult.NotFound("Product");
+                return CTBaseResult.NotFound("Mặt hàng");
 
             var orderDetail = new OrderDetail
             {
@@ -114,16 +117,18 @@ public class CreateOrderCommandValidator : AbstractValidator<CreateOrderCommand>
     {
         RuleFor(x => x.Arg.AgencyId)
             .NotEmpty()
-            .WithMessage("AgencyId is required.");
-        RuleFor(x => x.Arg.OrderDetails)
-            .NotEmpty()
-            .WithMessage("OrderDetails is required.");
+            .WithMessage("Id của đại lý là bắt buộc.");
         RuleForEach(x => x.Arg.OrderDetails)
-            .NotEmpty()
-            .WithMessage("OrderDetail is required.")
-            .Must(x => !string.IsNullOrWhiteSpace(x.ProductId))
-            .WithMessage("ProductId is required.")
-            .Must(x => x.Quantity > 0)
-            .WithMessage("Quantity must be greater than 0.");
+            .ChildRules(details =>
+            {
+                details.RuleFor(x => x.ProductId)
+                    .NotEmpty()
+                    .WithMessage("Id của mặt hàng là bắt buộc.");
+                details.RuleFor(x => x.Quantity)
+                    .NotEmpty()
+                    .WithMessage("Số lượng là bắt buộc.")
+                    .GreaterThan(0)
+                    .WithMessage("Số lượng phải lớn hơn 0.");
+            });
     }
 }

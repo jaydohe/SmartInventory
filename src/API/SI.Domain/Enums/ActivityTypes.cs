@@ -2,6 +2,7 @@ namespace SI.Domain.Enums;
 
 public readonly struct ActivityEntityTypes
 {
+    public const string AGENCY = "AGENCY";
     public const string USER = "USER";
 }
 

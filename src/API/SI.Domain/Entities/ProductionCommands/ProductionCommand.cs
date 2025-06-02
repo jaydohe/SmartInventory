@@ -2,10 +2,8 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SI.Domain.Common.Abstractions;
 using SI.Domain.Common.Primitives;
-using SI.Domain.Common.Utils;
 using SI.Domain.Entities.Orders;
 using SI.Domain.Enums;
-using SI.Domain.Events;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 

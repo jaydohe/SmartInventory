@@ -47,7 +47,7 @@ public class RefreshTokenCommandHandler(
             return CTBaseResult.UnProcess("Invalid access token.");
 
         if (getRefresh.ExpiredAt <= DateTimeOffset.UtcNow)
-            return CTBaseResult.UnProcess("Your session has time out. Please log-in again.");
+            return CTBaseResult.UnProcess("Phiên đăng nhập đã hết hạn. Hãy đăng nhập lại.");
 
         var ipAddress = httpContext?.HttpContext?.Connection.RemoteIpAddress?.MapToIPv4().ToString();
         var userAgent = httpContext?.HttpContext?.Request.Headers["User-Agent"].ToString();

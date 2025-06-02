@@ -37,7 +37,7 @@ public class UpdateInventoryCommandHandler(
         var checkInventory = await inventoryRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.ProductId == request.ProductId && x.WarehouseId == warehouseId && x.DeletedOn == null, cancellationToken);
         if (checkInventory is null)
-            return CTBaseResult.NotFound("Product");
+            return CTBaseResult.NotFound("Hàng hóa");
 
         checkInventory.Quantity = request.Arg.Quantity;
         
@@ -55,6 +55,6 @@ public class UpdateInventoryCommandValidator : AbstractValidator<UpdateInventory
     {
         RuleFor(x => x.Arg.Quantity)
             .GreaterThanOrEqualTo(0)
-            .WithMessage("Quantity must be greater than or equal to 0.");
+            .WithMessage("Số lượng phải lớn hơn hoặc bằng 0.");
     }
 }

@@ -46,12 +46,12 @@ public class CreateGoodsReceiptOrderCommandHandler(
         var checkOrder = await orderRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Id == request.Arg.OrderId && x.DeletedOn == null, cancellationToken);
         if (checkOrder is null)
-            return CTBaseResult.NotFound("Order");
+            return CTBaseResult.NotFound("Đơn hàng");
 
         var checkOrderDetail = await orderDetailRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.OrderId == request.Arg.OrderId && x.DeletedOn == null, cancellationToken);
         if (checkOrderDetail is null)
-            return CTBaseResult.NotFound("Order Detail");
+            return CTBaseResult.NotFound("Chi tiết của đơn đặt hàng");
 
         // Calculate total amount
         decimal subTotal = 0;
@@ -60,7 +60,7 @@ public class CreateGoodsReceiptOrderCommandHandler(
             var product = await productRepos.BuildQuery
                 .FirstOrDefaultAsync(x => x.Id == checkOrderDetail.ProductId && x.DeletedOn == null, cancellationToken);
             if (product is null)
-                return CTBaseResult.NotFound("Product");
+                return CTBaseResult.NotFound("Mặt hàng");
 
             subTotal += item.QuantityReceived * checkOrderDetail.UnitPrice;
         }
@@ -101,8 +101,8 @@ public class CreateGoodsReceiptOrderCommandHandler(
             var goodsReceiptDetail = new GoodsReceiptDetail
             {
                 GoodsReceiptId = goodsReceipt.Id,
-                ProductId = checkOrderDetail.ProductId,
-                QuantityOrdered = checkOrderDetail.Quantity,
+                ProductId = item.ProductId ?? checkOrderDetail.ProductId,
+                QuantityOrdered = item.QuantityOrdered > 0 ? item.QuantityOrdered : checkOrderDetail.Quantity,
                 QuantityReceived = item.QuantityReceived,
                 TotalPrice = item.QuantityReceived * checkOrderDetail.UnitPrice
             };
@@ -144,26 +144,26 @@ public class CreateGoodsReceiptOrderCommandValidator : AbstractValidator<CreateG
     {
         RuleFor(x => x.Arg.OrderId)
             .NotEmpty()
-            .WithMessage("OrderId is required");
+            .WithMessage("id của đơn hàng là bắt buộc.");
         RuleFor(x => x.Arg.ShipperName)
             .NotEmpty()
-            .WithMessage("ShipperName is required")
+            .WithMessage("Tên tài xế giao hàng là bắt buộc.")
             .MaximumLength(512)
-            .WithMessage("ShipperName must be less than 512 characters");
+            .WithMessage("Tên tài xế tối đa 512 ký tự.");
         RuleFor(x => x.Arg.Note)
             .MaximumLength(1024)
-            .WithMessage("Note must be less than 1024 characters");
-        RuleFor(x => x.Arg.Details)
-            .NotEmpty()
-            .WithMessage("Details is required");
+            .WithMessage("Ghi chú tối đa 1024 ký tự.");
         RuleForEach(x => x.Arg.Details)
             .ChildRules(details =>
             {
+                details.RuleFor(x => x.ProductId)
+                    .NotEmpty()
+                    .WithMessage("Id của mặt hàng là bắt buộc.");
                 details.RuleFor(x => x.QuantityReceived)
                     .NotEmpty()
-                    .WithMessage("Quantity received is required.")
+                    .WithMessage("Số lượng nhận là bắt buộc.")
                     .GreaterThanOrEqualTo(0)
-                    .WithMessage("Quantity received must be greater than or equal to 0.");
+                    .WithMessage("Số lượng nhận phải lớn hơn hoặc bằng 0.");
             });
     }
 }

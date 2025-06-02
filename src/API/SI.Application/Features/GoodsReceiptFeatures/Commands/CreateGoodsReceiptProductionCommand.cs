@@ -46,12 +46,12 @@ public class CreateGoodsReceiptCommandHandler(
         var checkProductionCommand = await productionCommandRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Id == request.Arg.ProductionCommandId && x.DeletedOn == null, cancellationToken);
         if (checkProductionCommand is null)
-            return CTBaseResult.NotFound("Production Command");
+            return CTBaseResult.NotFound("Lệnh sản xuất");
 
         var checkProductionCommandDetail = await productionCommandDetailRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.ProductionCommandId == request.Arg.ProductionCommandId && x.DeletedOn == null, cancellationToken);
         if (checkProductionCommandDetail is null)
-            return CTBaseResult.NotFound("Production Command Detail");
+            return CTBaseResult.NotFound("Chi tiết của lệnh sản xuất");
 
         // Calculate total amount
         decimal totalAmount = 0;
@@ -60,7 +60,7 @@ public class CreateGoodsReceiptCommandHandler(
             var product = await productRepos.BuildQuery
                 .FirstOrDefaultAsync(x => x.Id == checkProductionCommandDetail.ProductId && x.DeletedOn == null, cancellationToken);
             if (product is null)
-                return CTBaseResult.NotFound("Product");
+                return CTBaseResult.NotFound("Mặt hàng");
 
             totalAmount += item.QuantityReceived * checkProductionCommandDetail.Price;
         }
@@ -84,8 +84,8 @@ public class CreateGoodsReceiptCommandHandler(
             var goodsReceiptDetail = new GoodsReceiptDetail
             {
                 GoodsReceiptId = goodsReceipt.Id,
-                ProductId = checkProductionCommandDetail.ProductId,
-                QuantityOrdered = checkProductionCommandDetail.Quantity,
+                ProductId = item.ProductId ?? checkProductionCommandDetail.ProductId,
+                QuantityOrdered = item.QuantityOrdered > 0 ? item.QuantityOrdered : checkProductionCommandDetail.Quantity,
                 QuantityReceived = item.QuantityReceived,
                 TotalPrice = item.QuantityReceived * checkProductionCommandDetail.Price
             };
@@ -124,25 +124,28 @@ public class CreateGoodsReceiptCommandValidator : AbstractValidator<CreateGoodsR
 {
     public CreateGoodsReceiptCommandValidator()
     {
+        RuleFor(x => x.Arg.ProductionCommandId)
+            .NotEmpty()
+            .WithMessage("Id của lệnh sản xuất là bắt buộc.");
         RuleFor(x => x.Arg.ShipperName)
             .NotEmpty()
-            .WithMessage("Shipper name is required.")
-            .MaximumLength(512)
-            .WithMessage("Shipper name is too long. Only up to 512 characters.");
+            .WithMessage("Tên tài xế giao hàng là bắt buộc.").
+            MaximumLength(512)
+            .WithMessage("Tên tài xế tối đa 512 ký tự.");
         RuleFor(x => x.Arg.Note)
             .MaximumLength(1024)
-            .WithMessage("Note is too long. Only up to 1024 characters.");
-        RuleFor(x => x.Arg.Details)
-            .NotEmpty()
-            .WithMessage("Details are required.");
+            .WithMessage("Ghi chú tối đa 1024 ký tự.");
         RuleForEach(x => x.Arg.Details)
             .ChildRules(details =>
             {
+                details.RuleFor(x => x.ProductId)
+                    .NotEmpty()
+                    .WithMessage("Id của mặt hàng là bắt buộc.");
                 details.RuleFor(x => x.QuantityReceived)
                     .NotEmpty()
-                    .WithMessage("Quantity received is required.")
+                    .WithMessage("Số lượng nhận là bắt buộc.")
                     .GreaterThanOrEqualTo(0)
-                    .WithMessage("Quantity received must be greater than or equal to 0.");
+                    .WithMessage("Số lượng nhận phải lớn hơn hoặc bằng 0.");
             });
     }
 }

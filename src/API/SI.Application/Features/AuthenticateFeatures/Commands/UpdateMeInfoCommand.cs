@@ -38,17 +38,17 @@ public class UpdateMeInfoCommandHandler(
         var checkUser = await userRepos.BuildQuery
             .FirstOrDefaultAsync(e => e.Id == userId, cancellationToken);
         if (checkUser is null)
-            return CTBaseResult.NotFound("User");
+            return CTBaseResult.NotFound("Người dùng");
 
         var checkLoginName = await userRepos.BuildQuery
             .FirstOrDefaultAsync(e => e.LoginName == request.Arg.LoginName, cancellationToken);
         if (checkLoginName != null && checkLoginName.LoginName != request?.Arg.LoginName)
-            return CTBaseResult.UnProcess("Login name has existed.");
+            return CTBaseResult.UnProcess("Tên đăng nhập đã tồn tại.");
 
         var checkEmployee = await employeeRepos.BuildQuery
             .FirstOrDefaultAsync(e => e.Id == checkUser.EmployeeId, cancellationToken);
         if (checkEmployee is null)
-            return CTBaseResult.NotFound("Employee");
+            return CTBaseResult.NotFound("Nhân viên");
 
         checkUser.LoginName = request?.Arg.LoginName ?? checkUser.LoginName;
         checkUser.ModifiedOn = DateTimeOffset.UtcNow;
@@ -71,14 +71,14 @@ public class UpdateAccountInForCommandValidator : AbstractValidator<UpdateMeInfo
     {
         RuleFor(e => e.Arg.LoginName)
             .MaximumLength(512)
-            .WithMessage("Login name maximum 512 characters.")
+            .WithMessage("Tên đăng nhập tối đa 512 ký tự.")
             .Must(LoginName => LoginName == null || LoginName.All(c => char.IsLetterOrDigit(c) || c == '-' || c == '_'))
-            .WithMessage("Login name can only contain letters, digits, dashes and underscores.");
+            .WithMessage("Tên đăng nhập chứa chữ cái, số và ký tự gạch ngang.");
         RuleFor(e => e.Arg.PhoneNumber)
             .MaximumLength(20)
-            .WithMessage("Phone number maximum 20 characters.");
+            .WithMessage("Số điện thoại tối đa 20 ký tự.");
         RuleFor(e => e.Arg.Email)
             .MaximumLength(512)
-            .WithMessage("Email maximum 512 characters.");
+            .WithMessage("Email tối đa 512 ký tự.");
     }
 }

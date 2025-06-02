@@ -35,22 +35,22 @@ public class CreateEmployeeCommandHandler(
         if (request.Arg.Gender != GenderTypes.FEMALE &&
             request.Arg.Gender != GenderTypes.MALE &&
             request.Arg.Gender != GenderTypes.OTHER)
-            return CTBaseResult.NotFound("Gender Type");
+            return CTBaseResult.NotFound("Loại giới tính");
 
         var checkExisted = await employeeRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Name == request.Arg.Name && x.PhoneNumber == request.Arg.PhoneNumber && x.DeletedOn == null, cancellationToken);
         if (checkExisted != null)
-            return CTBaseResult.UnProcess("Employee is existed.");
+            return CTBaseResult.UnProcess("Nhân viên đã tồn tại.");
 
         var checkDepartment = await departmentRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Id == request.Arg.DepartmentId && x.DeletedOn == null, cancellationToken);
         if (checkDepartment is null)
-            return CTBaseResult.NotFound("Department");
+            return CTBaseResult.NotFound("Phòng ban");
 
         var checkPosition = await positionRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Id == request.Arg.PositionId && x.DeletedOn == null, cancellationToken);
         if (checkPosition is null)
-            return CTBaseResult.NotFound("Position");
+            return CTBaseResult.NotFound("Chức vụ");
 
         var newEmp = new Employee
         {
@@ -81,28 +81,28 @@ public class CreateEmployeeCommandValidator : AbstractValidator<CreateEmployeeCo
     {
         RuleFor(x => x.Arg.Code)
             .NotEmpty()
-            .WithMessage("Code is required.")
+            .WithMessage("Mã số là bắt buộc.")
             .MaximumLength(100)
-            .WithMessage("Code is too long. Only up to 100 characters.");
+            .WithMessage("Mã số tối đa 100 ký tự.");
         RuleFor(x => x.Arg.Name)
             .NotEmpty()
-            .WithMessage("Name is required.")
+            .WithMessage("Tên nhân viên là bắt buộc.")
             .MaximumLength(1024)
-            .WithMessage("Name is too long. Only up to 1024 characters.");
+            .WithMessage("Tên nhân viên tối đa 1024 ký tự.");
         RuleFor(x => x.Arg.PhoneNumber)
             .NotEmpty()
-            .WithMessage("Phone Number is required.")
+            .WithMessage("Số điện thoại là bắt buộc.")
             .MaximumLength(20)
-            .WithMessage("Phone Number is too long. Only up to 20 characters.");
+            .WithMessage("Số điện thoại tối đa 20 ký tự.");
         RuleFor(x => x.Arg.Email)
             .NotEmpty()
-            .WithMessage("Email is required.")
+            .WithMessage("Email là bắt buộc.")
             .MaximumLength(512)
-            .WithMessage("Email is too long. Only up to 512 characters.");
+            .WithMessage("Email tối đa 512 ký tự.");
         RuleFor(x => x.Arg.Address)
             .NotEmpty()
-            .WithMessage("Address is required.")
+            .WithMessage("Địa chỉ là bắt buộc.")
             .MaximumLength(1024)
-            .WithMessage("Address is too long. Only up to 1024 characters.");
+            .WithMessage("Địa chỉ tối đa 1024 ký tự.");
     }
 }

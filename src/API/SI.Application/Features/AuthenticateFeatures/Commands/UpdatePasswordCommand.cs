@@ -40,17 +40,17 @@ public class UpdatePasswordCommandHandler(
         var checkUser = await userRepos.BuildQuery
             .FirstOrDefaultAsync(e => e.Id == userId, cancellationToken);
         if (checkUser is null)
-            return CTBaseResult.NotFound("User");
+            return CTBaseResult.NotFound("Người dùng");
 
         var hashPassword = request.Arg.OldPassword.ToSHA256(iconfiguration["Salt"]!);
         if (hashPassword != checkUser.HashPassword)
-            return CTBaseResult.UnProcess("Wrong password.");
+            return CTBaseResult.UnProcess("Sai mật khẩu.");
         if (request.Arg.NewPassword != request.Arg.ConfirmPassword)
-            return CTBaseResult.UnProcess("Confirm password does not match.");
+            return CTBaseResult.UnProcess("Xác nhận mật khẩu không khớp.");
 
         var hashNewPassword = request.Arg.NewPassword.ToSHA256(iconfiguration["Salt"]!);
         if (hashNewPassword == hashPassword)
-            return CTBaseResult.UnProcess("New password must be different from old password.");
+            return CTBaseResult.UnProcess("Mật khẩu mới phải khác mật khẩu cũ.");
 
         checkUser.HashPassword = hashNewPassword;
         checkUser.ModifiedOn = DateTimeOffset.UtcNow;
@@ -69,25 +69,24 @@ public class UpdatePasswordCommandValidator : AbstractValidator<UpdatePasswordCo
     {
         RuleFor(e => e.Arg.OldPassword)
             .NotEmpty()
-            .WithMessage("Password is required.")
+            .WithMessage("Mật khẩu là bắt buộc.")
             .Length(4, 32)
-            .WithMessage("Password length must be between 4 and 32 characters.")
+            .WithMessage("Mật khẩu ít nhất 4 ký tự và tối đa 32 ký tự.")
             .Must(pass => pass != null && pass.All(c => char.IsLetterOrDigit(c) || char.IsPunctuation(c)))
-            .WithMessage("Password must contain only letters, digits, and punctuation.");
+            .WithMessage("Mật khẩu chứa chữ cái, số và ký tự đặc biệt.");
         RuleFor(e => e.Arg.NewPassword)
             .NotEmpty()
-            .WithMessage("New Password is required.")
+            .WithMessage("Mật khẩu mới là bắt buộc.")
             .Length(4, 32)
-            .WithMessage("New Password length must be between 4 and 32 characters.")
+            .WithMessage("Mật khẩu mới ít nhất 4 ký tự và tối đa 32 ký tự.")
             .Must(newPass => newPass != null && newPass.All(c => char.IsLetterOrDigit(c) || char.IsPunctuation(c)))
-            .WithMessage("New Password must contain only letters, digits, and punctuation.");
+            .WithMessage("Mật khẩu mới chứa chữ cái, số và ký tự đặc biệt.");
         RuleFor(e => e.Arg.ConfirmPassword)
             .NotEmpty()
-            .WithMessage("Confirm Password is required.")
+            .WithMessage("Xác nhận mật khẩu là bắt buộc.")
             .Length(4, 32)
-            .WithMessage("Confirm Password length must be between 4 and 32 characters.")
+            .WithMessage("Xác nhận mật khẩu ít nhất 4 ký tự và tối đa 32 ký tự.")
             .Must(confirmPass => confirmPass != null && confirmPass.All(c => char.IsLetterOrDigit(c) || char.IsPunctuation(c)))
-            .WithMessage("Re-enter New Password must contain only letters, digits, and punctuation.");
-
+            .WithMessage("Xác nhận mật khẩu chứa chữ cái, số và ký tự đặc biệt.");
     }
 }

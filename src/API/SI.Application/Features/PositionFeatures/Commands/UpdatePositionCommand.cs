@@ -31,19 +31,19 @@ public class UpdatePositionCommandHandler(
             return CTBaseResult.BadRequest(checkValid.Errors);
 
         if (request.Arg.Name != null && request.Arg.Name.Trim() == "")
-            return CTBaseResult.UnProcess("Name cannot consist only of whitespace.");
+            return CTBaseResult.UnProcess("Tên chức vụ không được chỉ bao gồm khoảng trắng.");
 
         var checkPosition = await positionRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Id == request.Id && x.DeletedOn == null, cancellationToken);
         if (checkPosition is null)
-            return CTBaseResult.NotFound("Position");
+            return CTBaseResult.NotFound("Chức vụ");
         if (checkPosition.Name == request.Arg.Name)
-            return CTBaseResult.UnProcess("Position name has not been changed.");
+            return CTBaseResult.UnProcess("Tên chức vụ không có gì thay đổi.");
 
         var checkExisted = await positionRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Name == request.Arg.Name && x.DeletedOn == null, cancellationToken);
         if (checkExisted != null)
-            return CTBaseResult.UnProcess($"Position name is existed.");
+            return CTBaseResult.UnProcess($"Chức vụ đã tồn tại.");
 
         checkPosition.Name = request.Arg.Name ?? checkPosition.Name;
         checkPosition.ModifiedOn = DateTimeOffset.UtcNow;
@@ -62,6 +62,6 @@ public class UpdatePositionCommandValidator : AbstractValidator<UpdatePositionCo
     {
         RuleFor(x => x.Arg.Name)
             .MaximumLength(1024)
-            .WithMessage("Name must be less than 1024 characters.");
+            .WithMessage("Tên chức vụ tối đa 1024 ký tự.");
     }
 }

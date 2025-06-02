@@ -4,7 +4,6 @@ using CTCore.DynamicQuery.Core.Primitives;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
-using SI.Contract.AgencyContract;
 using SI.Contract.GoodsIssueContract;
 using SI.Domain.Common.Authenticate;
 using SI.Domain.Common.Utils;
@@ -48,12 +47,12 @@ public class CreateGoodsIssueCommandHandler(
             .Include(x => x.Agency)
             .FirstOrDefaultAsync(x => x.Id == request.Arg.OrderId && x.DeletedOn == null, cancellationToken);
         if (checkOrder is null)
-            return CTBaseResult.NotFound("Order");
+            return CTBaseResult.NotFound("Đơn hàng");
 
         var checkOrderDetail = await orderDetailRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.OrderId == request.Arg.OrderId && x.DeletedOn == null, cancellationToken);
         if (checkOrderDetail is null)
-            return CTBaseResult.NotFound("Order Detail");
+            return CTBaseResult.NotFound("Chi tiết đơn hàng");
 
         // Calculate total amount
         decimal subTotal = 0;
@@ -62,7 +61,7 @@ public class CreateGoodsIssueCommandHandler(
             var product = await productRepos.BuildQuery
                 .FirstOrDefaultAsync(x => x.Id == checkOrderDetail.ProductId && x.DeletedOn == null, cancellationToken);
             if (product is null)
-                return CTBaseResult.NotFound("Product");
+                return CTBaseResult.NotFound("Mặt hàng");
 
             subTotal += item.QuantityIssued * checkOrderDetail.UnitPrice;
         }
@@ -94,8 +93,8 @@ public class CreateGoodsIssueCommandHandler(
             var goodsIssueDetail = new GoodsIssueDetail
             {
                 GoodsIssueId = goodsIssue.Id,
-                ProductId = checkOrderDetail.ProductId,
-                QuantityRequested = checkOrderDetail.Quantity,
+                ProductId = item.ProductId ?? checkOrderDetail.ProductId,
+                QuantityRequested = item.QuantityRequested > 0 ? item.QuantityRequested : checkOrderDetail.Quantity,
                 QuantityIssued = item.QuantityIssued,
                 TotalPrice = item.QuantityIssued * checkOrderDetail.UnitPrice
             };
@@ -105,7 +104,7 @@ public class CreateGoodsIssueCommandHandler(
             var inventory = await inventoryRepos.BuildQuery
                 .FirstOrDefaultAsync(x => x.ProductId == checkOrderDetail.ProductId && x.WarehouseId == warehouseId, cancellationToken);
             if (inventory is null)
-                return CTBaseResult.NotFound("Product in Inventory");
+                return CTBaseResult.UnProcess("Hàng hóa chưa có tồn kho");
 
             inventory.Quantity -= item.QuantityIssued;
             inventory.ModifiedOn = DateTimeOffset.UtcNow;
@@ -125,21 +124,18 @@ public class CreateGoodsIssueCommandValidator : AbstractValidator<CreateGoodsIss
     {
         RuleFor(x => x.Arg.OrderId)
             .NotEmpty()
-            .WithMessage("OrderId is required");
+            .WithMessage("Id của đơn hàng là bắt buộc.");
         RuleFor(x => x.Arg.Note)
             .MaximumLength(1024)
-            .WithMessage("Note must be less than 1024 characters");
-        RuleFor(x => x.Arg.Details)
-            .NotEmpty()
-            .WithMessage("Details is required");
+            .WithMessage("Ghi chú tối đa 1024 ký tự.");
         RuleForEach(x => x.Arg.Details)
             .ChildRules(details =>
             {
                 details.RuleFor(x => x.QuantityIssued)
                     .NotEmpty()
-                    .WithMessage("Quantity Issued is required")
+                    .WithMessage("Số lượng xuất là bắt buộc.")
                     .GreaterThanOrEqualTo(0)
-                    .WithMessage("Quantity Issued must be greater than or equal to 0");
+                    .WithMessage("Số lượng xuất phải lớn hơn hoặc bằng 0.");
             });
     }
 }

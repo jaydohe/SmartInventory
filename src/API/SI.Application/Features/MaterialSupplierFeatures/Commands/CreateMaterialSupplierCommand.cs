@@ -33,12 +33,12 @@ public class CreateMaterialSupplierCommandHandler(
         var checkExist = await materialSupplierRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Name == request.Arg.Name && x.DeletedOn == null, cancellationToken);
         if (checkExist != null)
-            return CTBaseResult.UnProcess("Material Supplier name already exists.");
+            return CTBaseResult.UnProcess("Tên nhà cung cấp NVL đã tồn tại.");
 
         var checkMaterialSupplier = await materialSupplierRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.TaxCode == request.Arg.TaxCode && x.DeletedOn == null, cancellationToken);
         if (checkMaterialSupplier != null)
-            return CTBaseResult.UnProcess("Material Supplier tax code already exists.");
+            return CTBaseResult.UnProcess("Mã số thuế của nhà cung cấp NVL đã tồn tại.");
 
         var newMaterialSupplier = new MaterialSupplier
         {
@@ -68,39 +68,39 @@ public class CreateMaterialSupplierCommandValidator : AbstractValidator<CreateMa
     {
         RuleFor(x => x.Arg.Name)
             .NotEmpty()
-            .WithMessage("Name is required.")
+            .WithMessage("Tên là bắt buộc.")
             .MaximumLength(1024)
-            .WithMessage("Name is too long. Only up to 1024 characters.");
+            .WithMessage("Tên tối đa 1024 ký tự.");
         RuleFor(x => x.Arg.Representative)
             .NotEmpty()
-            .WithMessage("Representative is required.")
+            .WithMessage("Người đại diện là bắt buộc.")
             .MaximumLength(512)
-            .WithMessage("Representative is too long. Only up to 512 characters.");
+            .WithMessage("Người đại diện tối đa 512 ký tự.");
         RuleFor(x => x.Arg.TaxCode)
             .MaximumLength(100)
-            .WithMessage("TaxCode is too long. Only up to 100 characters.");
+            .WithMessage("Mã số thuế tối đa 100 ký tự.");
         RuleFor(x => x.Arg.PhoneNumber)
             .NotEmpty()
-            .WithMessage("PhoneNumber is required.")
+            .WithMessage("Số điện thoại là bắt buộc.")
             .MaximumLength(20)
-            .WithMessage("PhoneNumber is too long. Only up to 20 characters.");
+            .WithMessage("Số điện thoại tối đa 20 ký tự.");
         RuleFor(x => x.Arg.BusinessItem)
             .NotEmpty()
-            .WithMessage("BusinessItem is required.")
+            .WithMessage("Sản phẩm kinh doanh là bắt buộc.")
             .MaximumLength(1024)
-            .WithMessage("BusinessItem is too long. Only up to 1024 characters.");
+            .WithMessage("Sản phẩm kinh doanh tối đa 1024 ký tự.");
         RuleFor(x => x.Arg.Email)
             .NotEmpty()
-            .WithMessage("Email is required.")
+            .WithMessage("Email là bắt buộc.")
             .MaximumLength(512)
-            .WithMessage("Email is too long. Only up to 512 characters.");
+            .WithMessage("Email tối đa 512 ký tự.");
         RuleFor(x => x.Arg.Address)
             .NotEmpty()
-            .WithMessage("Address is required.")
+            .WithMessage("Địa chỉ là bắt buộc.")
             .MaximumLength(1024)
-            .WithMessage("Address is too long. Only up to 1024 characters.");
+            .WithMessage("Địa chỉ tối đa 1024 ký tự.");
         RuleFor(x => x.Arg.Note)
             .MaximumLength(1024)
-            .WithMessage("Note is too long. Only up to 1024 characters.");
+            .WithMessage("Ghi chú tối đa 1024 ký tự.");
     }
 }

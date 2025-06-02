@@ -37,18 +37,18 @@ public class CreateUserCommandHandler(
 
         var userRole = Enum.Parse<UserRoles>(request.Arg.UserRole);
         if (!Enum.IsDefined(typeof(UserRoles), userRole))
-            return CTBaseResult.NotFound("User Role");
+            return CTBaseResult.NotFound("Quyền");
 
         if (userRole == UserRoles.DEV || userRole == UserRoles.ADMIN)
-            return CTBaseResult.UnProcess("User Role is not allowed.");
+            return CTBaseResult.UnProcess("Không được phép tạo quyền này.");
 
         if (request.Arg.LoginName == null)
-            return CTBaseResult.UnProcess("Login Name is required.");
+            return CTBaseResult.UnProcess("Tên đăng nhập là bắt buộc.");
 
         var checkEmp = await employeeRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Id == request.Arg.EmployeeId && x.DeletedOn == null, cancellationToken);
         if (checkEmp is null)
-            return CTBaseResult.NotFound("Employee");
+            return CTBaseResult.NotFound("Nhân viên");
 
         var checkUser = await userRepos.BuildQuery
             .Where(x => x.LoginName == request.Arg.LoginName || x.EmployeeId == request.Arg.EmployeeId)
@@ -56,10 +56,10 @@ public class CreateUserCommandHandler(
         if (checkUser != null)
         {
             if (checkUser.LoginName == request.Arg.LoginName)
-                return CTBaseResult.UnProcess("User is already exists.");
+                return CTBaseResult.UnProcess("Tên đăng nhập đã tồn tại.");
 
             if (checkUser.EmployeeId == request.Arg.EmployeeId)
-                return CTBaseResult.UnProcess("User is already exists.");
+                return CTBaseResult.UnProcess("Nhân viên đã có tài khoản.");
         }
 
         var hashPassword = request.Arg.Password.ToSHA256(iconfiguration["Salt"]!);
@@ -88,23 +88,23 @@ public class CreateUserCommandValidator : AbstractValidator<CreateUserCommand>
     {
         RuleFor(x => x.Arg.EmployeeId)
             .NotEmpty()
-            .WithMessage("EmployeeId is required.");
+            .WithMessage("Id của nhân viên là bắt buộc.");
         RuleFor(x => x.Arg.LoginName)
             .NotEmpty()
-            .WithMessage("Login Name is required.")
+            .WithMessage("Tên đăng nhập là bắt buộc.")
             .MaximumLength(512)
-            .WithMessage("Login Name is too long. Only up to 512 characters.")
+            .WithMessage("Tên đăng nhập tối đa 512 ký tự.")
             .Must(LoginName => LoginName != null && LoginName.All(c => char.IsLetterOrDigit(c) || c == '-' || c == '_'))
-            .WithMessage("Login name can only contain letters, digits, dashes and underscores.");
+            .WithMessage("Tên đăng nhập chỉ chứa chữ, số và gạch ngang.");
         RuleFor(x => x.Arg.Password)
             .NotEmpty()
-            .WithMessage("Password is required.")
+            .WithMessage("Mật khẩu là bắt buộc.")
             .Length(4, 32)
-            .WithMessage("Password length must be between 4 and 32 characters.")
+            .WithMessage("Mật khẩu chỉ từ 4 đến 32 ký tự.")
             .Must(pass => pass != null && pass.All(c => char.IsLetterOrDigit(c) || char.IsPunctuation(c)))
-            .WithMessage("Password must contain only letters, digits, and punctuation.");
+            .WithMessage("Mật khẩu chỉ chứa chữ, số và ký tự đặc biệt.");
         RuleFor(x => x.Arg.UserRole)
             .NotEmpty()
-            .WithMessage("User Role is required.");
+            .WithMessage("Quyền là bắt buộc.");
     }
 }

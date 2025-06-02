@@ -5,6 +5,7 @@ using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
 using SI.Contract.AgencyContract;
+using SI.Domain.Common.Authenticate;
 using SI.Domain.Common.Utils;
 using SI.Domain.Entities;
 
@@ -23,7 +24,8 @@ public class UpdateAgencyCommand(string id, UpdateAgencyArg arg) : ICommand<OkRe
 
 public class UpdateAgencyCommandHandler(
     IUnitOfWork unitOfWork,
-    IRepository<Agency> agencyRepos) : ICommandHandler<UpdateAgencyCommand, OkResponse>
+    IRepository<Agency> agencyRepos,
+    IUserIdentifierProvider identifierProvider) : ICommandHandler<UpdateAgencyCommand, OkResponse>
 {
     public async Task<CTBaseResult<OkResponse>> Handle(UpdateAgencyCommand request, CancellationToken cancellationToken)
     {
@@ -32,27 +34,27 @@ public class UpdateAgencyCommandHandler(
             return CTBaseResult.BadRequest(checkValid.Errors);
 
         if (request.Arg.Name != null && request.Arg.Name.Trim() == "")
-            return CTBaseResult.UnProcess("Name cannot consist only of whitespace.");
+            return CTBaseResult.UnProcess("Tên đại lý không được chỉ bao gồm khoảng trắng.");
         if (request.Arg.Representative != null && request.Arg.Representative.Trim() == "")
-            return CTBaseResult.UnProcess("Representative cannot consist only of whitespace.");
+            return CTBaseResult.UnProcess("Người đại diện không được chỉ bao gồm khoảng trắng.");
         if (request.Arg.PhoneNumber != null && request.Arg.PhoneNumber.Trim() == "")
-            return CTBaseResult.UnProcess("Phone Number cannot consist only of whitespace.");
+            return CTBaseResult.UnProcess("Số điện thoại không được chỉ bao gồm khoảng trắng.");
         if (request.Arg.Email != null && request.Arg.Email.Trim() == "")
-            return CTBaseResult.UnProcess("Email cannot consist only of whitespace.");
+            return CTBaseResult.UnProcess("Email không được chỉ bao gồm khoảng trắng.");
         if (request.Arg.Address != null && request.Arg.Address.Trim() == "")
-            return CTBaseResult.UnProcess("Address cannot consist only of whitespace.");
+            return CTBaseResult.UnProcess("Địa chỉ không được chỉ bao gồm khoảng trắng.");
         if (request.Arg.Note != null && request.Arg.Note.Trim() == "")
-            return CTBaseResult.UnProcess("Note cannot consist only of whitespace.");
+            return CTBaseResult.UnProcess("Ghi chú không được chỉ bao gồm khoảng trắng.");
 
         var checkAgency = await agencyRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Id == request.Id && x.DeletedOn == null, cancellationToken);
         if (checkAgency is null)
-            return CTBaseResult.NotFound("Agency");
+            return CTBaseResult.NotFound("Đại lý");
 
         var checkExist = await agencyRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Name == request.Arg.Name && x.DeletedOn == null, cancellationToken);
         if (checkExist != null)
-            return CTBaseResult.UnProcess("Agency name already exists.");
+            return CTBaseResult.UnProcess("Đại lý đã tồn tại.");
 
         if (request.Arg.Name != null)
         {
@@ -65,6 +67,7 @@ public class UpdateAgencyCommandHandler(
         checkAgency.Address = request.Arg.Address ?? checkAgency.Address;
         checkAgency.CurrentDebt = request.Arg.CurrentDebt ?? 0;
         checkAgency.Note = request.Arg.Note;
+        checkAgency.ActivityUpdateAgency(identifierProvider.Name, identifierProvider.Role, identifierProvider.WarehouseId);
 
         var ret = await unitOfWork.SaveChangeAsync(cancellationToken);
         if (ret <= 0)
@@ -80,24 +83,24 @@ public class UpdateAgencyCommandValidator : AbstractValidator<UpdateAgencyComman
     {
         RuleFor(x => x.Arg.Name)
             .MaximumLength(1024)
-            .WithMessage("Name is too long. Only up to 1024 characters.");
+            .WithMessage("Tên tối đa 1024 ký tự.");
         RuleFor(x => x.Arg.Representative)
             .MaximumLength(512)
-            .WithMessage("Representative is too long. Only up to 512 characters.");
+            .WithMessage("Người đại diện tối đa 512 ký tự.");
         RuleFor(x => x.Arg.PhoneNumber)
             .MaximumLength(20)
-            .WithMessage("PhoneNumber is too long. Only up to 20 characters.");
+            .WithMessage("Số điện thoại tối đa 20 ký tự.");
         RuleFor(x => x.Arg.Email)
             .MaximumLength(512)
-            .WithMessage("Email is too long. Only up to 512 characters.");
+            .WithMessage("Email tối đa 512 ký tự.");
         RuleFor(x => x.Arg.Address)
             .MaximumLength(1024)
-            .WithMessage("Address is too long. Only up to 1024 characters.");
+            .WithMessage("Địa chỉ tối đa 1024 ký tự.");
         RuleFor(x => x.Arg.CurrentDebt)
             .GreaterThanOrEqualTo(0)
-            .WithMessage("CurrentDebt must be greater than or equal to 0.");
+            .WithMessage("Công nợ phải lớn hơn hoặc bằng 0.");
         RuleFor(x => x.Arg.Note)
             .MaximumLength(1024)
-            .WithMessage("Note is too long. Only up to 1024 characters.");
+            .WithMessage("Ghi chú tối đa 1024 ký tự.");
     }
 }

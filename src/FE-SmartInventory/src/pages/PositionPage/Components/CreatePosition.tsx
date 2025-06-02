@@ -23,10 +23,10 @@ const CreateDeviceType: React.FC<CreateDeviceTypeProps> = ({ handleCreatePositio
     <Form form={form} layout="vertical" onFinish={onFinish}>
       <Form.Item
         name="name"
-        label="Tên vị trí"
-        rules={[{ required: true, message: 'Vui lòng nhập tên vị trí' }]}
+        label="Tên chức vụ"
+        rules={[{ required: true, message: 'Vui lòng nhập tên chức vụ' }]}
       >
-        <Input placeholder="Nhập tên vị trí" />
+        <Input placeholder="Nhập tên chức vụ" />
       </Form.Item>
 
       <Button type="primary" htmlType="submit" className="w-full font-semibold text-base">

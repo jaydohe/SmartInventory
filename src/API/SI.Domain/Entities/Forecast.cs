@@ -9,6 +9,9 @@ public class Forecast : AggregateRoot
     [ForeignKey(nameof(Product))]
     public string? ProductId { get; set; }
 
+    [ForeignKey(nameof(Warehouse))]
+    public string WarehouseId { get; set; } = null!;
+
     /// <summary>
     /// Giá trị dự báo (forecasted quantity)
     /// </summary>
@@ -42,12 +45,12 @@ public class Forecast : AggregateRoot
     public double? Seasonal { get; set; }
 
     /// <summary>
-    /// Lower bound (ví dụ 95% CI) cho giá trị dự báo
+    /// Lower bound cho giá trị dự báo
     /// </summary>
     public double? LowerBound { get; set; }
 
     /// <summary>
-    /// Upper bound (ví dụ 95% CI) cho giá trị dự báo
+    /// Upper bound cho giá trị dự báo
     /// </summary>
     public double? UpperBound { get; set; }
 
@@ -80,4 +83,5 @@ public class Forecast : AggregateRoot
     public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
 
     public virtual Product? Product { get; set; }
+    public virtual Warehouse? Warehouse { get; set; }
 }

@@ -11,10 +11,11 @@ interface DetailWarehouseProps {
 }
 
 const DetailWarehouse: React.FC<DetailWarehouseProps> = ({ warehouseId }) => {
-  const { data: warehouse, isLoading } = useQueryDetailWarehouse(warehouseId);
+  const { data: detailWarehouse, isLoading } = useQueryDetailWarehouse(warehouseId);
+  const warehouse = detailWarehouse?.data;
   const [categoryName, setCategoryName] = useState<string>('');
   const [parentWarehouseName, setParentWarehouseName] = useState<string>('');
-
+  console.log(warehouse);
   // Lấy thông tin chi tiết về nhân viên quản lý, danh mục và kho cha (nếu có)
   // const { data: detailEmployee } = useQueryEmployee(
   //   warehouseId ? `id=${warehouse?.managerId}` : ''
@@ -33,7 +34,7 @@ const DetailWarehouse: React.FC<DetailWarehouseProps> = ({ warehouseId }) => {
 
   useEffect(() => {
     if (parentWarehouse) {
-      setParentWarehouseName(parentWarehouse.name || '');
+      setParentWarehouseName(parentWarehouse.data.name || '');
     }
   }, [parentWarehouse]);
 

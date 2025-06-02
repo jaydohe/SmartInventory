@@ -18,6 +18,14 @@ import EmployeePage from '@/pages/Employee';
 import CateloryRouter from '../Category.Router';
 import CategoryRouter from '../Category.Router';
 import WarehousePage from '@/pages/Warehouse';
+import ProductPage from '@/pages/ProductPage';
+import MaterialSupplierPage from '@/pages/MaterialSupplierPage';
+import AgencyPage from '@/pages/AgencyPage';
+import OrderPage from '@/pages/OrderPage';
+import ProductionCommandPage from '@/pages/ProductionCommandPage';
+import GoodsIssuePage from '@/pages/GoodsIssuePage';
+import GoodsReceiptPage from '@/pages/GoodsReceiptPage';
+import InventoryPage from '@/pages/InventoryPage';
 export const DefaultRouter = () => {
   return (
     <Suspense fallback={<SkeletonComponent />}>
@@ -40,6 +48,7 @@ export const DefaultRouter = () => {
             <Route path="/position" element={<PositionPage />}></Route>
             <Route path="/department" element={<DepartmentPage />}></Route>
             <Route path="/category/*" element={<CategoryRouter />}></Route>
+            <Route path="/product" element={<ProductPage />}></Route>
           </Route>
 
           <Route
@@ -50,7 +59,6 @@ export const DefaultRouter = () => {
             }
           >
             <Route path="/warehouse" element={<WarehousePage />}></Route>
-
             <Route path="/activity/*" element={<ActivityRouter />}></Route>
             <Route path="/user/*" element={<UserRouter />}></Route>
             <Route path="/employee/*" element={<EmployeePage />}></Route>
@@ -59,10 +67,17 @@ export const DefaultRouter = () => {
           <Route
             element={
               <Suspense fallback={<SkeletonComponent />}>
-                <PrivateRouters roleList={[WAREHOUSE_STAFF]} />
+                <PrivateRouters roleList={[WAREHOUSE_STAFF, DEV, ADMIN]} />
               </Suspense>
             }
           >
+            <Route path="/inventory" element={<InventoryPage />}></Route>
+            <Route path="/goods-issue" element={<GoodsIssuePage />}></Route>
+            <Route path="/goods-receipt" element={<GoodsReceiptPage />}></Route>
+            <Route path="/agency" element={<AgencyPage />}></Route>
+            <Route path="/order" element={<OrderPage />}></Route>
+            <Route path="/production-command" element={<ProductionCommandPage />}></Route>
+            <Route path="/material-supplier" element={<MaterialSupplierPage />}></Route>
             <Route path="/activity/*" element={<ActivityRouter />}></Route>
           </Route>
         </Route>

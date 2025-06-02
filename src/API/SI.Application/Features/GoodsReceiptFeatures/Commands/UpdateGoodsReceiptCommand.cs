@@ -41,20 +41,20 @@ public class UpdateGoodsReceiptCommandHandler(
             .Include(x => x.Employee)
             .FirstOrDefaultAsync(x => x.Id == userId && x.DeletedOn == null, cancellationToken);
         if (checkUser is null)
-            return CTBaseResult.NotFound("User");
+            return CTBaseResult.NotFound("Người dùng");
         if (checkUser.Employee.IsManager == false)
-            return CTBaseResult.UnProcess("Just manager can access.");
+            return CTBaseResult.UnProcess("Chỉ có quản lý được truy cập.");
 
         var checkGoodsReceipt = await goodsReceiptRepos.BuildQuery
                 .FirstOrDefaultAsync(x => x.Code == request.Code && x.DeletedOn == null, cancellationToken);
         if (checkGoodsReceipt is null)
-            return CTBaseResult.NotFound("Goods Receipt");
+            return CTBaseResult.NotFound("Phiếu nhập hàng");
 
         if (checkGoodsReceipt.Status == GoodsStatus.CANCELED)
-            return CTBaseResult.UnProcess("Goods Receipt has been canceled");
+            return CTBaseResult.UnProcess("Phiếu nhập hàng đã hủy.");
 
         if (checkGoodsReceipt.Status == GoodsStatus.SUCCESS)
-            return CTBaseResult.UnProcess("Goods Receipt has been completed");
+            return CTBaseResult.UnProcess("Phiếu nhập hàng đã hoàn thành.");
 
         checkGoodsReceipt.Status = request.Arg.Status ?? checkGoodsReceipt.Status;
         checkGoodsReceipt.Note = request.Arg.Note ?? checkGoodsReceipt.Note;
@@ -73,6 +73,6 @@ public class UpdateGoodsReceiptCommandValidator : AbstractValidator<UpdateGoodsR
     {
         RuleFor(x => x.Arg.Note)
             .MaximumLength(1024)
-            .WithMessage("Note must be less than 1024 characters");
+            .WithMessage("Ghi chú tối đa 1024 ký tự.");
     }
 }

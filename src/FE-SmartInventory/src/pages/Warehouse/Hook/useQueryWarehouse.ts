@@ -6,7 +6,10 @@ import { TCreateWarehouse, TUpdateWarehouse, TWarehouse } from '@/interface/TWar
 import { warehouseApi } from '@/api/warehouseApi';
 
 type useQueryWarehouseOptions = Omit<UseQueryOptions<TPage<TWarehouse>>, 'queryKey' | 'queryFn'>;
-type useQueryDetailWarehouseOptions = Omit<UseQueryOptions<TWarehouse>, 'queryKey' | 'queryFn'>;
+type useQueryDetailWarehouseOptions = Omit<
+  UseQueryOptions<TResponse<TWarehouse>>,
+  'queryKey' | 'queryFn'
+>;
 
 export const useQueryWarehousePage = (params: string, options?: useQueryWarehouseOptions) => {
   const queryClient = useQueryClient();

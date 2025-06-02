@@ -31,19 +31,19 @@ public class UpdateDepartmentCommandHandler(
             return CTBaseResult.BadRequest(checkValid.Errors);
 
         if (request.Arg.Name != null && request.Arg.Name.Trim() == "")
-            return CTBaseResult.UnProcess("Name cannot consist only of whitespace.");
+            return CTBaseResult.UnProcess("Tên phòng ban không được chỉ bao gồm khoảng trắng.");
 
         var checkDepartment = await departmentRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Id == request.Id && x.DeletedOn == null, cancellationToken);
         if (checkDepartment is null)
-            return CTBaseResult.NotFound("Department");
+            return CTBaseResult.NotFound("Phòng ban");
         if (checkDepartment.Name == request.Arg.Name)
-            return CTBaseResult.UnProcess("Department name has not been changed.");
+            return CTBaseResult.UnProcess("Tên phòng ban không thay đổi.");
 
         var checkExisted = await departmentRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Name == request.Arg.Name && x.DeletedOn == null, cancellationToken);
         if (checkExisted != null)
-            return CTBaseResult.UnProcess($"Department name is existed.");
+            return CTBaseResult.UnProcess($"Phòng ban đã tồn tại.");
 
         if (request.Arg.Name != null)
         {
@@ -66,6 +66,6 @@ public class UpdateDepartmentCommandValidator : AbstractValidator<UpdateDepartme
     {
         RuleFor(x => x.Arg.Name)
             .MaximumLength(1024)
-            .WithMessage("Name is too long. Only up to 1024 characters.");
+            .WithMessage("Tên phòng ban tối đa 1024 ký tự.");
     }
 }

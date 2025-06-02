@@ -33,7 +33,7 @@ public class GetWarehouseQueryHandler(
             var checkManager = await employeeRepos.BuildQuery
                 .FirstOrDefaultAsync(x => x.Id == employeeId && x.IsManager == true, cancellationToken);
             if (checkManager is null)
-                return CTBaseResult.UnProcess("Just manager can access.");
+                return CTBaseResult.UnProcess("Chỉ có quản lý được truy cập.");
         }
 
         QueryRequestV3 queryContext = request.QueryContext;
@@ -44,7 +44,7 @@ public class GetWarehouseQueryHandler(
                 queryContext.ToCacheKey())
             .FirstOrDefaultAsync(cancellationToken);
         if (warehouse is null)
-            return CTBaseResult.NotFound("Warehouse");
+            return CTBaseResult.NotFound("Kho, bãi");
 
         return CTBaseResult.Success(warehouse);
     }

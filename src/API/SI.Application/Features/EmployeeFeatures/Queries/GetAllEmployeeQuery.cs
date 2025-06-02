@@ -33,7 +33,7 @@ public class GetAllEmployeeQueryHandler(
             var checkManager = await employeeRepos.BuildQuery
                 .FirstOrDefaultAsync(x => x.Id == employeeId && x.IsManager == true, cancellationToken);
             if (checkManager is null)
-                return CTBaseResult.UnProcess("Just manager can access.");
+                return CTBaseResult.UnProcess("Chỉ có quản lý kho được truy cập.");
 
             employeeQuery = employeeQuery.Where(x => x.WarehouseId == warehouseId);
         }

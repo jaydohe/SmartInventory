@@ -219,10 +219,10 @@ export default function WarehousePage() {
       },
     },
     {
-      title: 'Dung tích',
+      title: 'Sức chứa',
       dataIndex: 'capacity',
       key: 'capacity',
-      render: (capacity) => <span>{capacity.toLocaleString()}</span>,
+      render: (capacity) => <span>{capacity.toLocaleString()} m3</span>,
     },
     {
       title: 'Loại kho',
@@ -246,7 +246,7 @@ export default function WarehousePage() {
             onClick={() => handleViewDetail(record.id)}
             className={'font-medium'}
           >
-            Chi tiết
+            {/* Chi tiết */}
           </Button>
           <Button
             color="gold"
@@ -256,7 +256,7 @@ export default function WarehousePage() {
             onClick={() => handleEditWarehouse(record)}
             className={'font-medium'}
           >
-            Cập nhật
+            {/* Cập nhật */}
           </Button>
           <Button
             color="red"
@@ -266,7 +266,7 @@ export default function WarehousePage() {
             onClick={() => showConfirmDelete('Xóa kho', 'Bạn có muốn xóa kho này?', record)}
             className={'font-medium'}
           >
-            Xoá
+            {/* Xoá */}
           </Button>
         </Space>
       ),

@@ -26,7 +26,7 @@ public class CreateProductionCommandRequestCommandHandler(
         var checkOrder = await orderRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Id == request.Arg.OrderId && x.DeletedOn == null, cancellationToken);
         if (checkOrder == null)
-            return CTBaseResult.NotFound("Order");
+            return CTBaseResult.NotFound("Đơn hàng");
 
         var checkUserIds = await userRepos.BuildQuery
             .Include(x => x.Employee)
