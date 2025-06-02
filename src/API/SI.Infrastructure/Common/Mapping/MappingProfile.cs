@@ -1,4 +1,5 @@
 using AutoMapper;
+using SI.Contract.InventoryContract;
 using SI.Contract.SmartContract;
 using SI.Contract.UserContract;
 using SI.Domain.Entities;
@@ -11,6 +12,22 @@ public class MappingProfile : Profile
     {
         CreateMap<User, UserDTO>()
             .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role.ToString()));
+
+        CreateMap<Inventory, InventoryDTO>()
+            .ForMember(dest => dest.ProductId,
+                       opt => opt.MapFrom(src => src.ProductId))
+            .ForMember(dest => dest.ProductName,
+                       opt => opt.MapFrom(src => src.Product!.Name))
+            .ForMember(dest => dest.ProductUnit,
+                       opt => opt.MapFrom(src => src.Product!.Unit))
+            .ForMember(dest => dest.WarehouseId,
+                       opt => opt.MapFrom(src => src.WarehouseId))
+            .ForMember(dest => dest.WarehouseName,
+                       opt => opt.MapFrom(src => src.Warehouse!.Name))
+            .ForMember(dest => dest.Quantity,
+                       opt => opt.MapFrom(src => src.Quantity))
+            .ForMember(dest => dest.CreatedAt,
+                       opt => opt.MapFrom(src => src.CreatedAt));
 
         CreateMap<Forecast, DemandForecastResponse>()
             .ForMember(dest => dest.ProductId,
