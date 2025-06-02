@@ -63,7 +63,7 @@ public class HoltWintersJob(
                 .Include(x => x.Order)
                 .Where(x => x.ProductId == item.ProductId &&
                             x.Order.WarehouseId == item.WarehouseId)
-                .GroupBy(o => new { o.CreatedAt.UtcDateTime.Year, o.CreatedAt.UtcDateTime.Month })
+                .GroupBy(o => new { o.Order.CreatedAt.UtcDateTime.Year, o.Order.CreatedAt.UtcDateTime.Month })
                 .OrderBy(g => g.Key.Year).ThenBy(g => g.Key.Month)
                 .Select(g => (double)g.Sum(x => x.Quantity))
                 .ToListAsync();

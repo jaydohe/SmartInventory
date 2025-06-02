@@ -78,12 +78,6 @@ public class EOQSafetyStockJob(
                 .Take(5)
                 .ToListAsync();
 
-            if (!top5Revenue.Any())
-            {
-                logger.LogWarning($"WarehouseId {wareId} không tồn tại, bỏ qua.");
-                continue;
-            }
-
             foreach (var demand in top5Revenue)
             {
                 var getProduct = await productRepository.BuildQuery

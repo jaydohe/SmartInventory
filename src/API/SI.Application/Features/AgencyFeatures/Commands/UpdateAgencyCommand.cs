@@ -5,6 +5,7 @@ using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
 using SI.Contract.AgencyContract;
+using SI.Domain.Common.Authenticate;
 using SI.Domain.Common.Utils;
 using SI.Domain.Entities;
 
@@ -23,7 +24,8 @@ public class UpdateAgencyCommand(string id, UpdateAgencyArg arg) : ICommand<OkRe
 
 public class UpdateAgencyCommandHandler(
     IUnitOfWork unitOfWork,
-    IRepository<Agency> agencyRepos) : ICommandHandler<UpdateAgencyCommand, OkResponse>
+    IRepository<Agency> agencyRepos,
+    IUserIdentifierProvider identifierProvider) : ICommandHandler<UpdateAgencyCommand, OkResponse>
 {
     public async Task<CTBaseResult<OkResponse>> Handle(UpdateAgencyCommand request, CancellationToken cancellationToken)
     {
@@ -65,6 +67,7 @@ public class UpdateAgencyCommandHandler(
         checkAgency.Address = request.Arg.Address ?? checkAgency.Address;
         checkAgency.CurrentDebt = request.Arg.CurrentDebt ?? 0;
         checkAgency.Note = request.Arg.Note;
+        checkAgency.ActivityUpdateAgency(identifierProvider.Name, identifierProvider.Role, identifierProvider.WarehouseId);
 
         var ret = await unitOfWork.SaveChangeAsync(cancellationToken);
         if (ret <= 0)
