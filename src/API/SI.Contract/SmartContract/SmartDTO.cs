@@ -7,7 +7,8 @@ public class DemandForecastResponse
     public string ProductUnit { get; set; } = null!;
     public string WarehouseId { get; set; } = null!;
     public string WarehouseName { get; set; } = null!;
-    public string Period { get; set; } = null!; // "2024-01", "2024-02"
+    public string FromPeriod { get; set; } = null!;
+    public string ToPeriod { get; set; } = null!;
     public double ForecastValue { get; set; }
     public string Method { get; set; } = null!;
     public double Trend { get; set; }
