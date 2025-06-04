@@ -23,21 +23,21 @@ public class DeleteProductionCommandCommandHandler(
         var checkProductionCommand = await productionCommandRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Id == request.Id && x.DeletedOn == null, cancellationToken);
         if (checkProductionCommand is null)
-            return CTBaseResult.NotFound("Production Command");
+            return CTBaseResult.NotFound("Lệnh sản xuất");
         if (checkProductionCommand.Status != CommandStatus.CREATED)
-            return CTBaseResult.UnProcess("Can not delete Production Command.");
+            return CTBaseResult.UnProcess("Trạng thái lệnh sản xuất phải là mới khởi tạo, mới xóa được.");
 
         var checkProductionCommandDetail = await productionCommandDetailRepos.BuildQuery
             .Where(x => x.ProductionCommandId == request.Id && x.DeletedOn == null)
             .FirstOrDefaultAsync(cancellationToken);
         if (checkProductionCommandDetail is null)
-            return CTBaseResult.NotFound("Production Command");
+            return CTBaseResult.NotFound("Chi tiết của lệnh sản xuất");
 
         var checkProductionCommandProcess = await productionCommandProcessRepos.BuildQuery
             .Where(x => x.ProductionCommandId == request.Id && x.DeletedOn == null)
             .FirstOrDefaultAsync(cancellationToken);
         if (checkProductionCommandProcess is null)
-            return CTBaseResult.NotFound("Production Command");
+            return CTBaseResult.NotFound("Phân công của lệnh sản xuất");
 
         checkProductionCommandProcess.DeletedOn = DateTimeOffset.UtcNow;
         checkProductionCommandDetail.DeletedOn = DateTimeOffset.UtcNow;

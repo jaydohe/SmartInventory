@@ -32,29 +32,29 @@ public class UpdateMaterialSupplierCommandHandler(
             return CTBaseResult.BadRequest(checkValid.Errors);
 
         if (request.Arg.Name != null && request.Arg.Name.Trim() == "")
-            return CTBaseResult.UnProcess("Name cannot consist only of whitespace.");
+            return CTBaseResult.UnProcess("Tên đại lý không được chỉ bao gồm khoảng trắng.");
         if (request.Arg.Representative != null && request.Arg.Representative.Trim() == "")
-            return CTBaseResult.UnProcess("Representative cannot consist only of whitespace.");
+            return CTBaseResult.UnProcess("Người đại diện không được chỉ bao gồm khoảng trắng.");
         if (request.Arg.PhoneNumber != null && request.Arg.PhoneNumber.Trim() == "")
-            return CTBaseResult.UnProcess("Phone Number cannot consist only of whitespace.");
+            return CTBaseResult.UnProcess("Số điện thoại không được chỉ bao gồm khoảng trắng.");
         if (request.Arg.BusinessItem != null && request.Arg.BusinessItem.Trim() == "")
-            return CTBaseResult.UnProcess("Business Item cannot consist only of whitespace.");
+            return CTBaseResult.UnProcess("Sản phẩm kinh doanh không được chỉ bao gồm khoảng trắng.");
         if (request.Arg.Email != null && request.Arg.Email.Trim() == "")
-            return CTBaseResult.UnProcess("Email cannot consist only of whitespace.");
+            return CTBaseResult.UnProcess("Email không được chỉ bao gồm khoảng trắng.");
         if (request.Arg.Address != null && request.Arg.Address.Trim() == "")
-            return CTBaseResult.UnProcess("Address cannot consist only of whitespace.");
+            return CTBaseResult.UnProcess("Địa chỉ không được chỉ bao gồm khoảng trắng.");
         if (request.Arg.Note != null && request.Arg.Note.Trim() == "")
-            return CTBaseResult.UnProcess("Note cannot consist only of whitespace.");
+            return CTBaseResult.UnProcess("Ghi chú không được chỉ bao gồm khoảng trắng.");
 
         var checkMaterialSupplier = await materialSupplierRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Id == request.Id && x.DeletedOn == null, cancellationToken);
         if (checkMaterialSupplier is null)
-            return CTBaseResult.NotFound("Material Supplier");
+            return CTBaseResult.NotFound("Nhà cung cấp NVL");
 
         var checkExist = await materialSupplierRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Name == request.Arg.Name && x.DeletedOn == null, cancellationToken);
         if (checkExist != null)
-            return CTBaseResult.UnProcess("Material Supplier name already exists.");
+            return CTBaseResult.UnProcess("Tên nhà cung cấp NVL đã tồn tại.");
 
         if (request.Arg.Name != null)
         {
@@ -83,27 +83,27 @@ public class UpdateMaterialSupplierCommandValidator : AbstractValidator<UpdateMa
     {
         RuleFor(x => x.Arg.Name)
             .MaximumLength(1024)
-            .WithMessage("Name is too long. Only up to 1024 characters.");
+            .WithMessage("Tên tối đa 1024 ký tự.");
         RuleFor(x => x.Arg.Representative)
             .MaximumLength(512)
-            .WithMessage("Representative is too long. Only up to 512 characters.");
+            .WithMessage("Người đại diện tối đa 512 ký tự.");
         RuleFor(x => x.Arg.PhoneNumber)
             .MaximumLength(20)
-            .WithMessage("PhoneNumber is too long. Only up to 20 characters.");
+            .WithMessage("Số điện thoại tối đa 20 ký tự.");
         RuleFor(x => x.Arg.BusinessItem)
             .MaximumLength(1024)
-            .WithMessage("BusinessItem is too long. Only up to 1024 characters.");
+            .WithMessage("Sản phẩm kinh doanh tối đa 1024 ký tự.");
         RuleFor(x => x.Arg.Email)
             .MaximumLength(512)
-            .WithMessage("Email is too long. Only up to 512 characters.");
+            .WithMessage("Email tối đa 512 ký tự.");
         RuleFor(x => x.Arg.Address)
             .MaximumLength(1024)
-            .WithMessage("Address is too long. Only up to 1024 characters.");
+            .WithMessage("Địa chỉ tối đa 1024 ký tự.");
         RuleFor(x => x.Arg.CurrentDebt)
             .GreaterThanOrEqualTo(0)
-            .WithMessage("CurrentDebt must be greater than or equal to 0.");
+            .WithMessage("Công nợ phải lớn hơn hoặc bằng 0.");
         RuleFor(x => x.Arg.Note)
             .MaximumLength(1024)
-            .WithMessage("Note is too long. Only up to 1024 characters.");
+            .WithMessage("Ghi chú tối đa 1024 ký tự.");
     }
 }

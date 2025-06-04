@@ -34,28 +34,28 @@ public class DeleteProductCommandHandler(
             var checkManager = await employeeRepos.BuildQuery
                 .FirstOrDefaultAsync(x => x.Id == employeeId && x.IsManager == true, cancellationToken);
             if (checkManager is null)
-                return CTBaseResult.UnProcess("Just manager can access.");
+                return CTBaseResult.UnProcess("Chỉ có quản lý được truy cập.");
         }
 
         var checkProduct = await productRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Id == request.Id && x.DeletedOn == null, cancellationToken);
         if (checkProduct is null)
-            return CTBaseResult.NotFound("Product");
+            return CTBaseResult.NotFound("Hàng hóa");
 
         var checkInventory = await inventRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.ProductId == checkProduct.Id && x.Quantity > 0 && x.DeletedOn == null, cancellationToken);
         if (checkInventory != null)
-            return CTBaseResult.UnProcess("Product is used in Inventory.");
+            return CTBaseResult.UnProcess("Hàng hóa vẫn còn tồn kho.");
 
         var checkBOM = await bomRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.ProductId == checkProduct.Id && x.DeletedOn == null, cancellationToken);
         if (checkBOM != null)
-            return CTBaseResult.UnProcess("Product is used in BOM.");
+            return CTBaseResult.UnProcess("Hàng hóa vẫn còn định mức NVL.");
 
         var checkProdCmd = await prodCmdRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Id == checkProduct.Id && x.DeletedOn == null, cancellationToken);
         if (checkProdCmd != null && (checkProdCmd.Status != CommandStatus.CANCELED || checkProdCmd.Status == CommandStatus.COMPLETED))
-            return CTBaseResult.UnProcess("Product is used in Production Command.");
+            return CTBaseResult.UnProcess("Hàng hóa đang được sản xuất.");
 
         checkProduct.DeletedOn = DateTimeOffset.UtcNow;
 

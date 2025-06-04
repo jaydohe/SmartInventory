@@ -38,14 +38,14 @@ public class UpdateGoodsIssueCommandHandler(
         var checkGoodsIssue = await goodsIssueRepos.BuildQuery
                 .FirstOrDefaultAsync(x => x.Code == request.Code && x.DeletedOn == null, cancellationToken);
         if (checkGoodsIssue is null)
-            return CTBaseResult.NotFound("Goods Issue");
+            return CTBaseResult.NotFound("Phiếu xuất hàng");
         if (checkGoodsIssue.Status == GoodsStatus.CANCELED)
-            return CTBaseResult.UnProcess("Goods Issue has been canceled.");
+            return CTBaseResult.UnProcess("Phiếu xuất hàng đã hủy.");
         if (checkGoodsIssue.Status == GoodsStatus.SUCCESS)
-            return CTBaseResult.UnProcess("Goods Issue has been completed.");
+            return CTBaseResult.UnProcess("Phiếu xuất hàng đã hoàn thành.");
 
         if (request.Arg.Status == GoodsStatus.CREATED)
-            return CTBaseResult.UnProcess("Goods Issue has been created.");
+            return CTBaseResult.UnProcess("Phiếu xuất hàng đã được tạo.");
 
         checkGoodsIssue.Status = request.Arg.Status ?? checkGoodsIssue.Status;
         checkGoodsIssue.Note = request.Arg.Note ?? checkGoodsIssue.Note;
@@ -64,6 +64,6 @@ public class UpdateGoodsIssueCommandValidator : AbstractValidator<UpdateGoodsIss
     {
         RuleFor(x => x.Arg.Note)
             .MaximumLength(1024)
-            .WithMessage("Note must be less than 1024 characters.");
+            .WithMessage("Ghi chú tối đa 1024 ký tự.");
     }
 }

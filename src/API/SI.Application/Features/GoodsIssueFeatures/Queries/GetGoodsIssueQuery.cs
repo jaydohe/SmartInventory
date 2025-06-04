@@ -29,7 +29,7 @@ public class GetGoodsIssueQueryHandler(
                 queryContext.ToCacheKey())
             .FirstOrDefaultAsync(cancellationToken);
         if (goodsIssue is null)
-            return CTBaseResult.NotFound("Goods Issue");
+            return CTBaseResult.NotFound("Phiếu xuất hàng");
 
         return CTBaseResult.Success(goodsIssue);
     }

@@ -11,14 +11,14 @@ public class MonitorHub
     public override async Task OnConnectedAsync()
     {
         var queries = Context.GetHttpContext()!.Request.Query;
-        var unitId = queries["unitId"].ToString().Trim() ?? "UNKNOW";
+        var wareId = queries["warehouseId"].ToString().Trim() ?? "UNKNOW";
         var userId = queries["userId"].ToString().Trim() ?? "UNKNOW";
 
-        await Groups.AddToGroupAsync(Context.ConnectionId, unitId);
+        await Groups.AddToGroupAsync(Context.ConnectionId, wareId);
         
         ApplicationHub.ConnectionGroups[Context.ConnectionId] = 
             new ClientInfo {
-                UnitId = unitId,
+                WareId = wareId,
                 UserId = userId,
                 Client = Clients.Client(Context.ConnectionId)
             };
@@ -29,9 +29,9 @@ public class MonitorHub
     {
         if (ApplicationHub.ConnectionGroups.TryRemove(Context.ConnectionId, out var clientInfo))
         {
-            var log = $"Connection {Context.ConnectionId} was part of group unit {clientInfo.UnitId} - user {clientInfo.UserId}";
+            var log = $"Connection {Context.ConnectionId} was part of group unit {clientInfo.WareId} - user {clientInfo.UserId}";
             logger.LogInformation(log);
-            await Groups.RemoveFromGroupAsync(Context.ConnectionId, clientInfo.UnitId);
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, clientInfo.WareId);
         }
         await base.OnDisconnectedAsync(exception);
     }

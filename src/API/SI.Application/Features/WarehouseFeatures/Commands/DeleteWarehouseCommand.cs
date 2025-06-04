@@ -21,17 +21,17 @@ public class DeleteWarehouseCommandHandler(
         var checkWare = await wareRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Id == request.Id && x.DeletedOn == null, cancellationToken);
         if (checkWare is null)
-            return CTBaseResult.NotFound("Warehouse");
+            return CTBaseResult.NotFound("Kho, bãi");
 
         var checkMasterWare = await wareRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Id == checkWare.WarehouseId && x.DeletedOn == null, cancellationToken);
         if (checkMasterWare != null)
-            return CTBaseResult.UnProcess("Master Warehouse is used in Slave Warehouse.");
+            return CTBaseResult.UnProcess("Kho cha đang được dùng tại kho con.");
 
         var checkEmployee = await employeeRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.WarehouseId == checkWare.Id && x.DeletedOn == null, cancellationToken);
         if (checkEmployee != null)
-            return CTBaseResult.UnProcess("Warehouse is used in Employee");
+            return CTBaseResult.UnProcess("Nhân viên vẫn còn trong kho.");
 
         checkWare.DeletedOn = DateTimeOffset.UtcNow;
 

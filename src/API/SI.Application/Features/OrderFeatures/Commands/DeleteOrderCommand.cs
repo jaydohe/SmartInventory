@@ -26,11 +26,11 @@ public class DeleteOrderCommandHandler(
         var checkOrder = await orderRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Id == request.Id && x.DeletedOn == null, cancellationToken);
         if (checkOrder is null)
-            return CTBaseResult.NotFound("Order");
+            return CTBaseResult.NotFound("Đơn hàng");
         if (checkOrder.OrderStatus != OrderStatus.NEW)
-            return CTBaseResult.UnProcess("Order is not NEW, so can not delete.");
+            return CTBaseResult.UnProcess("Trạng thái của đơn hàng không phải là mới tạo.");
         if (checkOrder.OrderStatus == OrderStatus.NEW && checkOrder.UserId != userId)
-            return CTBaseResult.UnProcess("Order is not your order, so can not delete.");
+            return CTBaseResult.UnProcess(" Đơn hàng không phải do bạn tạo.");
 
         var checkOrderDetail = await orderDetailRepos.BuildQuery
             .Where(x => x.OrderId == checkOrder.Id && x.DeletedOn == null)

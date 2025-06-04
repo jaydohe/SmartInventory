@@ -22,6 +22,7 @@ public class InventoryEndpoint : IEndpoint
             .HasApiVersion(1);
 
         inventoryGR.MapGet("/get-all", GetAllInventoryAsync).RequireAuthorization(APIPolicies.FULL);
+        inventoryGR.MapGet("/get-by-product/{productId}", GetInventoryAsync).RequireAuthorization(APIPolicies.SALESFULL);
         inventoryGR.MapPatch("/update/{id}", UpdateInventoryAsync).RequireAuthorization(APIPolicies.STAFFFULL);
 
         return endpoints;
@@ -31,6 +32,11 @@ public class InventoryEndpoint : IEndpoint
     private async Task<IResult> GetAllInventoryAsync(
         [FromServices] IMediator mediator, BaseAPIPageRequest request)
         => (await mediator.Send(new GetAllInventoryQuery(request.ToQueryContext())))
+            .ToOk(e => Results.Ok(e));
+
+    private async Task<IResult> GetInventoryAsync(
+        [FromServices] IMediator mediator, string productId)
+        => (await mediator.Send(new GetInventoryQuery(productId)))
             .ToOk(e => Results.Ok(e));
 
     private async Task<IResult> UpdateInventoryAsync(

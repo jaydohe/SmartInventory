@@ -28,14 +28,15 @@ public class DeleteGoodsIssueCommandHandler(
             .ThenInclude(x => x.Employee)
             .FirstOrDefaultAsync(x => x.Id == request.Id && x.DeletedOn == null, cancellationToken);
         if (checkGoodsIssue is null)
-            return CTBaseResult.NotFound("Goods Issue");
+            return CTBaseResult.NotFound("Phiếu xuất hàng");
         if (checkGoodsIssue.Status != GoodsStatus.CANCELED)
-            return CTBaseResult.UnProcess("Goods Issue is not CANCELED, so can not delete.");
+            return CTBaseResult.UnProcess("Trạng thái của phiếu xuất hàng không phải là hủy.");
+
 
         if (checkGoodsIssue.User.Employee.IsManager == false &&
             checkGoodsIssue.Status == GoodsStatus.CANCELED &&
             checkGoodsIssue.UserId != userId)
-            return CTBaseResult.UnProcess("Goods Issue is not your created, so can not delete.");
+            return CTBaseResult.UnProcess("Phiếu xuất hàng không phải do bạn tạo.");
 
         var checkGoodsIssueDetail = await goodsIssueDetailRepos.BuildQuery
             .Where(x => x.GoodsIssueId == checkGoodsIssue.Id && x.DeletedOn == null)

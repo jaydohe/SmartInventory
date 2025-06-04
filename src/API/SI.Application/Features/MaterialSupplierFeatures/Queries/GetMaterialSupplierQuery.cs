@@ -28,7 +28,7 @@ public class GetMaterialSupplierQueryHandler(
                 request.QueryContext.ToCacheKey())
             .FirstOrDefaultAsync(cancellationToken);
         if (materialSupplier is null)
-            return CTBaseResult.NotFound("Material Supplier");
+            return CTBaseResult.NotFound("Nhà cung cấp NVL");
 
         return CTBaseResult.Success(materialSupplier);
     }

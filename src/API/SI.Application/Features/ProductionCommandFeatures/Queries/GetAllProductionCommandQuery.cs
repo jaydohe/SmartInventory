@@ -35,7 +35,7 @@ public class GetAllProductionCommandQueryHandler(
             var checkManager = await employeeRepos.BuildQuery
                 .FirstOrDefaultAsync(x => x.Id == employeeId && x.IsManager == true, cancellationToken);
             if (checkManager is null)
-                return CTBaseResult.UnProcess("Just manager can access.");
+                return CTBaseResult.UnProcess("Chỉ có quản lý có thể truy cập.");
             
             productionCommandQuery = productionCommandQuery
                 .Include(x => x.User)

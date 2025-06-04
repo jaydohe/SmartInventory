@@ -32,7 +32,7 @@ public class CreatePositionCommandHandler(
         var checkPosition = await positionRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Name == request.Arg.Name && x.DeletedOn == null, cancellationToken);
         if (checkPosition != null)
-            return CTBaseResult.UnProcess("Position is existed.");
+            return CTBaseResult.UnProcess("Chức vụ đã tồn tại.");
 
         var newPosition = new Position
         {
@@ -54,8 +54,8 @@ public class CreatePositionCommandValidator : AbstractValidator<CreatePositionCo
     {
         RuleFor(x => x.Arg.Name)
             .NotEmpty()
-            .WithMessage("Name is required.")
+            .WithMessage("Tên chức vụ là bắt buộc.")
             .MaximumLength(1024)
-            .WithMessage("Name must be less than 1024 characters.");
+            .WithMessage("Tên chức vụ tối đa 1024 ký tự.");
     }
 }

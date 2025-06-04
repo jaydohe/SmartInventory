@@ -36,16 +36,16 @@ public class CreateWarehouseCommandHandler(
         var checkMasterWarehouse = await warehouseRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Id == request.Arg.WarehouseId && x.DeletedOn == null, cancellationToken);
         if (request.Arg.WarehouseId != null && checkMasterWarehouse is null)
-            return CTBaseResult.NotFound("Warehouse");
+            return CTBaseResult.NotFound("Kho, bãi");
 
         var checkExisted = await warehouseRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Name == request.Arg.Name && x.DeletedOn == null, cancellationToken);
         if (checkExisted != null && checkExisted.CategoryId == request.Arg.CategoryId)
         {
             if (checkExisted.ManagerId == request.Arg.ManagerId)
-                return CTBaseResult.UnProcess("The manager is already managing another warehouse.");
+                return CTBaseResult.UnProcess("Đang quản lý tại kho, bãi khác.");
 
-            return CTBaseResult.UnProcess("Warehouse already exists.");
+            return CTBaseResult.UnProcess("Kho, bãi đã tồn tại.");
         }
 
         if (request.Arg.CategoryId != null)
@@ -53,9 +53,9 @@ public class CreateWarehouseCommandHandler(
             var checkCate = await cateRepos.BuildQuery
                 .FirstOrDefaultAsync(x => x.Id == request.Arg.CategoryId && x.DeletedOn == null, cancellationToken);
             if (checkCate is null)
-                return CTBaseResult.NotFound("Category");
+                return CTBaseResult.NotFound("Danh mục kho");
             if (checkCate.CategoryEntityType != CategoryEntityTypes.WAREHOUSE)
-                return CTBaseResult.UnProcess("Category is not warehouse type.");
+                return CTBaseResult.UnProcess("Bắt buộc là danh mục kho.");
         }
 
         if (request.Arg.ManagerId != null)
@@ -63,11 +63,11 @@ public class CreateWarehouseCommandHandler(
             var checkManager = await empRepos.BuildQuery
                 .FirstOrDefaultAsync(x => x.Id == request.Arg.ManagerId && x.DeletedOn == null, cancellationToken);
             if (checkManager is null)
-                return CTBaseResult.NotFound("Employee");
+                return CTBaseResult.NotFound("Nhân viên");
             if (checkManager?.IsManager != true)
-                return CTBaseResult.UnProcess("Only managers can manage the warehouse.");
+                return CTBaseResult.UnProcess("Chỉ có quản lý mới được quản lý kho");
             if (checkManager?.WarehouseId != null)
-                return CTBaseResult.UnProcess("Manager had in another warehouse.");
+                return CTBaseResult.UnProcess("Đang quản lý tại kho, bãi khác.");
             if (checkManager?.WarehouseId is null)
             {
                 checkManager.WarehouseId = request.Arg.WarehouseId;
@@ -101,16 +101,16 @@ public class CreateWarehouseCommandValidator : AbstractValidator<CreateWarehouse
     {
         RuleFor(x => x.Arg.Name)
             .NotEmpty()
-            .WithMessage("Name is required.")
+            .WithMessage("Tên kho là bắt buộc.")
             .MaximumLength(1024)
-            .WithMessage("Name is too long. Only up to 1024 characters.");
+            .WithMessage("Tên kho tối đa 1024 ký tự.");
         RuleFor(x => x.Arg.Address)
             .NotEmpty()
-            .WithMessage("Address is required.")
+            .WithMessage("Địa chỉ là bắt buộc.")
             .MaximumLength(1024)
-            .WithMessage("Address is too long. Only up to 1024 characters.");
+            .WithMessage("Địa chỉ tối đa 1024 ký tự.");
         RuleFor(x => x.Arg.Capacity)
             .GreaterThan(0)
-            .WithMessage("Capacity must be greater than 0.");
+            .WithMessage("Sức chứa phải lớn hơn 0.");
     }
 }

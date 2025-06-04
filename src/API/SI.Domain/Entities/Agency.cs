@@ -2,6 +2,9 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SI.Domain.Common.Abstractions;
 using SI.Domain.Common.Primitives;
+using SI.Domain.Common.Utils;
+using SI.Domain.Enums;
+using SI.Domain.Events;
 using System.ComponentModel.DataAnnotations;
 
 namespace SI.Domain.Entities;
@@ -67,6 +70,45 @@ public class Agency : AggregateRoot, IAuditableEntity, ISoftDeletableEntity
 
     public Agency(string id) : base(id) { }
     public Agency() : base() { }
+
+    public void ActivityCreateAgency(string userName, string userRole, string? wareId)
+    {
+        var payLoad = new WriteActiPayLoad
+        (
+            this.Name,
+            ActivityContentTypes.CREATED,
+            $@"{userName} ({userRole}) đã thêm {this.Name} vào lúc {DateTimeOffset.UtcNow.ToLocal():dd/MM/yyyy HH:mm:ss}",
+            ActivityEntityTypes.AGENCY,
+            wareId
+        );
+        this.Raise(new WriteActivityEvent(Activity.Create(payLoad)));
+    }
+
+    public void ActivityUpdateAgency(string userName, string userRole, string? wareId)
+    {
+        var payLoad = new WriteActiPayLoad
+        (
+            this.Name,
+            ActivityContentTypes.UPDATED,
+            $@"{userName} ({userRole}) đã cập nhật {this.Name} vào lúc {DateTimeOffset.UtcNow.ToLocal():dd/MM/yyyy HH:mm:ss}",
+            ActivityEntityTypes.AGENCY,
+            wareId
+        );
+        this.Raise(new WriteActivityEvent(Activity.Create(payLoad)));
+    }
+
+    public void ActivityDeleteAgency(string userName, string userRole, string? wareId)
+    {
+        var payLoad = new WriteActiPayLoad
+        (
+            this.Name,
+            ActivityContentTypes.DELETED,
+            $@"{userName} ({userRole}) đã xóa {this.Name} vào lúc {DateTimeOffset.UtcNow.ToLocal():dd/MM/yyyy HH:mm:ss}",
+            ActivityEntityTypes.AGENCY,
+            wareId
+        );
+        this.Raise(new WriteActivityEvent(Activity.Create(payLoad)));
+    }
 }
 
 public class AgencyConfiguration : IEntityTypeConfiguration<Agency>

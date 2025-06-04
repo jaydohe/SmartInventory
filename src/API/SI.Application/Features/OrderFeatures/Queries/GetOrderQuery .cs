@@ -31,7 +31,7 @@ public class GetOrderQueryHandler(
                 queryContext.ToCacheKey())
             .FirstOrDefaultAsync(cancellationToken);
         if (order is null)
-            return CTBaseResult.NotFound("Order");
+            return CTBaseResult.NotFound("Đơn hàng");
 
         return CTBaseResult.Success(order);
     }
