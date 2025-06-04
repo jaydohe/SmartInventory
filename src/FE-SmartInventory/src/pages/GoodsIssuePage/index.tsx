@@ -19,6 +19,8 @@ import { useQueryAgency } from '../AgencyPage/Hook/useQueryAgency';
 import { useQueryProduct } from '../ProductPage/Hook/useQueryProduct';
 import { ProductTypes } from '@/Constant/ProductTypes';
 import { TUpdateOrderStatus } from '@/interface/TOder';
+import { useQueryOrder } from '../OrderPage/Hook/useQueryOrder';
+import { OrderStatus } from '@/Constant/OderStatus';
 
 export default function GoodsIssuePage() {
   const [activeTab, setActiveTab] = useState<string>('all'); // Tab "Tất cả" là tab mặc định
@@ -30,7 +32,7 @@ export default function GoodsIssuePage() {
     isOpen: false,
   });
 
-  // Bộ lọc cho agencies và products
+  // Bộ lọc cho agencies, products và orders
   const [filter] = useState<TBuilderQuery>({
     isAsc: false,
     appendQuery: [
@@ -57,19 +59,49 @@ export default function GoodsIssuePage() {
     ],
   });
 
-  // Lấy dữ liệu đại lý và sản phẩm từ API
+  // Bộ lọc cho đơn hàng - chỉ lấy đơn hàng có trạng thái NEW hoặc INPROCESS
+  const [filterOrder] = useState<TBuilderQuery>({
+    isAsc: false,
+    toPaging: {
+      page: 1,
+      pageSize: 10,
+    },
+    toJoin: ['orderDetails.*', 'orderDetails.product.*'],
+    appendQuery: [
+      {
+        code: {
+          value: '',
+          queryOperator: '$fli',
+          queryOperatorParent: '$or',
+        },
+      },
+      {
+        deletedOn: {
+          value: 'null',
+          queryOperator: '$eq',
+          queryOperatorParent: '$and',
+        },
+      },
+    ],
+  });
+
+  // Lấy dữ liệu đại lý, sản phẩm và đơn hàng từ API
   const agencyParams = useBuilderQuery(filter);
   const productParams = useBuilderQuery(filterProduct);
+  const orderParams = useBuilderQuery(filterOrder);
 
   const { getAllAgency } = useQueryAgency(agencyParams);
   const { getAllProduct } = useQueryProduct(productParams);
+  const { getAllOrder } = useQueryOrder(orderParams);
 
   const { data: agenciesData, isLoading: isLoadingAgencies } = getAllAgency;
   const { data: productsData, isLoading: isLoadingProducts } = getAllProduct;
+  const { data: ordersData, isLoading: isLoadingOrders } = getAllOrder;
 
   // Lọc sản phẩm thành phẩm (không phải nguyên vật liệu)
   const products = productsData?.data || [];
   const agencies = agenciesData?.data || [];
+  const orders = ordersData?.data || [];
 
   const [goodsIssueFilter, setGoodsIssueFilter] = useState<TBuilderQuery>({
     isAsc: false,
@@ -239,7 +271,7 @@ export default function GoodsIssuePage() {
         };
 
         updateGoodsIssueStatus.mutate({
-          id: goodsIssue.id,
+          id: goodsIssue.code,
           data: updateData,
         });
       },
@@ -408,10 +440,11 @@ export default function GoodsIssuePage() {
       </div>
 
       <Tabs defaultActiveKey="all" items={items} onChange={onChange} />
-
-      {agencies && products && (
+      {ordersData?.data && (
         <Modal
-          title={<h4 className="font-bold text-2xl text-center uppercase">TẠO PHIẾU XUẤT HÀNG</h4>}
+          title={
+            <h4 className="font-bold text-2xl text-center uppercase">TẠO PHIẾU XUẤT KHO MỚI</h4>
+          }
           className="w-11/12 md:w-2/3 xl:w-1/2"
           open={isOpenCreateModal}
           onCancel={handleCloseCreateModal}
@@ -419,16 +452,16 @@ export default function GoodsIssuePage() {
         >
           <CreateGoodsIssue
             handleCreateGoodsIssue={handleCreateGoodsIssue}
-            agencies={agencies}
+            orders={ordersData?.data}
             products={products}
             isLoadingProducts={isLoadingProducts}
-            isLoadingAgencies={isLoadingAgencies}
+            isLoadingOrders={isLoadingOrders}
           />
         </Modal>
       )}
 
       <Modal
-        title={<h4 className="font-bold text-2xl text-center">CHI TIẾT PHIẾU XUẤT HÀNG</h4>}
+        title={<h4 className="font-bold text-2xl text-center">CHI TIẾT PHIẾU XUẤT KHO</h4>}
         className="w-11/12 md:w-2/3 xl:w-1/2"
         open={isOpenDetailModal.isOpen}
         onCancel={handleCloseDetailModal}
@@ -451,13 +484,19 @@ export default function GoodsIssuePage() {
                   children: isOpenDetailModal.goodsIssue.code,
                 },
                 {
-                  span: 2,
+                  span: 1,
                   key: '2',
-                  label: 'Đại lý/Khách hàng',
-                  children: isOpenDetailModal.goodsIssue.agencyId,
+                  label: 'Mã đơn hàng',
+                  children: isOpenDetailModal.goodsIssue.orderId,
                 },
                 {
-                  span: 2,
+                  span: 1,
+                  key: '7',
+                  label: 'Kho xuất hàng',
+                  children: isOpenDetailModal.goodsIssue.warehouseId,
+                },
+                {
+                  span: 1,
                   key: '3',
                   label: 'Ngày tạo',
                   children: new Date(isOpenDetailModal.goodsIssue.createdAt).toLocaleDateString(
@@ -465,7 +504,7 @@ export default function GoodsIssuePage() {
                   ),
                 },
                 {
-                  span: 2,
+                  span: 1,
                   key: '4',
                   label: 'Tổng giá trị',
                   children: `${isOpenDetailModal.goodsIssue.totalAmount?.toLocaleString(
@@ -473,7 +512,7 @@ export default function GoodsIssuePage() {
                   )} đ`,
                 },
                 {
-                  span: 2,
+                  span: 1,
                   key: '5',
                   label: 'Trạng thái',
                   children: (
@@ -483,7 +522,7 @@ export default function GoodsIssuePage() {
                   ),
                 },
                 {
-                  span: 2,
+                  span: 1,
                   key: '6',
                   label: 'Ghi chú',
                   children: isOpenDetailModal.goodsIssue.note || 'Không có',

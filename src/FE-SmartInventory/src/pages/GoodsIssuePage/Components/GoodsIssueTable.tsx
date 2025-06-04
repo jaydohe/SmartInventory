@@ -36,9 +36,15 @@ const GoodsIssueTable = ({
       render: (text) => <span className="font-medium text-blue-600">{text}</span>,
     },
     {
-      title: 'Đại lý/Khách hàng',
-      dataIndex: 'receiverName',
-      key: 'receiverName',
+      title: 'Mã đơn hàng',
+      dataIndex: 'orderId',
+      key: 'orderId',
+      width: '15%',
+    },
+    {
+      title: 'Kho xuất',
+      dataIndex: 'warehouseId',
+      key: 'warehouseId',
       width: '15%',
     },
     {
@@ -116,7 +122,7 @@ const GoodsIssueTable = ({
         showSizeChanger: true,
         showTotal: (total, range) => `${range[0]}-${range[1]} của ${total} phiếu xuất`,
       }}
-      scroll={{ x: 800 }}
+      scroll={{ x: 900 }}
       bordered
     />
   );
