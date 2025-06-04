@@ -46,7 +46,7 @@ export const QueryKeys = {
 
   // INVENTORY
   INVENTORY: 'inventory',
-  INVENTORY_DETAIL: 'inventoryDetail',
+  INVENTORY_BY_PRODUCT: 'inventoryByProduct',
 
   GOODS_RECEIPT: 'goodsReceipt',
   GOODS_ISSUE: 'goodsIssue',

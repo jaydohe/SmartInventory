@@ -26,6 +26,7 @@ import ProductionCommandPage from '@/pages/ProductionCommandPage';
 import GoodsIssuePage from '@/pages/GoodsIssuePage';
 import GoodsReceiptPage from '@/pages/GoodsReceiptPage';
 import InventoryPage from '@/pages/InventoryPage';
+import BomPage from '@/pages/BomPage';
 export const DefaultRouter = () => {
   return (
     <Suspense fallback={<SkeletonComponent />}>
@@ -79,6 +80,7 @@ export const DefaultRouter = () => {
             <Route path="/production-command" element={<ProductionCommandPage />}></Route>
             <Route path="/material-supplier" element={<MaterialSupplierPage />}></Route>
             <Route path="/activity/*" element={<ActivityRouter />}></Route>
+            <Route path="/bom" element={<BomPage />}></Route>
           </Route>
         </Route>
 

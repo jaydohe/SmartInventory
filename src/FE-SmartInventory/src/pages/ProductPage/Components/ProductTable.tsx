@@ -16,6 +16,12 @@ interface ProductTableProps {
   onPageChange: (page: number, pageSize: number) => void;
   onEditProduct: (product: TProduct) => void;
   onDeleteProduct: (product: TProduct) => void;
+  permissions?: {
+    canCreate: () => boolean;
+    canRead: () => boolean;
+    canUpdate: () => boolean;
+    canDelete: () => boolean;
+  };
 }
 
 const ProductTable: React.FC<ProductTableProps> = ({
@@ -28,6 +34,7 @@ const ProductTable: React.FC<ProductTableProps> = ({
   onPageChange,
   onEditProduct,
   onDeleteProduct,
+  permissions,
 }) => {
   const getCategoryName = (categoryId: string): string => {
     const category = categories.find((cat) => cat.id === categoryId);
@@ -107,26 +114,30 @@ const ProductTable: React.FC<ProductTableProps> = ({
       align: 'center',
       render: (_, record) => (
         <Space size="middle">
-          <Button
-            color="gold"
-            variant="solid"
-            shape="round"
-            icon={<EditOutlined />}
-            onClick={() => onEditProduct(record)}
-            className={'font-medium'}
-          >
-            Cập nhật
-          </Button>
-          <Button
-            color="red"
-            variant="solid"
-            shape="round"
-            icon={<DeleteOutlined />}
-            onClick={() => onDeleteProduct(record)}
-            className={'font-medium'}
-          >
-            Xoá
-          </Button>
+          {permissions?.canUpdate() && (
+            <Button
+              color="gold"
+              variant="solid"
+              shape="round"
+              icon={<EditOutlined />}
+              onClick={() => onEditProduct(record)}
+              className={'font-medium'}
+            >
+              Cập nhật
+            </Button>
+          )}
+          {permissions?.canDelete() && (
+            <Button
+              color="red"
+              variant="solid"
+              shape="round"
+              icon={<DeleteOutlined />}
+              onClick={() => onDeleteProduct(record)}
+              className={'font-medium'}
+            >
+              Xoá
+            </Button>
+          )}
         </Space>
       ),
     },

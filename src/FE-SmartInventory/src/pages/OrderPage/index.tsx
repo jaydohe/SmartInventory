@@ -9,11 +9,14 @@ import { Button, Descriptions, List, Modal, Select, Tabs, TabsProps, Tag } from 
 import { useEffect, useState } from 'react';
 import { useQueryAgency } from '../AgencyPage/Hook/useQueryAgency';
 import { useQueryProduct } from '../ProductPage/Hook/useQueryProduct';
+import { useQueryWarehouse } from '@/hook/useQueryWarehouse';
 import CreateOrder from './Components/CreateOrder';
 import OrderTable from './Components/OrderTable';
 import { useQueryOrder } from './Hook/useQueryOrder';
+import { usePermissions } from '@/hooks/usePermissions';
 
 export default function OrderPage() {
+  const permissions = usePermissions('OrderPage');
   const [activeTab, setActiveTab] = useState<string>('all'); // Tab "Tất cả" là tab mặc định
   const [isOpenCreateModal, setIsOpenCreateModal] = useState<boolean>(false);
   const [isOpenDetailModal, setIsOpenDetailModal] = useState<{
@@ -22,7 +25,7 @@ export default function OrderPage() {
   }>({
     isOpen: false,
   });
-  // Bộ lọc cho agencies và products
+  // Bộ lọc cho agencies, products và warehouses
   const [filter] = useState<TBuilderQuery>({
     isAsc: false,
     appendQuery: [
@@ -48,19 +51,29 @@ export default function OrderPage() {
     ],
   });
 
-  // Lấy dữ liệu đại lý và sản phẩm từ API
+  // Lấy dữ liệu đại lý, sản phẩm và kho từ API
   const agencyParams = useBuilderQuery(filter);
   const productParams = useBuilderQuery(filterProduct);
+  const warehouseParams = useBuilderQuery(filter);
 
   const { getAllAgency } = useQueryAgency(agencyParams);
   const { getAllProduct } = useQueryProduct(productParams);
+  const { getAllWarehouse } = useQueryWarehouse(warehouseParams);
 
   const { data: agenciesData, isLoading: isLoadingAgencies } = getAllAgency;
   const { data: productsData, isLoading: isLoadingProducts } = getAllProduct;
+  const { data: warehousesData, isLoading: isLoadingWarehouses } = getAllWarehouse;
 
   // Lọc sản phẩm chỉ lấy những sản phẩm có productType = GOODS (không phải nguyên vật liệu)
   const products = productsData?.data || [];
   const agencies = agenciesData?.data || [];
+  const warehouses = warehousesData?.data || [];
+
+  // Tìm tên kho dựa vào warehouseId
+  const getWarehouseName = (warehouseId: string) => {
+    const warehouse = warehouses.find((w) => w.id === warehouseId);
+    return warehouse ? warehouse.name : warehouseId;
+  };
 
   // Thêm bộ lọc theo trạng thái đơn hàng
   useEffect(() => {
@@ -291,10 +304,12 @@ export default function OrderPage() {
           totalRecords={listOrder?.totalRecords}
           currentPage={orderFilter.toPaging?.page}
           pageSize={orderFilter.toPaging?.pageSize}
+          warehouses={warehouses}
           onPageChange={handleOrderPageChange}
           onEditOrder={handleEditOrder}
           onDeleteOrder={showConfirmDelete}
           onViewDetail={handleOpenDetailModal}
+          permissions={permissions}
         />
       ),
     },
@@ -308,10 +323,12 @@ export default function OrderPage() {
           totalRecords={listOrder?.totalRecords}
           currentPage={orderFilter.toPaging?.page}
           pageSize={orderFilter.toPaging?.pageSize}
+          warehouses={warehouses}
           onPageChange={handleOrderPageChange}
           onEditOrder={handleEditOrder}
           onDeleteOrder={showConfirmDelete}
           onViewDetail={handleOpenDetailModal}
+          permissions={permissions}
         />
       ),
     },
@@ -325,10 +342,12 @@ export default function OrderPage() {
           totalRecords={listOrder?.totalRecords}
           currentPage={orderFilter.toPaging?.page}
           pageSize={orderFilter.toPaging?.pageSize}
+          warehouses={warehouses}
           onPageChange={handleOrderPageChange}
           onEditOrder={handleEditOrder}
           onDeleteOrder={showConfirmDelete}
           onViewDetail={handleOpenDetailModal}
+          permissions={permissions}
         />
       ),
     },
@@ -342,10 +361,12 @@ export default function OrderPage() {
           totalRecords={listOrder?.totalRecords}
           currentPage={orderFilter.toPaging?.page}
           pageSize={orderFilter.toPaging?.pageSize}
+          warehouses={warehouses}
           onPageChange={handleOrderPageChange}
           onEditOrder={handleEditOrder}
           onDeleteOrder={showConfirmDelete}
           onViewDetail={handleOpenDetailModal}
+          permissions={permissions}
         />
       ),
     },
@@ -359,10 +380,12 @@ export default function OrderPage() {
           totalRecords={listOrder?.totalRecords}
           currentPage={orderFilter.toPaging?.page}
           pageSize={orderFilter.toPaging?.pageSize}
+          warehouses={warehouses}
           onPageChange={handleOrderPageChange}
           onEditOrder={handleEditOrder}
           onDeleteOrder={showConfirmDelete}
           onViewDetail={handleOpenDetailModal}
+          permissions={permissions}
         />
       ),
     },
@@ -376,10 +399,12 @@ export default function OrderPage() {
           totalRecords={listOrder?.totalRecords}
           currentPage={orderFilter.toPaging?.page}
           pageSize={orderFilter.toPaging?.pageSize}
+          warehouses={warehouses}
           onPageChange={handleOrderPageChange}
           onEditOrder={handleEditOrder}
           onDeleteOrder={showConfirmDelete}
           onViewDetail={handleOpenDetailModal}
+          permissions={permissions}
         />
       ),
     },
@@ -393,14 +418,16 @@ export default function OrderPage() {
             <ShoppingCartOutlined className="text-xl font-medium" />
             Quản lý đơn hàng
           </h2>
-          <Button
-            variant="solid"
-            color="primary"
-            onClick={handleOpenCreateModal}
-            className="rounded-2xl w-full sm:w-fit"
-          >
-            Tạo đơn hàng mới
-          </Button>
+          {permissions.canCreate() && (
+            <Button
+              variant="solid"
+              color="primary"
+              onClick={handleOpenCreateModal}
+              className="rounded-2xl w-full sm:w-fit"
+            >
+              Tạo đơn hàng mới
+            </Button>
+          )}
         </div>
 
         <div className="w-full sm:w-1/3 justify-end">
@@ -421,8 +448,10 @@ export default function OrderPage() {
             handleCreateOrder={handleCreateOrder}
             agencies={agencies}
             products={products}
+            warehouses={warehouses}
             isLoadingProducts={isLoadingProducts}
             isLoadingAgencies={isLoadingAgencies}
+            isLoadingWarehouses={isLoadingWarehouses}
           />
         </Modal>
       )}
@@ -451,35 +480,37 @@ export default function OrderPage() {
                   children: isOpenDetailModal.order.code,
                 },
                 {
-                  span: 2,
+                  span: 1,
                   key: '2',
                   label: 'Đại lý',
                   children: isOpenDetailModal.order.agencyId,
                 },
                 {
-                  span: 2,
-
+                  span: 1,
+                  key: '8',
+                  label: 'Kho xuất hàng',
+                  children: getWarehouseName(isOpenDetailModal.order.warehouseId),
+                },
+                {
+                  span: 1,
                   key: '3',
                   label: 'VAT',
                   children: `${isOpenDetailModal.order.vat || 0}%`,
                 },
                 {
-                  span: 2,
-
+                  span: 1,
                   key: '4',
                   label: 'Giảm giá',
                   children: `${isOpenDetailModal.order.discount || 0}%`,
                 },
                 {
                   span: 2,
-
                   key: '5',
                   label: 'Tổng giá trị',
                   children: `${isOpenDetailModal.order.totalAmount?.toLocaleString('vi-VN')} đ`,
                 },
                 {
-                  span: 2,
-
+                  span: 1,
                   key: '6',
                   label: 'Loại đơn hàng',
                   children: (
@@ -489,7 +520,7 @@ export default function OrderPage() {
                   ),
                 },
                 {
-                  span: 2,
+                  span: 1,
                   key: '7',
                   label: 'Trạng thái',
                   children: (

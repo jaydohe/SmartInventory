@@ -15,8 +15,11 @@ import { useQueryAgency } from './Hook/useQueryAgency';
 import EditAgency from './Components/EditAgency';
 import CreateAgency from './Components/CreateAgency';
 import SearchInput from '@/Components/SearchInput';
+import { usePermissions } from '@/hooks/usePermissions';
 
 export default function AgencyPage() {
+  const permissions = usePermissions('AgencyPage');
+
   const [isOpenCreateModal, setIsOpenCreateModal] = useState<boolean>(false);
   const [isOpenEditModal, setIsOpenEditModal] = useState<{
     isOpen: boolean;
@@ -225,26 +228,30 @@ export default function AgencyPage() {
       align: 'center',
       render: (_, record) => (
         <Space size="middle">
-          <Button
-            color="gold"
-            variant="solid"
-            shape="round"
-            icon={<EditOutlined />}
-            onClick={() => handleEditAgency(record)}
-            className={'font-medium'}
-          >
-            Cập nhật
-          </Button>
-          <Button
-            color="red"
-            variant="solid"
-            shape="round"
-            icon={<DeleteOutlined />}
-            onClick={() => showConfirmNotify('Xóa đại lý', 'Bạn có muốn xóa đại lý này?', record)}
-            className={'font-medium'}
-          >
-            Xoá
-          </Button>
+          {permissions.canUpdate() && (
+            <Button
+              color="gold"
+              variant="solid"
+              shape="round"
+              icon={<EditOutlined />}
+              onClick={() => handleEditAgency(record)}
+              className={'font-medium'}
+            >
+              Cập nhật
+            </Button>
+          )}
+          {permissions.canDelete() && (
+            <Button
+              color="red"
+              variant="solid"
+              shape="round"
+              icon={<DeleteOutlined />}
+              onClick={() => showConfirmNotify('Xóa đại lý', 'Bạn có muốn xóa đại lý này?', record)}
+              className={'font-medium'}
+            >
+              Xoá
+            </Button>
+          )}
         </Space>
       ),
     },
@@ -258,14 +265,16 @@ export default function AgencyPage() {
             <UnorderedListOutlined className="text-xl font-medium" />
             Danh sách đại lý
           </h2>
-          <Button
-            variant="solid"
-            color="primary"
-            onClick={() => handleOpenCreateModal()}
-            className="rounded-2xl w-full sm:w-fit"
-          >
-            Thêm đại lý
-          </Button>
+          {permissions.canCreate() && (
+            <Button
+              variant="solid"
+              color="primary"
+              onClick={() => handleOpenCreateModal()}
+              className="rounded-2xl w-full sm:w-fit"
+            >
+              Thêm đại lý
+            </Button>
+          )}
         </div>
 
         <div className="w-full sm:w-1/3 justify-end">

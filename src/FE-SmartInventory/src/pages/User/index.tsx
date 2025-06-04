@@ -45,12 +45,14 @@ import { authStoreSelectors } from '@/Stores/userStore';
 import { useQueryWarehouse } from '@/hook/useQueryWarehouse';
 import { useQueryEmployee } from '../Employee/Hook/useEmployeePage';
 import { useQueryDepartment } from '../DepartmentPage/Hook/useQueryDepartment';
+import { usePermissions } from '@/hooks/usePermissions';
 
 const { Title, Text } = Typography;
 const { TabPane } = Tabs;
 
 export default function User() {
   const role = authStoreSelectors.use.role();
+  const permissions = usePermissions('User');
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
   const [isDrawerVisible, setIsDrawerVisible] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
@@ -74,8 +76,6 @@ export default function User() {
       },
     ],
   });
-
-
 
   const { getAllDepartment } = useQueryDepartment(useBuilderQuery(filterEmployee), {
     enabled: role === RoleEnumString.DEV,
@@ -206,7 +206,7 @@ export default function User() {
               Chi tiết
             </Button>
           </Tooltip>
-          {role === RoleEnumString.DEV && (
+          {permissions.canDelete() && (
             <Tooltip title="Xóa người dùng">
               <Popconfirm
                 title="Bạn có chắc chắn muốn xóa người dùng này không?"
@@ -231,7 +231,7 @@ export default function User() {
   ];
 
   const columns: ColumnsType<TUser> =
-    role === RoleEnumString.DEV || role === RoleEnumString.ADMIN
+    permissions.canDelete() || permissions.canUpdate()
       ? [...commonColumns, ...actionColumn]
       : commonColumns;
 
@@ -269,7 +269,7 @@ export default function User() {
         <Title level={2} className="mb-0 uppercase text-center text-pretty ">
           Quản lý Tài khoản
         </Title>
-        {role === RoleEnumString.ADMIN && (
+        {permissions.canCreate() && (
           <Button
             variant="solid"
             color="primary"

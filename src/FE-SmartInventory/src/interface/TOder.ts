@@ -1,7 +1,8 @@
-import { OrderStatus } from "@/Constant/OderStatus";
-import { TProduct } from "./TProduct";
+import { OrderStatus } from '@/Constant/OderStatus';
+import { TProduct } from './TProduct';
 
 export type TOrder = {
+  warehouseId: string; // id của kho,
   agencyId: string; // id của đại lý,
   code: string; //mã số của đơn hàng
   userId: string; // id của người tạo đơn hàng,
@@ -27,6 +28,7 @@ export type TOrderDetail = {
 };
 
 export type TCreateOrder = {
+  warehouseId: string; //id của kho
   agencyId: string; //id của đại lý
   isRefund: boolean; //có phải thu hồi hàng từ đại lý không
   vat?: number; //thuế giá trị gia tăng

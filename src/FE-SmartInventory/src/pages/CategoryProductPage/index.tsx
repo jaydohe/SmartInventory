@@ -15,8 +15,11 @@ import { useQueryCategoryProduct } from './Hook/useQueryCategoryProduct';
 import EditCategoryProduct from './Components/EditCategoryProduct';
 import CreateCategoryProduct from './Components/CreateCategoryProduct';
 import SearchInput from '@/Components/SearchInput';
+import { usePermissions } from '@/hooks/usePermissions';
 
 export default function CategoryProductPage() {
+  const permissions = usePermissions('CategoryProductPage');
+
   const [isOpenCreateModal, setIsOpenCreateModal] = useState<boolean>(false);
   const [isOpenEditModal, setIsOpenEditModal] = useState<{
     isOpen: boolean;
@@ -195,28 +198,32 @@ export default function CategoryProductPage() {
       align: 'center',
       render: (_, record) => (
         <Space size="middle">
-          <Button
-            color="gold"
-            variant="solid"
-            shape="round"
-            icon={<EditOutlined />}
-            onClick={() => handleEditCategoryProduct(record)}
-            className={'font-medium'}
-          >
-            Cập nhật
-          </Button>
-          <Button
-            color="red"
-            variant="solid"
-            shape="round"
-            icon={<DeleteOutlined />}
-            onClick={() =>
-              showConfirmDelete('Xóa danh mục', 'Bạn có muốn xóa danh mục sản phẩm này?', record)
-            }
-            className={'font-medium'}
-          >
-            Xoá
-          </Button>
+          {permissions.canUpdate() && (
+            <Button
+              color="gold"
+              variant="solid"
+              shape="round"
+              icon={<EditOutlined />}
+              onClick={() => handleEditCategoryProduct(record)}
+              className={'font-medium'}
+            >
+              Cập nhật
+            </Button>
+          )}
+          {permissions.canDelete() && (
+            <Button
+              color="red"
+              variant="solid"
+              shape="round"
+              icon={<DeleteOutlined />}
+              onClick={() =>
+                showConfirmDelete('Xóa danh mục', 'Bạn có muốn xóa danh mục sản phẩm này?', record)
+              }
+              className={'font-medium'}
+            >
+              Xoá
+            </Button>
+          )}
         </Space>
       ),
     },
@@ -230,14 +237,16 @@ export default function CategoryProductPage() {
             <UnorderedListOutlined className="text-xl font-medium" />
             Danh sách danh mục sản phẩm
           </h2>
-          <Button
-            variant="solid"
-            color="primary"
-            onClick={() => handleOpenCreateModal()}
-            className="rounded-2xl w-full sm:w-fit"
-          >
-            Thêm danh mục
-          </Button>
+          {permissions.canCreate() && (
+            <Button
+              variant="solid"
+              color="primary"
+              onClick={() => handleOpenCreateModal()}
+              className="rounded-2xl w-full sm:w-fit"
+            >
+              Thêm danh mục
+            </Button>
+          )}
         </div>
 
         <div className="w-full sm:w-1/3 justify-end">

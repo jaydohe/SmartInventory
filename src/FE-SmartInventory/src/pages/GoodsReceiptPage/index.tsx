@@ -9,8 +9,11 @@ import GoodsReceiptTable from './Components/GoodsReceiptTable';
 import { TGoodsReceipt } from '@/interface/TGoodsReceipt';
 import { genGoodsStatus, GoodsStatus } from '@/Constant/GoodsStatus';
 import CreateGoodsReceiptContainer from './Components/CreateGoodsReceiptContainer';
+import { usePermissions } from '@/hooks/usePermissions';
 
 export default function GoodsReceiptPage() {
+  const permissions = usePermissions('GoodsReceiptPage');
+
   const [isOpenCreateModal, setIsOpenCreateModal] = useState<boolean>(false);
   const [isOpenDetailModal, setIsOpenDetailModal] = useState<{
     isOpen: boolean;
@@ -146,13 +149,15 @@ export default function GoodsReceiptPage() {
             <ShoppingCartOutlined className="text-xl font-medium" />
             Quản lý phiếu nhập hàng
           </h2>
-          <Button
-            type="primary"
-            onClick={handleOpenCreateModal}
-            className="rounded-2xl w-full sm:w-fit"
-          >
-            Tạo phiếu nhập hàng
-          </Button>
+          {permissions.canCreate() && (
+            <Button
+              type="primary"
+              onClick={handleOpenCreateModal}
+              className="rounded-2xl w-full sm:w-fit"
+            >
+              Tạo phiếu nhập hàng
+            </Button>
+          )}
         </div>
 
         <div className="w-full sm:w-1/3 justify-end">
@@ -173,6 +178,7 @@ export default function GoodsReceiptPage() {
         onEditGoodsReceipt={handleEditGoodsReceipt}
         onDeleteGoodsReceipt={showConfirmDelete}
         onViewDetail={handleOpenDetailModal}
+        permissions={permissions}
       />
 
       <CreateGoodsReceiptContainer
@@ -253,9 +259,7 @@ export default function GoodsReceiptPage() {
                   key: '6',
                   label: 'Trạng thái',
                   children: (
-                    <Tag
-                      color={genGoodsStatus[isOpenDetailModal.goodsReceipt.status]?.color}
-                    >
+                    <Tag color={genGoodsStatus[isOpenDetailModal.goodsReceipt.status]?.color}>
                       {genGoodsStatus[isOpenDetailModal.goodsReceipt.status]?.label}
                     </Tag>
                   ),
