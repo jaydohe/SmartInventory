@@ -12,10 +12,6 @@ import { useQueryProduct } from '../ProductPage/Hook/useQueryProduct';
 import CreateOrder from './Components/CreateOrder';
 import OrderTable from './Components/OrderTable';
 import { useQueryOrder } from './Hook/useQueryOrder';
-<<<<<<< Updated upstream
-=======
-import { usePermissions } from '@/hook/usePermissions';
->>>>>>> Stashed changes
 
 export default function OrderPage() {
   const [activeTab, setActiveTab] = useState<string>('all'); // Tab "Tất cả" là tab mặc định

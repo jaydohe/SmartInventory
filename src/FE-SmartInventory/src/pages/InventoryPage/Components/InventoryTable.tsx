@@ -10,20 +10,8 @@ interface InventoryTableProps {
   currentPage?: number;
   pageSize?: number;
   onPageChange: (page: number, pageSize: number) => void;
-<<<<<<< Updated upstream
   onViewDetail: (inventory: TInventory) => void;
   onViewHistory: (inventory: TInventory) => void;
-=======
-  onViewDetail: (record: TInventory) => void;
-  onViewByProduct: (record: TInventory) => void;
-  onUpdateInventory: (record: TInventory) => void;
-  permissions?: {
-    canCreate: () => boolean;
-    canRead: () => boolean;
-    canUpdate: () => boolean;
-    canDelete: () => boolean;
-  };
->>>>>>> Stashed changes
 }
 
 const InventoryTable = ({
@@ -34,13 +22,7 @@ const InventoryTable = ({
   pageSize,
   onPageChange,
   onViewDetail,
-<<<<<<< Updated upstream
   onViewHistory,
-=======
-  onViewByProduct,
-  onUpdateInventory,
-  permissions,
->>>>>>> Stashed changes
 }: InventoryTableProps) => {
   // Tính trạng thái cảnh báo tồn kho
   const getInventoryStatus = (inventory: TInventory) => {
@@ -172,48 +154,6 @@ const InventoryTable = ({
         </div>
       ),
     },
-<<<<<<< Updated upstream
-=======
-    {
-      title: 'Ngày tạo',
-      dataIndex: 'createdAt',
-      key: 'createdAt',
-      width: '15%',
-      render: (value) => new Date(value).toLocaleDateString('vi-VN'),
-    },
-    {
-      title: 'Thao tác',
-      key: 'action',
-      width: 200,
-      align: 'center',
-      render: (_, record) => (
-        <div className="flex gap-2 justify-center">
-          <Tooltip title="Xem chi tiết tồn kho theo sản phẩm">
-            <Button
-              color="cyan"
-              variant="solid"
-              shape="round"
-              icon={<HistoryOutlined />}
-              onClick={() => onViewByProduct(record)}
-              className={'font-medium'}
-            ></Button>
-          </Tooltip>
-          {permissions?.canUpdate() && onUpdateInventory && (
-            <Tooltip title="Cập nhật tồn kho">
-              <Button
-                color="gold"
-                variant="solid"
-                shape="round"
-                icon={<EditOutlined />}
-                onClick={() => onUpdateInventory(record)}
-                className={'font-medium'}
-              ></Button>
-            </Tooltip>
-          )}
-        </div>
-      ),
-    },
->>>>>>> Stashed changes
   ];
 
   return (

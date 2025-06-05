@@ -67,43 +67,36 @@ const GoodsIssueTable = ({
     {
       title: 'Thao tác',
       key: 'action',
-      width: 250,
-      align: 'center',
+      width: '15%',
       render: (_, record) => (
-        <div className="flex gap-2 justify-center">
-          <Tooltip title="Xem chi tiết phiếu xuất">
+        <div className="flex gap-2">
+          <Tooltip title="Xem chi tiết">
             <Button
-              color="cyan"
-              variant="solid"
-              shape="round"
+              type="text"
               icon={<EyeOutlined />}
               onClick={() => onViewDetail(record)}
-              className={'font-medium'}
-            ></Button>
+              className="text-blue-600 hover:text-blue-800"
+            />
           </Tooltip>
-          <Tooltip title="Cập nhật phiếu xuất">
+          <Tooltip title="Sửa">
             <Button
-              color="gold"
-              variant="solid"
-              shape="round"
+              type="text"
               icon={<EditOutlined />}
               onClick={() => onEditGoodsIssue(record)}
               disabled={
                 record.status === GoodsStatus.SUCCESS || record.status === GoodsStatus.CANCELLED
               }
-              className={'font-medium'}
-            ></Button>
+              className="text-green-600 hover:text-green-800"
+            />
           </Tooltip>
-          <Tooltip title="Xoá phiếu xuất">
+          <Tooltip title="Xóa">
             <Button
-              color="red"
-              variant="solid"
-              shape="round"
+              type="text"
               icon={<DeleteOutlined />}
               onClick={() => onDeleteGoodsIssue(record)}
               disabled={record.status === GoodsStatus.SUCCESS}
-              className={'font-medium'}
-            ></Button>
+              className="text-red-600 hover:text-red-800"
+            />
           </Tooltip>
         </div>
       ),

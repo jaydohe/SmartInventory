@@ -7,7 +7,7 @@ import {
   ExclamationCircleFilled,
   HomeOutlined,
 } from '@ant-design/icons';
-import { Button, Modal, Space, Table, Tag, Tooltip, Typography } from 'antd';
+import { Button, Modal, Space, Table, Tag, Typography } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { useState } from 'react';
 
@@ -238,36 +238,36 @@ export default function WarehousePage() {
       width: 250,
       render: (_, record) => (
         <Space size="middle">
-          <Tooltip title="Xem chi tiết kho">
-            <Button
-              color="cyan"
-              variant="solid"
-              shape="round"
-              icon={<EyeOutlined />}
-              onClick={() => handleViewDetail(record.id)}
-              className={'font-medium'}
-            ></Button>
-          </Tooltip>
-          <Tooltip title="Cập nhật kho">
-            <Button
-              color="gold"
-              variant="solid"
-              shape="round"
-              icon={<EditOutlined />}
-              onClick={() => handleEditWarehouse(record)}
-              className={'font-medium'}
-            ></Button>{' '}
-          </Tooltip>
-          <Tooltip title="Xoá kho">
-            <Button
-              color="red"
-              variant="solid"
-              shape="round"
-              icon={<DeleteOutlined />}
-              onClick={() => showConfirmDelete('Xóa kho', 'Bạn có muốn xóa kho này?', record)}
-              className={'font-medium'}
-            ></Button>
-          </Tooltip>
+          <Button
+            color="cyan"
+            variant="solid"
+            shape="round"
+            icon={<EyeOutlined />}
+            onClick={() => handleViewDetail(record.id)}
+            className={'font-medium'}
+          >
+            {/* Chi tiết */}
+          </Button>
+          <Button
+            color="gold"
+            variant="solid"
+            shape="round"
+            icon={<EditOutlined />}
+            onClick={() => handleEditWarehouse(record)}
+            className={'font-medium'}
+          >
+            {/* Cập nhật */}
+          </Button>
+          <Button
+            color="red"
+            variant="solid"
+            shape="round"
+            icon={<DeleteOutlined />}
+            onClick={() => showConfirmDelete('Xóa kho', 'Bạn có muốn xóa kho này?', record)}
+            className={'font-medium'}
+          >
+            {/* Xoá */}
+          </Button>
         </Space>
       ),
     },

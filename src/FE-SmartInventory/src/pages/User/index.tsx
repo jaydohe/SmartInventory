@@ -9,7 +9,6 @@ import {
   PlusOutlined,
   SettingOutlined,
   ToolOutlined,
-  EditOutlined,
 } from '@ant-design/icons';
 import {
   Button,
@@ -46,10 +45,6 @@ import { authStoreSelectors } from '@/Stores/userStore';
 import { useQueryWarehouse } from '@/hook/useQueryWarehouse';
 import { useQueryEmployee } from '../Employee/Hook/useEmployeePage';
 import { useQueryDepartment } from '../DepartmentPage/Hook/useQueryDepartment';
-<<<<<<< Updated upstream
-=======
-import { usePermissions } from '@/hook/usePermissions';
->>>>>>> Stashed changes
 
 const { Title, Text } = Typography;
 const { TabPane } = Tabs;
@@ -197,31 +192,20 @@ export default function User() {
     {
       title: 'Thao tác',
       key: 'action',
-      align: 'center',
-      width: 200,
       render: (_, record) => (
         <Space size="middle">
-          <Tooltip title="Cập nhật tài khoản">
+          <Tooltip title="Chi tiết">
             <Button
-              color="gold"
+              className="rounded-2xl"
+              size="middle"
+              color="primary"
               variant="solid"
-              shape="round"
-              icon={<EditOutlined />}
+              icon={<InfoCircleOutlined />}
               onClick={() => handleOpenDrawer(record.id)}
-              className={'font-medium'}
-            ></Button>
+            >
+              Chi tiết
+            </Button>
           </Tooltip>
-          <Tooltip title="Xoá tài khoản">
-            <Button
-              color="red"
-              variant="solid"
-              shape="round"
-              icon={<DeleteOutlined />}
-              onClick={() => handleDeleteUser(record.id)}
-              className={'font-medium'}
-            ></Button>
-          </Tooltip>
-<<<<<<< Updated upstream
           {role === RoleEnumString.DEV && (
             <Tooltip title="Xóa người dùng">
               <Popconfirm
@@ -241,8 +225,6 @@ export default function User() {
               </Popconfirm>
             </Tooltip>
           )}
-=======
->>>>>>> Stashed changes
         </Space>
       ),
     },

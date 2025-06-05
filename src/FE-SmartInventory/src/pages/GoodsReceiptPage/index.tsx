@@ -9,10 +9,6 @@ import GoodsReceiptTable from './Components/GoodsReceiptTable';
 import { TGoodsReceipt } from '@/interface/TGoodsReceipt';
 import { genGoodsStatus, GoodsStatus } from '@/Constant/GoodsStatus';
 import CreateGoodsReceiptContainer from './Components/CreateGoodsReceiptContainer';
-<<<<<<< Updated upstream
-=======
-import { usePermissions } from '@/hook/usePermissions';
->>>>>>> Stashed changes
 
 export default function GoodsReceiptPage() {
   const [isOpenCreateModal, setIsOpenCreateModal] = useState<boolean>(false);

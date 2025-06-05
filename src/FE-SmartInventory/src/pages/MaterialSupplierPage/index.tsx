@@ -6,7 +6,7 @@ import {
   ExclamationCircleFilled,
   UnorderedListOutlined,
 } from '@ant-design/icons';
-import { Button, Modal, Space, Table, Typography, Tooltip } from 'antd';
+import { Button, Modal, Space, Table, Typography } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { useState } from 'react';
 
@@ -232,31 +232,30 @@ export default function MaterialSupplierPage() {
       title: 'Thao tác',
       key: 'action',
       align: 'center',
-      width: 200,
       render: (_, record) => (
         <Space size="middle">
-          <Tooltip title="Cập nhật nhà cung cấp">
-            <Button
-              color="gold"
-              variant="solid"
-              shape="round"
-              icon={<EditOutlined />}
-              onClick={() => handleEditMaterialSupplier(record)}
-              className={'font-medium'}
-            ></Button>
-          </Tooltip>
-          <Tooltip title="Xoá nhà cung cấp">
-            <Button
-              color="red"
-              variant="solid"
-              shape="round"
-              icon={<DeleteOutlined />}
-              onClick={() =>
-                showConfirmNotify('Xóa nhà cung cấp', 'Bạn có muốn xóa nhà cung cấp này?', record)
-              }
-              className={'font-medium'}
-            ></Button>
-          </Tooltip>
+          <Button
+            color="gold"
+            variant="solid"
+            shape="round"
+            icon={<EditOutlined />}
+            onClick={() => handleEditMaterialSupplier(record)}
+            className={'font-medium'}
+          >
+            Cập nhật
+          </Button>
+          <Button
+            color="red"
+            variant="solid"
+            shape="round"
+            icon={<DeleteOutlined />}
+            onClick={() =>
+              showConfirmNotify('Xóa nhà cung cấp', 'Bạn có muốn xóa nhà cung cấp này?', record)
+            }
+            className={'font-medium'}
+          >
+            Xoá
+          </Button>
         </Space>
       ),
     },

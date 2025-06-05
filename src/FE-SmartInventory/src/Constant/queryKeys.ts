@@ -59,10 +59,4 @@ export const QueryKeys = {
 
   ORDER_DETAIL: 'orderDetail',
   ORDER: 'order',
-
-  // SMART DASHBOARD
-  SMART_DASHBOARD: 'smartDashboard',
-
-  // SETUP
-  SETUP: 'setup',
 };

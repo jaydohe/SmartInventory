@@ -6,7 +6,7 @@ import {
   ExclamationCircleFilled,
   UnorderedListOutlined,
 } from '@ant-design/icons';
-import { Button, Modal, Space, Table, Typography, Tooltip } from 'antd';
+import { Button, Modal, Space, Table, Typography } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { useState } from 'react';
 
@@ -193,31 +193,30 @@ export default function CategoryWarehousePage() {
       title: 'Thao tác',
       key: 'action',
       align: 'center',
-      width: 200,
       render: (_, record) => (
         <Space size="middle">
-          <Tooltip title="Cập nhật danh mục kho">
-            <Button
-              color="gold"
-              variant="solid"
-              shape="round"
-              icon={<EditOutlined />}
-              onClick={() => handleEditCategoryWarehouse(record)}
-              className={'font-medium'}
-            ></Button>
-          </Tooltip>
-          <Tooltip title="Xoá danh mục kho">
-            <Button
-              color="red"
-              variant="solid"
-              shape="round"
-              icon={<DeleteOutlined />}
-              onClick={() =>
-                showConfirmDelete('Xóa danh mục', 'Bạn có muốn xóa danh mục kho này?', record)
-              }
-              className={'font-medium'}
-            ></Button>
-          </Tooltip>
+          <Button
+            color="gold"
+            variant="solid"
+            shape="round"
+            icon={<EditOutlined />}
+            onClick={() => handleEditCategoryWarehouse(record)}
+            className={'font-medium'}
+          >
+            Cập nhật
+          </Button>
+          <Button
+            color="red"
+            variant="solid"
+            shape="round"
+            icon={<DeleteOutlined />}
+            onClick={() =>
+              showConfirmDelete('Xóa danh mục', 'Bạn có muốn xóa danh mục kho này?', record)
+            }
+            className={'font-medium'}
+          >
+            Xoá
+          </Button>
         </Space>
       ),
     },

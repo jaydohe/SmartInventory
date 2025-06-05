@@ -17,10 +17,6 @@ import CreateProduct from './Components/CreateProduct';
 import SearchInput from '@/Components/SearchInput';
 import ProductTable from './Components/ProductTable';
 import { ProductTypes } from '@/Constant/ProductTypes';
-<<<<<<< Updated upstream
-=======
-import { usePermissions } from '@/hook/usePermissions';
->>>>>>> Stashed changes
 
 export default function ProductPage() {
   const [activeTab, setActiveTab] = useState<string>('1'); // Tab sản phẩm là tab mặc định
