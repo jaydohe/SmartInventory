@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { usePermissions } from '@/hooks/usePermissions';
+import { usePermissions } from '@/hook/usePermissions';
 import { PermissionAction } from '@/utils/permissions';
 
 interface PermissionWrapperProps {

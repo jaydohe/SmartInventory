@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Button, Space, Tag } from 'antd';
+import { Table, Button, Space, Tag, Tooltip } from 'antd';
 import { EditOutlined, DeleteOutlined, EyeOutlined } from '@ant-design/icons';
 import type { ColumnsType } from 'antd/es/table';
 import { TBom } from '@/interface/TBom';
@@ -85,43 +85,43 @@ const BomTable: React.FC<BomTableProps> = ({
     {
       title: 'Thao tác',
       key: 'actions',
-      width: 180,
+      width: 250,
       align: 'center',
       render: (_, record) => (
-        <Space wrap>
-          <Button
-            type="default"
-            size="small"
-            icon={<EyeOutlined />}
-            onClick={() => onViewDetail?.(record)}
-            className="border-green-500 text-green-500 hover:bg-green-50"
-          >
-            Chi tiết
-          </Button>
-          {permissions?.canUpdate() && (
+        <Space size="middle">
+          <Tooltip title="Xem chi tiết định mức">
             <Button
-              type="primary"
-              ghost
-              size="small"
-              icon={<EditOutlined />}
-              onClick={() => onEditBom?.(record)}
-              className="border-blue-500 text-blue-500 hover:bg-blue-50"
-            >
-              Sửa
-            </Button>
+              color="cyan"
+              variant="solid"
+              shape="round"
+              icon={<EyeOutlined />}
+              onClick={() => onViewDetail?.(record)}
+              className={'font-medium'}
+            ></Button>
+          </Tooltip>
+          {permissions?.canUpdate() && (
+            <Tooltip title="Cập nhật định mức">
+              <Button
+                color="gold"
+                variant="solid"
+                shape="round"
+                icon={<EditOutlined />}
+                onClick={() => onEditBom?.(record)}
+                className={'font-medium'}
+              ></Button>
+            </Tooltip>
           )}
           {permissions?.canDelete() && (
-            <Button
-              type="primary"
-              danger
-              ghost
-              size="small"
-              icon={<DeleteOutlined />}
-              onClick={() => onDeleteBom?.(record)}
-              className="border-red-500 text-red-500 hover:bg-red-50"
-            >
-              Xóa
-            </Button>
+            <Tooltip title="Xoá định mức">
+              <Button
+                color="red"
+                variant="solid"
+                shape="round"
+                icon={<DeleteOutlined />}
+                onClick={() => onDeleteBom?.(record)}
+                className={'font-medium'}
+              ></Button>
+            </Tooltip>
           )}
         </Space>
       ),

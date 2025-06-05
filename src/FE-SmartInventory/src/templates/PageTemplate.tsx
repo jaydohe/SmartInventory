@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { Button, Modal, Space, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
-import { usePermissions } from '@/hooks/usePermissions';
+import { usePermissions } from '@/hook/usePermissions';
 import { PermissionWrapper } from '@/Components/PermissionWrapper';
 import SearchInput from '@/Components/SearchInput';
 

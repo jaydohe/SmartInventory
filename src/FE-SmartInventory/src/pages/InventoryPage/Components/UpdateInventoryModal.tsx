@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { Modal, Form, InputNumber, Button, Typography } from 'antd';
-import { TInventoryByProduct, TInventoryUpdate } from '@/interface/TInventory';
+import { TInventory, TInventoryByProduct, TInventoryUpdate } from '@/interface/TInventory';
 
 const { Title, Text } = Typography;
 
 interface UpdateInventoryModalProps {
   visible: boolean;
-  inventory: TInventoryByProduct | null;
+  inventory: TInventory | null;
   loading: boolean;
   onCancel: () => void;
   onUpdate: (id: string, data: TInventoryUpdate) => void;
@@ -28,7 +28,7 @@ const UpdateInventoryModal = ({
       setSubmitting(true);
 
       if (inventory) {
-        onUpdate(inventory.id, {
+        onUpdate(inventory.productId, {
           quantity: values.quantity,
         });
       }
@@ -66,10 +66,9 @@ const UpdateInventoryModal = ({
       {inventory && (
         <div className="mb-4">
           <div className="grid grid-cols-1 gap-2 mb-4">
-            <Text strong>Mã sản phẩm: {inventory.productId}</Text>
-            <Text strong>Tên sản phẩm: {inventory.productName}</Text>
-            <Text strong>Kho: {inventory.warehouseName}</Text>
-            <Text strong>Đơn vị: {inventory.productUnit}</Text>
+            <Text strong>Tên sản phẩm: {inventory.product?.name}</Text>
+            <Text strong>Kho: {inventory.warehouse?.name}</Text>
+            <Text strong>Đơn vị: {inventory.product?.unit}</Text>
             <Text strong>Số lượng hiện tại: {inventory.quantity.toLocaleString('vi-VN')}</Text>
           </div>
 
@@ -86,7 +85,7 @@ const UpdateInventoryModal = ({
                 style={{ width: '100%' }}
                 placeholder="Nhập số lượng tồn kho mới"
                 min={0}
-                addonAfter={inventory.productUnit || 'Đơn vị'}
+                addonAfter={inventory.product?.unit || 'Đơn vị'}
               />
             </Form.Item>
 

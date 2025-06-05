@@ -10,6 +10,9 @@ interface InventoryTableProps {
   pageSize?: number;
   onPageChange: (page: number, pageSize: number) => void;
 
+  onViewByProduct: (record: TInventory) => void;
+  onUpdateInventory: (record: TInventory) => void;
+
   permissions?: {
     canCreate: () => boolean;
     canRead: () => boolean;
@@ -26,6 +29,8 @@ const InventoryTable = ({
   pageSize,
   onPageChange,
 
+  onViewByProduct,
+  onUpdateInventory,
   permissions,
 }: InventoryTableProps) => {
   const columns: TableProps<TInventory>['columns'] = [
@@ -71,6 +76,7 @@ const InventoryTable = ({
         <span className="font-medium text-blue-600">{record.product.unit}</span>
       ),
     },
+
     {
       title: 'Ngày tạo',
       dataIndex: 'createdAt',
@@ -78,41 +84,39 @@ const InventoryTable = ({
       width: '15%',
       render: (value) => new Date(value).toLocaleDateString('vi-VN'),
     },
-    // {
-    //   title: 'Thao tác',
-    //   key: 'action',
-    //   width: '15%',
-    //   render: (_, record) => (
-    //     <div className="flex gap-2">
-    //       {/* <Tooltip title="Xem chi tiết">
-    //         <Button
-    //           type="text"
-    //           icon={<EyeOutlined />}
-    //           onClick={() => onViewDetail(record)}
-    //           className="text-blue-600 hover:text-blue-800"
-    //         />
-    //       </Tooltip>
-    //       <Tooltip title="Xem chi tiết theo sản phẩm">
-    //         <Button
-    //           type="text"
-    //           icon={<HistoryOutlined />}
-    //           onClick={() => onViewHistory(record)}
-    //           className="text-green-600 hover:text-green-800"
-    //         />
-    //       </Tooltip>
-    //       {permissions?.canUpdate() && onUpdateInventory && (
-    //         <Tooltip title="Cập nhật tồn kho">
-    //           <Button
-    //             type="text"
-    //             icon={<EditOutlined />}
-    //             onClick={() => onUpdateInventory(record)}
-    //             className="text-orange-600 hover:text-orange-800"
-    //           />
-    //         </Tooltip>
-    //       )} */}
-    //     </div>
-    //   ),
-    // },
+
+    {
+      title: 'Thao tác',
+      key: 'action',
+      width: 200,
+      align: 'center',
+      render: (_, record) => (
+        <div className="flex gap-2 justify-center">
+          <Tooltip title="Xem chi tiết tồn kho theo sản phẩm">
+            <Button
+              color="cyan"
+              variant="solid"
+              shape="round"
+              icon={<HistoryOutlined />}
+              onClick={() => onViewByProduct(record)}
+              className={'font-medium'}
+            ></Button>
+          </Tooltip>
+          {permissions?.canUpdate() && onUpdateInventory && (
+            <Tooltip title="Cập nhật tồn kho">
+              <Button
+                color="gold"
+                variant="solid"
+                shape="round"
+                icon={<EditOutlined />}
+                onClick={() => onUpdateInventory(record)}
+                className={'font-medium'}
+              ></Button>
+            </Tooltip>
+          )}
+        </div>
+      ),
+    },
   ];
 
   return (

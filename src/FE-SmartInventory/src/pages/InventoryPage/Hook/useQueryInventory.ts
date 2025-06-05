@@ -1,11 +1,17 @@
 import { TPage, TResponse } from '@/interface';
 import { QueryKeys } from '@/Constant';
+
 import { useQueryClient, UseQueryOptions, useQuery, useMutation } from '@tanstack/react-query';
-import { TInventory, TInventoryUpdate } from '@/interface/TInventory';
+import { TInventory, TInventoryByProduct, TInventoryUpdate } from '@/interface/TInventory';
+
 import { inventoryApi } from '@/api/inventoryApi';
 import { toast } from 'react-toastify';
 
 type useQueryInventoryOptions = Omit<UseQueryOptions<TPage<TInventory>>, 'queryKey' | 'queryFn'>;
+type useQueryInventoryByProductOptions = Omit<
+  UseQueryOptions<TInventoryByProduct[]>,
+  'queryKey' | 'queryFn'
+>;
 
 export const useQueryInventory = (params: string, options?: useQueryInventoryOptions) => {
   const queryClient = useQueryClient();
@@ -20,17 +26,6 @@ export const useQueryInventory = (params: string, options?: useQueryInventoryOpt
     retry: 3,
     staleTime: 5 * 60 * 1000,
   });
-
-  // Lấy chi tiết tồn kho theo sản phẩm
-  const getInventoryByProduct = (id: string) =>
-    useQuery({
-      queryKey: [QueryKeys.INVENTORY_BY_PRODUCT, id],
-      queryFn: () => inventoryApi.getInventoryByProduct(id),
-      enabled: !!id,
-      placeholderData: (prevData) => prevData,
-      retry: 3,
-      staleTime: 5 * 60 * 1000,
-    });
 
   const updateInventory = useMutation({
     mutationFn: ({ id, data }: { id: string; data: TInventoryUpdate }) =>
@@ -47,7 +42,15 @@ export const useQueryInventory = (params: string, options?: useQueryInventoryOpt
 
   return {
     getAllInventory,
-    getInventoryByProduct,
     updateInventory,
   };
+};
+
+export const getInventoryByProduct = (id: string, options?: useQueryInventoryByProductOptions) => {
+  return useQuery({
+    queryKey: [QueryKeys.INVENTORY_BY_PRODUCT, id],
+    queryFn: () => inventoryApi.getInventoryByProduct(id),
+    enabled: !!id,
+    ...options,
+  });
 };

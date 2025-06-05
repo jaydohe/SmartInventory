@@ -15,7 +15,7 @@ import BomTable from './Components/BomTable';
 import CreateBom from './Components/CreateBom';
 import EditBom from './Components/EditBom';
 import SearchInput from '@/Components/SearchInput';
-import { usePermissions } from '@/hooks/usePermissions';
+import { usePermissions } from '@/hook/usePermissions';
 import { formatDate } from '@/utils/formatDate';
 import { ProductTypes, genProductTypes } from '@/Constant/ProductTypes';
 

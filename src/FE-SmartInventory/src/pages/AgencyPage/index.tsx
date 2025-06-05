@@ -6,7 +6,7 @@ import {
   ExclamationCircleFilled,
   UnorderedListOutlined,
 } from '@ant-design/icons';
-import { Button, Modal, Space, Table, Typography } from 'antd';
+import { Button, Modal, Space, Table, Typography, Tooltip } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { useState } from 'react';
 
@@ -15,7 +15,8 @@ import { useQueryAgency } from './Hook/useQueryAgency';
 import EditAgency from './Components/EditAgency';
 import CreateAgency from './Components/CreateAgency';
 import SearchInput from '@/Components/SearchInput';
-import { usePermissions } from '@/hooks/usePermissions';
+
+import { usePermissions } from '@/hook/usePermissions';
 
 export default function AgencyPage() {
   const permissions = usePermissions('AgencyPage');
@@ -226,31 +227,34 @@ export default function AgencyPage() {
       title: 'Thao tác',
       key: 'action',
       align: 'center',
+      width: 200,
       render: (_, record) => (
         <Space size="middle">
           {permissions.canUpdate() && (
-            <Button
-              color="gold"
-              variant="solid"
-              shape="round"
-              icon={<EditOutlined />}
-              onClick={() => handleEditAgency(record)}
-              className={'font-medium'}
-            >
-              Cập nhật
-            </Button>
+            <Tooltip title="Cập nhật đại lý">
+              <Button
+                color="gold"
+                variant="solid"
+                shape="round"
+                icon={<EditOutlined />}
+                onClick={() => handleEditAgency(record)}
+                className={'font-medium'}
+              ></Button>
+            </Tooltip>
           )}
           {permissions.canDelete() && (
-            <Button
-              color="red"
-              variant="solid"
-              shape="round"
-              icon={<DeleteOutlined />}
-              onClick={() => showConfirmNotify('Xóa đại lý', 'Bạn có muốn xóa đại lý này?', record)}
-              className={'font-medium'}
-            >
-              Xoá
-            </Button>
+            <Tooltip title="Xoá đại lý">
+              <Button
+                color="red"
+                variant="solid"
+                shape="round"
+                icon={<DeleteOutlined />}
+                onClick={() =>
+                  showConfirmNotify('Xóa đại lý', 'Bạn có muốn xóa đại lý này?', record)
+                }
+                className={'font-medium'}
+              ></Button>
+            </Tooltip>
           )}
         </Space>
       ),

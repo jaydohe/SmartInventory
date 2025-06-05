@@ -314,6 +314,14 @@ export const PAGE_PERMISSIONS: {
     [RoleEnumString.WAREHOUSE_PRODUCER]: { create: false, read: true, update: true, delete: false },
     [RoleEnumString.SALESMAN]: { create: false, read: true, update: true, delete: false },
   },
+
+  // Thiết lập
+  SetupPage: {
+    [RoleEnumString.ADMIN]: { create: true, read: true, update: true, delete: true },
+    [RoleEnumString.DEV]: { create: true, read: true, update: true, delete: true },
+    [RoleEnumString.WAREHOUSE_STAFF]: { create: false, read: false, update: false, delete: false },
+    WAREHOUSE_STAFF_MANAGER: { create: false, read: false, update: false, delete: false },
+  },
 };
 
 // Utility functions để check quyền

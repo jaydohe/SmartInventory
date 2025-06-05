@@ -17,7 +17,8 @@ import CreateProduct from './Components/CreateProduct';
 import SearchInput from '@/Components/SearchInput';
 import ProductTable from './Components/ProductTable';
 import { ProductTypes } from '@/Constant/ProductTypes';
-import { usePermissions } from '@/hooks/usePermissions';
+
+import { usePermissions } from '@/hook/usePermissions';
 
 export default function ProductPage() {
   const permissions = usePermissions('ProductPage');

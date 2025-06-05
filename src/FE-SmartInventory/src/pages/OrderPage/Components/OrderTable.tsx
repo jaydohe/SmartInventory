@@ -111,40 +111,48 @@ const OrderTable = ({
     {
       title: 'Thao tác',
       key: 'action',
-      width: '15%',
+      width: 250,
+      align: 'center',
       render: (_, record) => (
-        <div className="flex gap-2">
-          <Tooltip title="Xem chi tiết">
+        <div className="flex gap-2 justify-center">
+          <Tooltip title="Xem chi tiết đơn hàng">
             <Button
-              type="text"
+              color="cyan"
+              variant="solid"
+              shape="round"
               icon={<EyeOutlined />}
               onClick={() => onViewDetail(record)}
-              className="text-blue-600 hover:text-blue-800"
-            />
+              className={'font-medium'}
+            ></Button>
           </Tooltip>
+
           {permissions?.canUpdate() && (
-            <Tooltip title="Sửa trạng thái">
+            <Tooltip title="Cập nhật trạng thái">
               <Button
-                type="text"
+                color="gold"
+                variant="solid"
+                shape="round"
                 icon={<EditOutlined />}
                 onClick={() => onEditOrder(record)}
                 disabled={
                   record.orderStatus === OrderStatus.CANCELED ||
                   record.orderStatus === OrderStatus.DELIVERED
                 }
-                className="text-green-600 hover:text-green-800"
-              />
+                className={'font-medium'}
+              ></Button>
             </Tooltip>
           )}
           {permissions?.canDelete() && (
-            <Tooltip title="Xóa">
+            <Tooltip title="Xoá đơn hàng">
               <Button
-                type="text"
+                color="red"
+                variant="solid"
+                shape="round"
                 icon={<DeleteOutlined />}
                 onClick={() => onDeleteOrder(record)}
                 disabled={record.orderStatus !== OrderStatus.NEW}
-                className="text-red-600 hover:text-red-800"
-              />
+                className={'font-medium'}
+              ></Button>
             </Tooltip>
           )}
         </div>

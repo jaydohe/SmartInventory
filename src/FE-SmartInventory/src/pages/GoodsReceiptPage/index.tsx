@@ -9,7 +9,8 @@ import GoodsReceiptTable from './Components/GoodsReceiptTable';
 import { TGoodsReceipt } from '@/interface/TGoodsReceipt';
 import { genGoodsStatus, GoodsStatus } from '@/Constant/GoodsStatus';
 import CreateGoodsReceiptContainer from './Components/CreateGoodsReceiptContainer';
-import { usePermissions } from '@/hooks/usePermissions';
+
+import { usePermissions } from '@/hook/usePermissions';
 
 export default function GoodsReceiptPage() {
   const permissions = usePermissions('GoodsReceiptPage');

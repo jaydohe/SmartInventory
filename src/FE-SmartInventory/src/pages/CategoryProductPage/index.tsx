@@ -6,7 +6,7 @@ import {
   ExclamationCircleFilled,
   UnorderedListOutlined,
 } from '@ant-design/icons';
-import { Button, Modal, Space, Table, Typography } from 'antd';
+import { Button, Modal, Space, Table, Typography, Tooltip } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { useState } from 'react';
 
@@ -15,7 +15,9 @@ import { useQueryCategoryProduct } from './Hook/useQueryCategoryProduct';
 import EditCategoryProduct from './Components/EditCategoryProduct';
 import CreateCategoryProduct from './Components/CreateCategoryProduct';
 import SearchInput from '@/Components/SearchInput';
-import { usePermissions } from '@/hooks/usePermissions';
+
+import { usePermissions } from '@/hook/usePermissions';
+
 
 export default function CategoryProductPage() {
   const permissions = usePermissions('CategoryProductPage');
@@ -196,34 +198,41 @@ export default function CategoryProductPage() {
       title: 'Thao tác',
       key: 'action',
       align: 'center',
+      width: 200,
       render: (_, record) => (
         <Space size="middle">
+
           {permissions.canUpdate() && (
-            <Button
-              color="gold"
-              variant="solid"
-              shape="round"
-              icon={<EditOutlined />}
-              onClick={() => handleEditCategoryProduct(record)}
-              className={'font-medium'}
-            >
-              Cập nhật
-            </Button>
+            <Tooltip title="Cập nhật danh mục">
+              <Button
+                color="gold"
+                variant="solid"
+                shape="round"
+                icon={<EditOutlined />}
+                onClick={() => handleEditCategoryProduct(record)}
+                className={'font-medium'}
+              ></Button>
+            </Tooltip>
           )}
           {permissions.canDelete() && (
-            <Button
-              color="red"
-              variant="solid"
-              shape="round"
-              icon={<DeleteOutlined />}
-              onClick={() =>
-                showConfirmDelete('Xóa danh mục', 'Bạn có muốn xóa danh mục sản phẩm này?', record)
-              }
-              className={'font-medium'}
-            >
-              Xoá
-            </Button>
+            <Tooltip title="Xoá danh mục">
+              <Button
+                color="red"
+                variant="solid"
+                shape="round"
+                icon={<DeleteOutlined />}
+                onClick={() =>
+                  showConfirmDelete(
+                    'Xóa danh mục',
+                    'Bạn có muốn xóa danh mục sản phẩm này?',
+                    record
+                  )
+                }
+                className={'font-medium'}
+              ></Button>
+            </Tooltip>
           )}
+
         </Space>
       ),
     },

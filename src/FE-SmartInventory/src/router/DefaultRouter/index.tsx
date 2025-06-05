@@ -26,7 +26,11 @@ import ProductionCommandPage from '@/pages/ProductionCommandPage';
 import GoodsIssuePage from '@/pages/GoodsIssuePage';
 import GoodsReceiptPage from '@/pages/GoodsReceiptPage';
 import InventoryPage from '@/pages/InventoryPage';
+
 import BomPage from '@/pages/BomPage';
+import Dashboard from '@/pages/Dashboard';
+import SetupPage from '@/pages/SetupPage';
+
 export const DefaultRouter = () => {
   return (
     <Suspense fallback={<SkeletonComponent />}>
@@ -34,7 +38,7 @@ export const DefaultRouter = () => {
         <Route path="/login" element={<LoginNew />} />
 
         <Route path="/" element={<AdminLayout />}>
-          {/* <Route path="/dashboard" element={<DashboardRouter />} /> */}
+          <Route path="/dashboard" element={<Dashboard />} />
 
           <Route
             element={
@@ -59,6 +63,7 @@ export const DefaultRouter = () => {
               </Suspense>
             }
           >
+            <Route path="/set-parameter" element={<SetupPage />}></Route>
             <Route path="/warehouse" element={<WarehousePage />}></Route>
             <Route path="/activity/*" element={<ActivityRouter />}></Route>
             <Route path="/user/*" element={<UserRouter />}></Route>

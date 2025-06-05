@@ -4,34 +4,46 @@ import { DatabaseOutlined, FilterOutlined } from '@ant-design/icons';
 import { Button, Modal, Tabs, TabsProps, Select } from 'antd';
 import { useEffect, useState } from 'react';
 import SearchInput from '@/Components/SearchInput';
-import { useQueryInventory } from './Hook/useQueryInventory';
+import { getInventoryByProduct, useQueryInventory } from './Hook/useQueryInventory';
 import InventoryTable from './Components/InventoryTable';
+
+
 import InventoryDetail from './Components/InventoryDetail';
 import UpdateInventoryModal from './Components/UpdateInventoryModal';
-import { TInventoryByProduct, TInventoryUpdate } from '@/interface/TInventory';
-import { usePermissions } from '@/hooks/usePermissions';
+import { TInventory, TInventoryByProduct, TInventoryUpdate } from '@/interface/TInventory';
+import { usePermissions } from '@/hook/usePermissions';
 
 export default function InventoryPage() {
   const permissions = usePermissions('InventoryPage');
   const [activeTab, setActiveTab] = useState<string>('all');
-  const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
 
   // State cho Modal chi tiết tồn kho theo sản phẩm
-  const [isOpenDetailModal, setIsOpenDetailModal] = useState<{
+  const [isOpenDetailModalByProduct, setIsOpenDetailModalByProduct] = useState<{
     isOpen: boolean;
-    inventory?: TInventoryByProduct;
+    inventory?: TInventory;
   }>({
     isOpen: false,
   });
+
+
+  const [isOpenDetailModal, setIsOpenDetailModal] = useState<{
+    isOpen: boolean;
+    inventory?: TInventory;
+  }>({
+    isOpen: false,
+  });
+
 
   // State cho Modal cập nhật tồn kho
   const [isOpenUpdateModal, setIsOpenUpdateModal] = useState<{
     isOpen: boolean;
-    inventory?: TInventoryByProduct | null;
+    inventory?: TInventory | null;
+
   }>({
     isOpen: false,
     inventory: null,
   });
+
 
   const [inventoryFilter, setInventoryFilter] = useState<TBuilderQuery>({
     isAsc: false,
@@ -59,15 +71,13 @@ export default function InventoryPage() {
   });
 
   const inventoryParams = useBuilderQuery(inventoryFilter);
-  const { getAllInventory, getInventoryByProduct, updateInventory } =
-    useQueryInventory(inventoryParams);
-
+  const { getAllInventory, updateInventory } = useQueryInventory(inventoryParams);
   const { data: listInventory, isLoading: isLoadingInventory } = getAllInventory;
 
   // Query để lấy chi tiết tồn kho theo sản phẩm
-  const { data: inventoryByProduct, isLoading: isLoadingInventoryByProduct } = useQueryInventory(
+  const { data: inventoryByProduct, isLoading: isLoadingInventoryByProduct } = getInventoryByProduct(
     ''
-  ).getInventoryByProduct(selectedProductId || '');
+  )
 
   const handleInventoryPageChange = (page: number, pageSize: number) => {
     setInventoryFilter({
@@ -79,20 +89,25 @@ export default function InventoryPage() {
     });
   };
 
-  const handleViewDetail = (inventory: TInventoryByProduct) => {
+  const handleViewDetail = (inventory: TInventory) => {
     setIsOpenDetailModal({ isOpen: true, inventory });
   };
 
   const handleCloseDetailModal = () => {
     setIsOpenDetailModal({ isOpen: false });
+    setIsOpenDetailModalByProduct({ isOpen: false });
   };
 
-  const handleViewByProduct = (inventory: TInventoryByProduct) => {
-    setSelectedProductId(inventory.productId);
+
+
+
+  const handleViewByProduct = (inventory: TInventory) => {
     setIsOpenDetailModal({ isOpen: true, inventory });
   };
 
-  const handleUpdateInventory = (inventory: TInventoryByProduct) => {
+
+
+  const handleUpdateInventory = (inventory: TInventory) => {
     setIsOpenUpdateModal({
       isOpen: true,
       inventory,
@@ -215,6 +230,7 @@ export default function InventoryPage() {
         </div>
       </div>
 
+
       <InventoryTable
         data={listInventory?.data}
         loading={isLoadingInventory}
@@ -222,16 +238,17 @@ export default function InventoryPage() {
         currentPage={inventoryFilter.toPaging?.page}
         pageSize={inventoryFilter.toPaging?.pageSize}
         onPageChange={handleInventoryPageChange}
-        // onViewDetail={handleViewDetail}
-        // onViewHistory={handleViewByProduct}
-        // onUpdateInventory={handleUpdateInventory}
+
+        onViewByProduct={handleViewByProduct}
+        onUpdateInventory={handleUpdateInventory}
         permissions={permissions}
       />
 
-      {/* <Modal
+      <Modal
         title={<h4 className="font-bold text-2xl text-center">CHI TIẾT TỒN KHO THEO SẢN PHẨM</h4>}
+
         className="w-11/12 md:w-2/3 xl:w-1/2"
-        open={isOpenDetailModal.isOpen}
+        open={isOpenDetailModalByProduct.isOpen}
         onCancel={handleCloseDetailModal}
         footer={[
           <Button key="back" onClick={handleCloseDetailModal}>
@@ -239,13 +256,73 @@ export default function InventoryPage() {
           </Button>,
         ]}
       >
+        {isOpenDetailModal.inventory && (
+          <div className="mt-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <p>
+                  <strong>Mã sản phẩm:</strong> {isOpenDetailModal.inventory.product.code}
+                </p>
+                <p>
+                  <strong>Tên sản phẩm:</strong> {isOpenDetailModal.inventory.product.name}
+                </p>
+                <p>
+                  <strong>Loại sản phẩm:</strong>{' '}
+                  {isOpenDetailModal.inventory.product.productType === ProductTypes.GOODS
+                    ? 'Thành phẩm'
+                    : 'Nguyên vật liệu'}
+                </p>
+                <p>
+                  <strong>Đơn vị:</strong> {isOpenDetailModal.inventory.product.unit || 'Không có'}
+                </p>
+              </div>
+              <div>
+                <p>
+                  <strong>Số lượng hiện tại:</strong>{' '}
+                  {isOpenDetailModal.inventory.currentQuantity.toLocaleString('vi-VN')}
+                </p>
+                <p>
+                  <strong>Số lượng tối thiểu:</strong>{' '}
+                  {isOpenDetailModal.inventory.minQuantity.toLocaleString('vi-VN')}
+                </p>
+                <p>
+                  <strong>Số lượng tối đa:</strong>{' '}
+                  {isOpenDetailModal.inventory.maxQuantity.toLocaleString('vi-VN')}
+                </p>
+                <p>
+                  <strong>Vị trí lưu trữ:</strong>{' '}
+                  {isOpenDetailModal.inventory.storageLocation || 'Chưa xác định'}
+                </p>
+              </div>
+            </div>
+            <div className="mt-4">
+              <p>
+                <strong>Mô tả:</strong>{' '}
+                {isOpenDetailModal.inventory.product.description || 'Không có'}
+              </p>
+            </div>
+            <div className="mt-4">
+              <Button
+                type="primary"
+                onClick={() => {
+                  handleCloseDetailModal();
+                  handleViewHistory(isOpenDetailModal.inventory!);
+                }}
+              >
+                Xem lịch sử tồn kho
+              </Button>
+            </div>
+          </div>
+        )}
+      </Modal>
+
+
         <InventoryDetail
-          data={inventoryByProduct}
-          loading={isLoadingInventoryByProduct}
-          productId={isOpenDetailModal.inventory?.productId}
-          productName={isOpenDetailModal.inventory?.productName}
+          productId={isOpenDetailModalByProduct.inventory?.productId}
+          productName={isOpenDetailModalByProduct.inventory?.product?.name}
         />
-      </Modal> */}
+      </Modal>
+
 
       <UpdateInventoryModal
         visible={isOpenUpdateModal.isOpen}
@@ -254,6 +331,7 @@ export default function InventoryPage() {
         onCancel={handleCloseUpdateModal}
         onUpdate={handleSubmitUpdate}
       />
+
     </div>
   );
 }

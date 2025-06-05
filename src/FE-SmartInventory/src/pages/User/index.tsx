@@ -9,6 +9,7 @@ import {
   PlusOutlined,
   SettingOutlined,
   ToolOutlined,
+  EditOutlined,
 } from '@ant-design/icons';
 import {
   Button,
@@ -45,7 +46,8 @@ import { authStoreSelectors } from '@/Stores/userStore';
 import { useQueryWarehouse } from '@/hook/useQueryWarehouse';
 import { useQueryEmployee } from '../Employee/Hook/useEmployeePage';
 import { useQueryDepartment } from '../DepartmentPage/Hook/useQueryDepartment';
-import { usePermissions } from '@/hooks/usePermissions';
+
+import { usePermissions } from '@/hook/usePermissions';
 
 const { Title, Text } = Typography;
 const { TabPane } = Tabs;
@@ -192,39 +194,38 @@ export default function User() {
     {
       title: 'Thao tác',
       key: 'action',
+      align: 'center',
+      width: 200,
       render: (_, record) => (
         <Space size="middle">
-          <Tooltip title="Chi tiết">
+          <Tooltip title="Cập nhật tài khoản">
             <Button
-              className="rounded-2xl"
-              size="middle"
-              color="primary"
+              color="gold"
               variant="solid"
-              icon={<InfoCircleOutlined />}
+              shape="round"
+              icon={<EditOutlined />}
               onClick={() => handleOpenDrawer(record.id)}
-            >
-              Chi tiết
-            </Button>
+              className={'font-medium'}
+            ></Button>
           </Tooltip>
-          {permissions.canDelete() && (
-            <Tooltip title="Xóa người dùng">
-              <Popconfirm
-                title="Bạn có chắc chắn muốn xóa người dùng này không?"
-                onConfirm={() => handleDeleteUser(record.id)}
-                okText="Có"
-                cancelText="Không"
+
+          <Tooltip title="Xóa người dùng">
+            <Popconfirm
+              title="Bạn có chắc chắn muốn xóa người dùng này không?"
+              onConfirm={() => handleDeleteUser(record.id)}
+              okText="Có"
+              cancelText="Không"
+            >
+              <Button
+                color="danger"
+                variant="solid"
+                className="rounded-2xl"
+                icon={<DeleteOutlined />}
               >
-                <Button
-                  color="danger"
-                  variant="solid"
-                  className="rounded-2xl"
-                  icon={<DeleteOutlined />}
-                >
-                  Xóa
-                </Button>
-              </Popconfirm>
-            </Tooltip>
-          )}
+                Xóa
+              </Button>
+            </Popconfirm>
+          </Tooltip>
         </Space>
       ),
     },

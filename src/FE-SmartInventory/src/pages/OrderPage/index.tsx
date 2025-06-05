@@ -13,7 +13,8 @@ import { useQueryWarehouse } from '@/hook/useQueryWarehouse';
 import CreateOrder from './Components/CreateOrder';
 import OrderTable from './Components/OrderTable';
 import { useQueryOrder } from './Hook/useQueryOrder';
-import { usePermissions } from '@/hooks/usePermissions';
+
+import { usePermissions } from '@/hook/usePermissions';
 
 export default function OrderPage() {
   const permissions = usePermissions('OrderPage');

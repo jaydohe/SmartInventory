@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Button, Space } from 'antd';
+import { Table, Button, Space, Tooltip } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { TProduct } from '@/interface/TProduct';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
@@ -112,31 +112,32 @@ const ProductTable: React.FC<ProductTableProps> = ({
       title: 'Thao tác',
       key: 'action',
       align: 'center',
+      width: 200,
       render: (_, record) => (
         <Space size="middle">
           {permissions?.canUpdate() && (
-            <Button
-              color="gold"
-              variant="solid"
-              shape="round"
-              icon={<EditOutlined />}
-              onClick={() => onEditProduct(record)}
-              className={'font-medium'}
-            >
-              Cập nhật
-            </Button>
+            <Tooltip title="Cập nhật sản phẩm">
+              <Button
+                color="gold"
+                variant="solid"
+                shape="round"
+                icon={<EditOutlined />}
+                onClick={() => onEditProduct(record)}
+                className={'font-medium'}
+              ></Button>
+            </Tooltip>
           )}
           {permissions?.canDelete() && (
-            <Button
-              color="red"
-              variant="solid"
-              shape="round"
-              icon={<DeleteOutlined />}
-              onClick={() => onDeleteProduct(record)}
-              className={'font-medium'}
-            >
-              Xoá
-            </Button>
+            <Tooltip title="Xoá sản phẩm">
+              <Button
+                color="red"
+                variant="solid"
+                shape="round"
+                icon={<DeleteOutlined />}
+                onClick={() => onDeleteProduct(record)}
+                className={'font-medium'}
+              ></Button>
+            </Tooltip>
           )}
         </Space>
       ),

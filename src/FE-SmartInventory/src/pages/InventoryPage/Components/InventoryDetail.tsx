@@ -1,14 +1,16 @@
 import { Table, TableProps, Empty } from 'antd';
 import { TInventoryByProduct } from '@/interface/TInventory';
+import { getInventoryByProduct } from '../Hook/useQueryInventory';
 
 interface InventoryDetailProps {
-  data?: TInventoryByProduct[];
-  loading: boolean;
   productId?: string;
   productName?: string;
 }
 
-const InventoryDetail = ({ data, loading, productId, productName }: InventoryDetailProps) => {
+const InventoryDetail = ({ productId, productName }: InventoryDetailProps) => {
+  const { data, isLoading } = getInventoryByProduct(productId || '', {
+    enabled: !!productId,
+  });
   const columns: TableProps<TInventoryByProduct>['columns'] = [
     {
       title: 'Kho',
@@ -58,7 +60,7 @@ const InventoryDetail = ({ data, loading, productId, productName }: InventoryDet
       <Table
         columns={columns}
         dataSource={data?.map((item, index) => ({ ...item, key: index }))}
-        loading={loading}
+        loading={isLoading}
         pagination={false}
         scroll={{ x: 800 }}
         bordered
