@@ -7,7 +7,7 @@ import {
   ExclamationCircleFilled,
   UnorderedListOutlined,
 } from '@ant-design/icons';
-import { Button, Modal, Space, Table, Typography } from 'antd';
+import { Button, Modal, Space, Table, Typography, Tooltip } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { useState } from 'react';
 
@@ -18,7 +18,6 @@ import CreateDepartment from './Components/CreateDepartment';
 import SearchInput from '@/Components/SearchInput';
 
 export default function DepartmentPage() {
-
   const [isOpenCreateModal, setIsOpenCreateModal] = useState<boolean>(false);
   const [isOpenEditModal, setIsOpenEditModal] = useState<{
     isOpen: boolean;
@@ -190,30 +189,31 @@ export default function DepartmentPage() {
       title: 'Thao tác',
       key: 'action',
       align: 'center',
+      width: 200,
       render: (_, record) => (
         <Space size="middle">
-          <Button
-            color="gold"
-            variant="solid"
-            shape="round"
-            icon={<EditOutlined />}
-            onClick={() => handleEditDepartment(record)}
-            className={'font-medium'}
-          >
-            Cập nhật
-          </Button>
-          <Button
-            color="red"
-            variant="solid"
-            shape="round"
-            icon={<DeleteOutlined />}
-            onClick={() =>
-              showConfirmNotify('Xóa phòng ban', 'Bạn có muốn xóa phòng ban này?', record)
-            }
-            className={'font-medium'}
-          >
-            Xoá
-          </Button>
+          <Tooltip title="Cập nhật phòng ban">
+            <Button
+              color="gold"
+              variant="solid"
+              shape="round"
+              icon={<EditOutlined />}
+              onClick={() => handleEditDepartment(record)}
+              className={'font-medium'}
+            ></Button>
+          </Tooltip>
+          <Tooltip title="Xoá phòng ban">
+            <Button
+              color="red"
+              variant="solid"
+              shape="round"
+              icon={<DeleteOutlined />}
+              onClick={() =>
+                showConfirmNotify('Xóa phòng ban', 'Bạn có muốn xóa phòng ban này?', record)
+              }
+              className={'font-medium'}
+            ></Button>
+          </Tooltip>
         </Space>
       ),
     },

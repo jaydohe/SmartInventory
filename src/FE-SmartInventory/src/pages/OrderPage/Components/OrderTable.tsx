@@ -88,17 +88,21 @@ const OrderTable = ({
     {
       title: 'Thao tác',
       key: 'action',
-      width: '15%',
+      width: 250,
+      align: 'center',
       render: (_, record) => (
-        <div className="flex gap-2">
-          <Tooltip title="Xem chi tiết">
+        <div className="flex gap-2 justify-center">
+          <Tooltip title="Xem chi tiết đơn hàng">
             <Button
-              type="text"
+              color="cyan"
+              variant="solid"
+              shape="round"
               icon={<EyeOutlined />}
               onClick={() => onViewDetail(record)}
-              className="text-blue-600 hover:text-blue-800"
-            />
+              className={'font-medium'}
+            ></Button>
           </Tooltip>
+<<<<<<< Updated upstream
           <Tooltip title="Sửa trạng thái">
             <Button
               type="text"
@@ -120,6 +124,37 @@ const OrderTable = ({
               className="text-red-600 hover:text-red-800"
             />
           </Tooltip>
+=======
+          {permissions?.canUpdate() && (
+            <Tooltip title="Cập nhật trạng thái">
+              <Button
+                color="gold"
+                variant="solid"
+                shape="round"
+                icon={<EditOutlined />}
+                onClick={() => onEditOrder(record)}
+                disabled={
+                  record.orderStatus === OrderStatus.CANCELED ||
+                  record.orderStatus === OrderStatus.DELIVERED
+                }
+                className={'font-medium'}
+              ></Button>
+            </Tooltip>
+          )}
+          {permissions?.canDelete() && (
+            <Tooltip title="Xoá đơn hàng">
+              <Button
+                color="red"
+                variant="solid"
+                shape="round"
+                icon={<DeleteOutlined />}
+                onClick={() => onDeleteOrder(record)}
+                disabled={record.orderStatus !== OrderStatus.NEW}
+                className={'font-medium'}
+              ></Button>
+            </Tooltip>
+          )}
+>>>>>>> Stashed changes
         </div>
       ),
     },

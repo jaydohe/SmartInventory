@@ -7,7 +7,7 @@ import {
   ExclamationCircleFilled,
   UnorderedListOutlined,
 } from '@ant-design/icons';
-import { Button, Image, Modal, Space, Table, Tag, Typography } from 'antd';
+import { Button, Image, Modal, Space, Table, Tag, Typography, Tooltip } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { useState } from 'react';
 
@@ -178,31 +178,31 @@ export default function PositionPage() {
       title: 'Thao tác',
       key: 'action',
       align: 'center',
-
+      width: 200,
       render: (_, record) => (
         <Space size="middle">
-          <Button
-            color="gold"
-            variant="solid"
-            shape="round"
-            icon={<EditOutlined />}
-            onClick={() => handleEditPosition(record)}
-            className={'font-medium'}
-          >
-            Cập nhật
-          </Button>
-          <Button
-            color="red"
-            variant="solid"
-            shape="round"
-            icon={<DeleteOutlined />}
-            onClick={() =>
-              showConfirmNotify('Xóa chức vụ', 'Bạn có muốn xóa chức vụ này ?', record)
-            }
-            className={'font-medium'}
-          >
-            Xoá
-          </Button>
+          <Tooltip title="Cập nhật chức vụ">
+            <Button
+              color="gold"
+              variant="solid"
+              shape="round"
+              icon={<EditOutlined />}
+              onClick={() => handleEditPosition(record)}
+              className={'font-medium'}
+            ></Button>
+          </Tooltip>
+          <Tooltip title="Xoá chức vụ">
+            <Button
+              color="red"
+              variant="solid"
+              shape="round"
+              icon={<DeleteOutlined />}
+              onClick={() =>
+                showConfirmNotify('Xóa chức vụ', 'Bạn có muốn xóa chức vụ này?', record)
+              }
+              className={'font-medium'}
+            ></Button>
+          </Tooltip>
         </Space>
       ),
     },

@@ -6,7 +6,7 @@ import {
   ExclamationCircleFilled,
   UnorderedListOutlined,
 } from '@ant-design/icons';
-import { Button, Modal, Space, Table, Typography } from 'antd';
+import { Button, Modal, Space, Table, Typography, Tooltip } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { useState } from 'react';
 
@@ -15,6 +15,10 @@ import { useQueryAgency } from './Hook/useQueryAgency';
 import EditAgency from './Components/EditAgency';
 import CreateAgency from './Components/CreateAgency';
 import SearchInput from '@/Components/SearchInput';
+<<<<<<< Updated upstream
+=======
+import { usePermissions } from '@/hook/usePermissions';
+>>>>>>> Stashed changes
 
 export default function AgencyPage() {
   const [isOpenCreateModal, setIsOpenCreateModal] = useState<boolean>(false);
@@ -223,8 +227,10 @@ export default function AgencyPage() {
       title: 'Thao tác',
       key: 'action',
       align: 'center',
+      width: 200,
       render: (_, record) => (
         <Space size="middle">
+<<<<<<< Updated upstream
           <Button
             color="gold"
             variant="solid"
@@ -245,6 +251,34 @@ export default function AgencyPage() {
           >
             Xoá
           </Button>
+=======
+          {permissions.canUpdate() && (
+            <Tooltip title="Cập nhật đại lý">
+              <Button
+                color="gold"
+                variant="solid"
+                shape="round"
+                icon={<EditOutlined />}
+                onClick={() => handleEditAgency(record)}
+                className={'font-medium'}
+              ></Button>
+            </Tooltip>
+          )}
+          {permissions.canDelete() && (
+            <Tooltip title="Xoá đại lý">
+              <Button
+                color="red"
+                variant="solid"
+                shape="round"
+                icon={<DeleteOutlined />}
+                onClick={() =>
+                  showConfirmNotify('Xóa đại lý', 'Bạn có muốn xóa đại lý này?', record)
+                }
+                className={'font-medium'}
+              ></Button>
+            </Tooltip>
+          )}
+>>>>>>> Stashed changes
         </Space>
       ),
     },

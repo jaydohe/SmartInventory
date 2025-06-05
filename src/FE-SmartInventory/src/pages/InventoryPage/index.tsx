@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import SearchInput from '@/Components/SearchInput';
 import { useQueryInventory } from './Hook/useQueryInventory';
 import InventoryTable from './Components/InventoryTable';
+<<<<<<< Updated upstream
 import InventoryHistory from './Components/InventoryHistory';
 import { TInventory } from '@/interface/TInventory';
 import { ProductTypes } from '@/Constant/ProductTypes';
@@ -22,6 +23,25 @@ export default function InventoryPage() {
     isOpen: false,
     isLoading: false,
   });
+=======
+import InventoryDetail from './Components/InventoryDetail';
+import UpdateInventoryModal from './Components/UpdateInventoryModal';
+import { TInventory, TInventoryByProduct, TInventoryUpdate } from '@/interface/TInventory';
+import { usePermissions } from '@/hook/usePermissions';
+
+export default function InventoryPage() {
+  const permissions = usePermissions('InventoryPage');
+  const [activeTab, setActiveTab] = useState<string>('all');
+
+  // State cho Modal chi tiết tồn kho theo sản phẩm
+  const [isOpenDetailModalByProduct, setIsOpenDetailModalByProduct] = useState<{
+    isOpen: boolean;
+    inventory?: TInventory;
+  }>({
+    isOpen: false,
+  });
+
+>>>>>>> Stashed changes
   const [isOpenDetailModal, setIsOpenDetailModal] = useState<{
     isOpen: boolean;
     inventory?: TInventory;
@@ -29,6 +49,18 @@ export default function InventoryPage() {
     isOpen: false,
   });
 
+<<<<<<< Updated upstream
+=======
+  // State cho Modal cập nhật tồn kho
+  const [isOpenUpdateModal, setIsOpenUpdateModal] = useState<{
+    isOpen: boolean;
+    inventory?: TInventory | null;
+  }>({
+    isOpen: false,
+    inventory: null,
+  });
+
+>>>>>>> Stashed changes
   const [inventoryFilter, setInventoryFilter] = useState<TBuilderQuery>({
     isAsc: false,
     toPaging: {
@@ -168,7 +200,11 @@ export default function InventoryPage() {
   }, [filterStatus]);
 
   const inventoryParams = useBuilderQuery(inventoryFilter);
+<<<<<<< Updated upstream
   const { getAllInventory, getInventoryHistory } = useQueryInventory(inventoryParams);
+=======
+  const { getAllInventory, updateInventory } = useQueryInventory(inventoryParams);
+>>>>>>> Stashed changes
 
   const { data: listInventory, isLoading: isLoadingInventory } = getAllInventory;
 
@@ -188,10 +224,20 @@ export default function InventoryPage() {
 
   const handleCloseDetailModal = () => {
     setIsOpenDetailModal({ isOpen: false });
+    setIsOpenDetailModalByProduct({ isOpen: false });
   };
 
+<<<<<<< Updated upstream
   const handleViewHistory = (inventory: TInventory) => {
     setIsOpenHistoryModal({
+=======
+  const handleViewByProduct = (inventory: TInventory) => {
+    setIsOpenDetailModalByProduct({ isOpen: true, inventory });
+  };
+
+  const handleUpdateInventory = (inventory: TInventory) => {
+    setIsOpenUpdateModal({
+>>>>>>> Stashed changes
       isOpen: true,
       inventory,
       isLoading: true,
@@ -422,12 +468,30 @@ export default function InventoryPage() {
         </div>
       </div>
 
+<<<<<<< Updated upstream
       <Tabs defaultActiveKey="all" items={items} onChange={onChange} />
 
       <Modal
         title={<h4 className="font-bold text-2xl text-center">CHI TIẾT TỒN KHO</h4>}
+=======
+      <InventoryTable
+        data={listInventory?.data}
+        loading={isLoadingInventory}
+        totalRecords={listInventory?.totalRecords}
+        currentPage={inventoryFilter.toPaging?.page}
+        pageSize={inventoryFilter.toPaging?.pageSize}
+        onPageChange={handleInventoryPageChange}
+        onViewDetail={handleViewDetail}
+        onViewByProduct={handleViewByProduct}
+        onUpdateInventory={handleUpdateInventory}
+        permissions={permissions}
+      />
+
+      <Modal
+        title={<h4 className="font-bold text-2xl text-center">CHI TIẾT TỒN KHO THEO SẢN PHẨM</h4>}
+>>>>>>> Stashed changes
         className="w-11/12 md:w-2/3 xl:w-1/2"
-        open={isOpenDetailModal.isOpen}
+        open={isOpenDetailModalByProduct.isOpen}
         onCancel={handleCloseDetailModal}
         footer={[
           <Button key="back" onClick={handleCloseDetailModal}>
@@ -435,6 +499,7 @@ export default function InventoryPage() {
           </Button>,
         ]}
       >
+<<<<<<< Updated upstream
         {isOpenDetailModal.inventory && (
           <div className="mt-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -513,6 +578,21 @@ export default function InventoryPage() {
           productCode={isOpenHistoryModal.inventory?.product.code}
         />
       </Modal> */}
+=======
+        <InventoryDetail
+          productId={isOpenDetailModalByProduct.inventory?.productId}
+          productName={isOpenDetailModalByProduct.inventory?.product?.name}
+        />
+      </Modal>
+
+      <UpdateInventoryModal
+        visible={isOpenUpdateModal.isOpen}
+        inventory={isOpenUpdateModal.inventory || null}
+        loading={updateInventory.isPending}
+        onCancel={handleCloseUpdateModal}
+        onUpdate={handleSubmitUpdate}
+      />
+>>>>>>> Stashed changes
     </div>
   );
 }
