@@ -29,7 +29,7 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.CreatedAt,
                        opt => opt.MapFrom(src => src.CreatedAt));
 
-        CreateMap<Forecast, DemandForecastResponse>()
+        CreateMap<Forecast, AllDemandForecastResponse>()
             .ForMember(dest => dest.ProductId,
                         opt => opt.MapFrom(src => src.ProductId))
             .ForMember(dest => dest.ProductName,
