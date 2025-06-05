@@ -38,10 +38,13 @@ const CreateGoodsReceiptMaterial = ({
     form.resetFields();
   };
 
-  const materialOptions = materials?.map((material) => ({
-    label: `${material.code} - ${material.name}`,
-    value: material.id,
-  }));
+  // Lọc chỉ lấy các sản phẩm là nguyên vật liệu
+  const materialOptions = materials
+    ?.filter((product) => product.productType === ProductTypes.RAW_MATERIAL)
+    .map((product) => ({
+      label: `${product.code} - ${product.name}`,
+      value: product.id,
+    }));
 
   return (
     <Form

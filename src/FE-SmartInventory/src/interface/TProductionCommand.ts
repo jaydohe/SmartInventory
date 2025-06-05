@@ -7,7 +7,7 @@ export type TProductionCommand = {
   code: string;
   totalAmount: number;
   description: any;
-  status: ProductCommandStatus;
+  status: ProductCommandProcessStatus;
   plannedStart: string;
   plannedEnd: string;
   createdAt: string;
@@ -29,12 +29,11 @@ export type TProductionCommandDetail = {
 export type TProductionCommandProcess = {
   percentage: number;
   note: any;
-  status: ProductCommandProcessStatus;
+  status: ProductCommandStatus;
   actualStart: any;
   actualEnd: any;
 };
-
-export type TProductionCommandStatusUpdate = {
+export type TProductionCommandProcessUpdate = {
   status: ProductCommandStatus;
 };
 
@@ -44,7 +43,7 @@ export type TProductionCommandCreate = {
   productionCommandDetails: Pick<TProductionCommandDetail, 'productId' | 'quantity'>[];
 };
 
-export type TProductionCommandProcessUpdate = {
+export type TProductionCommandUpdate = {
   percentage: number;
   note: string;
   status: ProductCommandProcessStatus;

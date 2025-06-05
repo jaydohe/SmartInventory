@@ -10,7 +10,7 @@ import {
   TProductionCommand,
   TProductionCommandCreate,
   TProductionCommandProcessUpdate,
-  TProductionCommandStatusUpdate,
+  TProductionCommandUpdate,
 } from '@/interface/TProductionCommand';
 import { TProduct } from '@/interface/TProduct';
 import {
@@ -165,16 +165,13 @@ export default function ProductionCommandPage() {
 
   const handleUpdateProductionCommandStatus = (
     id: string,
-    data: TProductionCommandStatusUpdate
-  ) => {
-    updateProductionCommandStatus.mutate({ id, data });
-  };
-
-  const handleUpdateProductionCommandProcess = (
-    id: string,
     data: TProductionCommandProcessUpdate
   ) => {
-    updateProductionCommandProcess.mutate(
+    updateProductionCommandProcess.mutate({ id, data });
+  };
+
+  const handleUpdateProductionCommandProcess = (id: string, data: TProductionCommandUpdate) => {
+    updateProductionCommandStatus.mutate(
       { id, data },
       {
         onSuccess: () => {
@@ -425,7 +422,6 @@ export default function ProductionCommandPage() {
       >
         {isOpenUpdateModal.productionCommand && (
           <UpdateProductionCommandProcess
-            key={isOpenUpdateModal.productionCommand.id}
             productionCommand={isOpenUpdateModal.productionCommand}
             handleUpdateProcess={handleUpdateProductionCommandProcess}
             handleUpdateProductionCommandStatus={handleUpdateProductionCommandStatus}
@@ -487,14 +483,22 @@ export default function ProductionCommandPage() {
                 {
                   span: 2,
                   key: '6',
-                  label: 'Tình trạng',
+                  label: 'Trạng thái',
                   children: (
                     <Tag
+                      // className={`text-${
+                      //   genProductCommandProcessStatus[isOpenDetailModal.productionCommand.status]
+                      //     ?.color
+                      // }`}
                       color={
-                        genProductCommandStatus[isOpenDetailModal.productionCommand.status]?.color
+                        genProductCommandProcessStatus[isOpenDetailModal.productionCommand.status]
+                          ?.color
                       }
                     >
-                      {genProductCommandStatus[isOpenDetailModal.productionCommand.status]?.label}
+                      {
+                        genProductCommandProcessStatus[isOpenDetailModal.productionCommand.status]
+                          ?.label
+                      }
                     </Tag>
                   ),
                 },
@@ -513,10 +517,47 @@ export default function ProductionCommandPage() {
                       ].percentage
                     }
                     status={
-                      isOpenDetailModal.productionCommand.status === ProductCommandStatus.COMPLETED
+                      isOpenDetailModal.productionCommand.status ===
+                      ProductCommandProcessStatus.COMPLETED
                         ? 'success'
                         : 'active'
                     }
+                  />
+                  <List
+                    itemLayout="vertical"
+                    dataSource={isOpenDetailModal.productionCommand.processes}
+                    renderItem={(process, index) => (
+                      <List.Item key={index} className="  bg-blue-50">
+                        <List.Item.Meta
+                          description={
+                            <div className="flex items-center gap-2">
+                              <p>
+                                <strong>Tiến độ:</strong> {process.percentage}%
+                              </p>
+                              <p>
+                                <strong>Trạng thái:</strong>{' '}
+                                <Tag
+                                  color={
+                                    genProductCommandStatus[process.status as ProductCommandStatus]
+                                      .color
+                                  }
+                                >
+                                  {
+                                    genProductCommandStatus[process.status as ProductCommandStatus]
+                                      .label
+                                  }
+                                </Tag>
+                              </p>
+                              {process.note && (
+                                <p>
+                                  <strong>Ghi chú:</strong> {process.note}
+                                </p>
+                              )}
+                            </div>
+                          }
+                        />
+                      </List.Item>
+                    )}
                   />
                 </div>
               ) : (

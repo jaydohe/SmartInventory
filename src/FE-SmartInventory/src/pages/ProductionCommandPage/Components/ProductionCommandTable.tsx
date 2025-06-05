@@ -56,16 +56,15 @@ const ProductionCommandTable = ({
     },
     {
       title: 'Tình trạng',
-      dataIndex: 'status',
-      key: 'status',
+      dataIndex: 'processes',
+      key: 'processes',
       width: '15%',
-      render: (status: ProductCommandStatus) => (
-        <Tag color={genProductCommandStatus[status]?.color}>
-          {genProductCommandStatus[status]?.label}
+      render: (processes: TProductionCommandProcess[]) => (
+        <Tag color={genProductCommandStatus[processes[processes.length - 1].status]?.color}>
+          {genProductCommandStatus[processes[processes.length - 1].status]?.label}
         </Tag>
       ),
     },
-
     {
       title: 'Tiến độ',
       dataIndex: 'processes',
@@ -87,21 +86,14 @@ const ProductionCommandTable = ({
     },
     {
       title: 'Trạng thái sản xuất',
-      dataIndex: 'processes',
-      key: 'processStatus',
+      dataIndex: 'status',
+      key: 'status',
       width: '15%',
-      render: (processes: TProductionCommandProcess[]) => {
-        if (!processes || processes.length === 0) {
-          return <Tag color="default">Chưa có trạng thái</Tag>;
-        }
-
-        const lastProcess = processes[processes.length - 1];
-        return (
-          <Tag color={genProductCommandProcessStatus[lastProcess.status]?.color || 'default'}>
-            {genProductCommandProcessStatus[lastProcess.status]?.label || 'Không xác định'}
-          </Tag>
-        );
-      },
+      render: (status: ProductCommandProcessStatus) => (
+        <Tag color={genProductCommandProcessStatus[status]?.color}>
+          {genProductCommandProcessStatus[status]?.label}
+        </Tag>
+      ),
     },
     {
       title: 'Thao tác',
@@ -122,7 +114,7 @@ const ProductionCommandTable = ({
               type="text"
               icon={<EditOutlined />}
               onClick={() => onEditProductionCommand(record)}
-              disabled={record.status === ProductCommandStatus.COMPLETED}
+              disabled={record.status === ProductCommandProcessStatus.COMPLETED}
               className="text-green-600 hover:text-green-800"
             />
           </Tooltip>
@@ -131,7 +123,7 @@ const ProductionCommandTable = ({
               type="text"
               icon={<DeleteOutlined />}
               onClick={() => onDeleteProductionCommand(record)}
-              disabled={record.status !== ProductCommandStatus.CREATED}
+              disabled={record.status !== ProductCommandProcessStatus.PREPARATION}
               className="text-red-600 hover:text-red-800"
             />
           </Tooltip>

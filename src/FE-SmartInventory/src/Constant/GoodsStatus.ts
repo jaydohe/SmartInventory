@@ -7,7 +7,7 @@ export enum GoodsStatus {
 
 /** Tra cứu thuộc tính hiển thị */
 export const genGoodsStatus = {
-  [GoodsStatus.CREATED]: { label: 'Tạo mới', color: 'blue' },
+  [GoodsStatus.CREATED]: { label: 'Tạo mới', color: 'default' },
   [GoodsStatus.PENDING]: { label: 'Chờ xác nhận', color: 'warning' },
   [GoodsStatus.SUCCESS]: { label: 'Đã xác nhận', color: 'success' },
   [GoodsStatus.CANCELLED]: { label: 'Đã hủy', color: 'error' },

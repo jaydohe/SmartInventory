@@ -13,7 +13,7 @@ import {
 import {
   TProductionCommand,
   TProductionCommandProcessUpdate,
-  TProductionCommandStatusUpdate,
+  TProductionCommandUpdate,
 } from '@/interface/TProductionCommand';
 import {
   ProductCommandProcessStatus,
@@ -26,8 +26,8 @@ import { useState } from 'react';
 
 interface UpdateProductionCommandProcessProps {
   productionCommand: TProductionCommand;
-  handleUpdateProcess: (id: string, data: TProductionCommandProcessUpdate) => void;
-  handleUpdateProductionCommandStatus: (id: string, data: TProductionCommandStatusUpdate) => void;
+  handleUpdateProcess: (id: string, data: TProductionCommandUpdate) => void;
+  handleUpdateProductionCommandStatus?: (id: string, data: TProductionCommandProcessUpdate) => void;
 }
 
 const UpdateProductionCommandProcess = ({
@@ -39,8 +39,8 @@ const UpdateProductionCommandProcess = ({
   const [activeTab, setActiveTab] = useState<string>('process');
 
   const onFinishProcess = (values: any) => {
-    const formattedData: TProductionCommandProcessUpdate = {
-      status: values.status as ProductCommandProcessStatus,
+    const formattedData: TProductionCommandUpdate = {
+      status: values.status,
       percentage: values.percentage,
       note: values.note || '',
       actualStart: values.actualStart
@@ -55,11 +55,13 @@ const UpdateProductionCommandProcess = ({
   };
 
   const onFinishStatus = (values: any) => {
-    const formattedData: TProductionCommandStatusUpdate = {
-      status: values.commandStatus as ProductCommandStatus,
-    };
-    handleUpdateProductionCommandStatus(productionCommand.id, formattedData);
-    form.resetFields();
+    if (handleUpdateProductionCommandStatus) {
+      const formattedData: TProductionCommandProcessUpdate = {
+        status: values.commandStatus,
+      };
+
+      handleUpdateProductionCommandStatus(productionCommand.id, formattedData);
+    }
   };
 
   // Lấy tiến độ hiện tại từ lệnh sản xuất
@@ -70,33 +72,33 @@ const UpdateProductionCommandProcess = ({
 
   const currentStatus = productionCommand.status;
 
-  // Lấy trạng thái hiện tại của quy trình
-  const currentProcessStatus =
+  // Lấy trạng thái hiện tại của lệnh sản xuất
+  const currentCommandStatus =
     productionCommand.processes && productionCommand.processes.length > 0
       ? productionCommand.processes[productionCommand.processes.length - 1].status
-      : ProductCommandProcessStatus.PREPARATION;
+      : ProductCommandStatus.CREATED;
 
   // Lọc ra các trạng thái lệnh có thể chuyển đến
-  const getAvailableProcessStatuses = () => {
-    const allStatuses = Object.values(ProductCommandProcessStatus).filter(
+  const getAvailableCommandStatuses = () => {
+    const allStatuses = Object.values(ProductCommandStatus).filter(
       (value) => typeof value === 'number' && value >= 0
-    ) as ProductCommandProcessStatus[];
+    ) as ProductCommandStatus[];
 
     // Nếu trạng thái hiện tại là COMPLETED, không cho phép thay đổi
-    if (currentProcessStatus === ProductCommandProcessStatus.COMPLETED) {
-      return [ProductCommandProcessStatus.COMPLETED];
+    if (currentCommandStatus === ProductCommandStatus.COMPLETED) {
+      return [ProductCommandStatus.COMPLETED];
     }
 
     return allStatuses.filter(
       (status) =>
-        status === currentProcessStatus ||
-        status === currentProcessStatus + 1 ||
-        status === ProductCommandProcessStatus.COMPLETED
+        status === currentCommandStatus ||
+        status === currentCommandStatus + 1 ||
+        status === ProductCommandStatus.CANCELLED
     );
   };
 
-  const processStatusOptions = getAvailableProcessStatuses().map((status) => ({
-    label: genProductCommandProcessStatus[status]?.label,
+  const commandStatusOptions = getAvailableCommandStatuses().map((status) => ({
+    label: genProductCommandStatus[status]?.label,
     value: status,
   }));
 
@@ -111,7 +113,7 @@ const UpdateProductionCommandProcess = ({
           layout="vertical"
           onFinish={onFinishProcess}
           initialValues={{
-            status: currentProcessStatus,
+            status: currentStatus,
             percentage: currentPercentage,
             note: '',
             actualStart: null,
@@ -132,7 +134,7 @@ const UpdateProductionCommandProcess = ({
                 ),
                 value: status.value,
               }))}
-              // disabled={currentProcessStatus === ProductCommandProcessStatus.COMPLETED}
+              // disabled={currentStatus === ProductCommandProcessStatus.COMPLETED}
             />
           </Form.Item>
 
@@ -154,7 +156,7 @@ const UpdateProductionCommandProcess = ({
               max={100}
               placeholder="Nhập tiến độ hoàn thành"
               className="w-full"
-              disabled={currentProcessStatus === ProductCommandProcessStatus.COMPLETED}
+              disabled={currentStatus === ProductCommandProcessStatus.COMPLETED}
             />
           </Form.Item>
 
@@ -185,7 +187,7 @@ const UpdateProductionCommandProcess = ({
               type="primary"
               htmlType="submit"
               className="w-full"
-              disabled={currentProcessStatus === ProductCommandProcessStatus.COMPLETED}
+              disabled={currentStatus === ProductCommandProcessStatus.COMPLETED}
             >
               Cập nhật tiến độ
             </Button>
@@ -195,20 +197,20 @@ const UpdateProductionCommandProcess = ({
     },
     {
       key: 'status',
-      label: 'Cập nhật tình trạng',
+      label: 'Cập nhật trạng thái lệnh',
       children: (
         <Form
           name="update_production_command_status"
           layout="vertical"
           onFinish={onFinishStatus}
           initialValues={{
-            commandStatus: currentStatus,
+            commandStatus: currentCommandStatus,
           }}
         >
           <Form.Item
             name="commandStatus"
-            label="Tình trạng lệnh sản xuất"
-            rules={[{ required: true, message: 'Vui lòng chọn tình trạng lệnh' }]}
+            label="Trạng thái lệnh sản xuất"
+            rules={[{ required: true, message: 'Vui lòng chọn trạng thái lệnh' }]}
           >
             <Select
               options={Object.values(genProductCommandStatus).map((status) => ({
@@ -219,10 +221,10 @@ const UpdateProductionCommandProcess = ({
                 ),
                 value: status.value,
               }))}
-              disabled={
-                currentStatus === ProductCommandStatus.COMPLETED ||
-                currentStatus === ProductCommandStatus.CANCELLED
-              }
+              // disabled={
+              //   currentCommandStatus === ProductCommandStatus.COMPLETED ||
+              //   currentCommandStatus === ProductCommandStatus.CANCELLED
+              // }
             />
           </Form.Item>
 
@@ -232,8 +234,8 @@ const UpdateProductionCommandProcess = ({
               htmlType="submit"
               className="w-full"
               disabled={
-                currentStatus === ProductCommandStatus.COMPLETED ||
-                currentStatus === ProductCommandStatus.CANCELLED
+                currentCommandStatus === ProductCommandStatus.COMPLETED ||
+                currentCommandStatus === ProductCommandStatus.CANCELLED
               }
             >
               Cập nhật trạng thái lệnh

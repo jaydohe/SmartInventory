@@ -1,13 +1,13 @@
 import { useBuilderQuery } from '@/hook';
 import { TBuilderQuery } from '@/interface';
 import { ExclamationCircleFilled, ShoppingCartOutlined } from '@ant-design/icons';
-import { Button, Descriptions, List, Modal, Tag } from 'antd';
+import { Button, Descriptions, List, Modal } from 'antd';
 import { useState } from 'react';
 import SearchInput from '@/Components/SearchInput';
 import { useQueryGoodsReceipt } from './Hook/useQueryGoodsReceipt';
 import GoodsReceiptTable from './Components/GoodsReceiptTable';
 import { TGoodsReceipt } from '@/interface/TGoodsReceipt';
-import { genGoodsStatus, GoodsStatus } from '@/Constant/GoodsStatus';
+import { GoodsStatus } from '@/Constant/GoodsStatus';
 import CreateGoodsReceiptContainer from './Components/CreateGoodsReceiptContainer';
 
 export default function GoodsReceiptPage() {
@@ -25,7 +25,9 @@ export default function GoodsReceiptPage() {
       page: 1,
       pageSize: 10,
     },
-    toJoin: ['goodsReceiptDetail.*', 'goodsReceiptDetail.product.*'],
+    toJoin: [
+      'goodsReceiptDetail.*,  goodsReceiptDetail.product.name, goodsReceiptDetail.product.*',
+    ],
     appendQuery: [
       {
         code: {
@@ -189,7 +191,6 @@ export default function GoodsReceiptPage() {
             Đóng
           </Button>,
         ]}
-        className="w-11/12 md:w-8/12 xl:w-1/2"
       >
         {isOpenDetailModal.goodsReceipt && (
           <div className="mt-4">
@@ -222,43 +223,6 @@ export default function GoodsReceiptPage() {
                   key: '4',
                   label: 'Ghi chú',
                   children: isOpenDetailModal.goodsReceipt.note || 'Không có',
-                },
-
-                {
-                  span: 2,
-                  key: '5',
-                  label: 'Loại phiếu nhập',
-                  children: (
-                    <Tag
-                      className="font-medium text-blue-600"
-                      color={
-                        isOpenDetailModal.goodsReceipt.productionCommandId
-                          ? 'blue'
-                          : isOpenDetailModal.goodsReceipt.materialSupplierId
-                          ? 'green'
-                          : 'cyan'
-                      }
-                    >
-                      {isOpenDetailModal.goodsReceipt.productionCommandId
-                        ? 'Lệnh sản xuất'
-                        : isOpenDetailModal.goodsReceipt.materialSupplierId
-                        ? 'Nhà cung cấp'
-                        : 'Đơn hàng'}
-                    </Tag>
-                  ),
-                },
-
-                {
-                  span: 2,
-                  key: '6',
-                  label: 'Trạng thái',
-                  children: (
-                    <Tag
-                      color={genGoodsStatus[isOpenDetailModal.goodsReceipt.status]?.color}
-                    >
-                      {genGoodsStatus[isOpenDetailModal.goodsReceipt.status]?.label}
-                    </Tag>
-                  ),
                 },
               ]}
             />

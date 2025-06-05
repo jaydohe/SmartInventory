@@ -4,7 +4,7 @@ import CreateGoodsReceiptTabs from './CreateGoodsReceiptTabs';
 import { useQueryGoodsReceipt } from '../Hook/useQueryGoodsReceipt';
 import { useQueryProduct } from '@/pages/ProductPage/Hook/useQueryProduct';
 import { useQueryOrder } from '@/pages/OrderPage/Hook/useQueryOrder';
-import { useQueryProductionCommand } from '@/pages/ProductionCommandPage/Hook/useQueryProductionCommand';
+
 import { useQueryMaterialSupplier } from '@/pages/MaterialSupplierPage/Hook/useQueryMaterialSupplier';
 import {
   TGoodsReceiptCreateMaterial,
@@ -14,6 +14,7 @@ import {
 import { ProductTypes } from '@/Constant/ProductTypes';
 import { TBuilderQuery } from '@/interface';
 import { useBuilderQuery } from '@/hook/useBuilderQuery';
+import { useQueryProductionCommand } from '@/pages/ProductionCommandPage/Hook/useQueryProductionCommand';
 
 interface CreateGoodsReceiptContainerProps {
   isModalOpen: boolean;
@@ -37,7 +38,7 @@ const CreateGoodsReceiptContainer = ({
     ],
   });
 
-  const [orderFilter] = useState<TBuilderQuery>({
+  const [orderFilter, setOrderFilter] = useState<TBuilderQuery>({
     isAsc: false,
     toJoin: ['orderDetails.*', 'orderDetails.product.*'],
     appendQuery: [
@@ -51,22 +52,9 @@ const CreateGoodsReceiptContainer = ({
     ],
   });
 
-  const [productionCommandFilter] = useState<TBuilderQuery>({
-    isAsc: false,
-    toJoin: ['processes.*', 'details.product.*', 'details.*'],
-    appendQuery: [
-      {
-        deletedOn: {
-          value: 'null',
-          queryOperator: '$eq',
-          queryOperatorParent: '$and',
-        },
-      },
-    ],
-  });
-
   const [filterMaterialSupplier, setFilterMaterialSupplier] = useState<TBuilderQuery>({
     isAsc: false,
+
     appendQuery: [
       {
         name: {
@@ -93,9 +81,10 @@ const CreateGoodsReceiptContainer = ({
   });
 
   const supplierParams = useBuilderQuery(filterMaterialSupplier);
+
   const orderParams = useBuilderQuery(orderFilter);
   const productParams = useBuilderQuery(filter);
-  const productionCommandParams = useBuilderQuery(productionCommandFilter);
+  const productionCommandParams = useBuilderQuery(filter);
   const goodsReceiptParams = '';
 
   // Lấy danh sách nhà cung cấp
@@ -105,7 +94,7 @@ const CreateGoodsReceiptContainer = ({
   // Lấy danh sách sản phẩm
   const { getAllProduct } = useQueryProduct(productParams);
   const products = getAllProduct.data?.data || [];
-  const materials = products.filter((p) => p.productType === ProductTypes.RAW_MATERIAL);
+  const materials = products.filter((p: any) => p.productType === ProductTypes.RAW_MATERIAL);
 
   // Lấy danh sách đơn hàng
   const { getAllOrder } = useQueryOrder(orderParams);

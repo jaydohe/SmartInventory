@@ -36,29 +36,6 @@ const GoodsReceiptTable = ({
       render: (text) => <span className="font-medium text-blue-600">{text}</span>,
     },
     {
-      title: 'Loại phiếu nhập',
-
-      width: '15%',
-      render: (_, record) => (
-        <Tag
-          className="font-medium text-blue-600"
-          color={record.productionCommandId ? 'blue' : record.materialSupplierId ? 'green' : 'cyan'}
-        >
-          {record.productionCommandId
-            ? 'Lệnh sản xuất'
-            : record.materialSupplierId
-            ? 'Nhà cung cấp'
-            : 'Đơn hàng'}
-        </Tag>
-      ),
-    },
-    // productionCommandId:
-
-    // materialSupplierId:
-
-    // orderId
-
-    {
       title: 'Shipper',
       dataIndex: 'shipperName',
       key: 'shipperName',

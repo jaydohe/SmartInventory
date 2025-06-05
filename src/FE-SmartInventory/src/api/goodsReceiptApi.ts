@@ -23,19 +23,19 @@ export const GoodsReceiptApi = {
   },
   //Thêm phiếu nhập hàng từ nhà cung cấp NVL
   createGoodsReceiptByMaterial: async (data: TGoodsReceiptCreateMaterial) => {
-    const url = '/api/v1/goods-receipt/create-material';
+    const url = 'api/v1/goods-receipt/create-material';
     const res = await axiosClient.post(url, data);
     return res.data;
   },
   //Thêm phiếu nhập hàng từ đơn hàng
   createGoodsReceiptByOrder: async (data: TGoodsReceiptCreateOrder) => {
-    const url = '/api/v1/goods-receipt/create-order';
+    const url = 'api/v1/goods-receipt/create-order';
     const res = await axiosClient.post(url, data);
     return res.data;
   },
   //Thêm phiếu nhập hàng từ lệnh sản xuất
   createGoodsReceiptByProductionCommand: async (data: TGoodsReceiptCreateProductionCommand) => {
-    const url = '/api/v1/goods-receipt/create-production';
+    const url = 'api/v1/goods-receipt/create-production';
     const res = await axiosClient.post(url, data);
     return res.data;
   },

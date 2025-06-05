@@ -1,12 +1,12 @@
 import { Button, Form, Input, Select, Space, InputNumber, DatePicker } from 'antd';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import { TCreateGoodsIssue } from '@/interface/TGoodsIssuse';
+import { TGoodsIssueCreate } from '@/interface/TGoodsIssuse';
 import { TProduct } from '@/interface/TProduct';
 import { ProductTypes } from '@/Constant/ProductTypes';
 import dayjs from 'dayjs';
 
 interface CreateGoodsIssueProps {
-  handleCreateGoodsIssue: (data: TCreateGoodsIssue) => void;
+  handleCreateGoodsIssue: (data: TGoodsIssueCreate) => void;
   agencies: { id: string; name: string }[];
   products: TProduct[];
   isLoadingProducts: boolean;
@@ -23,13 +23,14 @@ const CreateGoodsIssue = ({
   const [form] = Form.useForm();
 
   const onFinish = (values: any) => {
-    const formattedData: TCreateGoodsIssue = {
-      orderId: values.agencyId, // Tạm thời sử dụng agencyId làm orderId
+    const formattedData: TGoodsIssueCreate = {
+      agencyId: values.agencyId,
+      receiverName: values.receiverName,
+      deliveryDate: values.deliveryDate.toISOString(),
       note: values.note || '',
       details: values.details.map((detail: any) => ({
         productId: detail.productId,
-        quantityRequested: detail.quantity,
-        quantityIssued: detail.quantity,
+        quantity: detail.quantity,
       })),
     };
 
