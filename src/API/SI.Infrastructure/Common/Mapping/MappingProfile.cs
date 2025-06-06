@@ -43,19 +43,19 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Period,
                        opt => opt.MapFrom(src => src.Period))
             .ForMember(dest => dest.ForecastValue,
-                       opt => opt.MapFrom(src => src.ForecastValue))
+                       opt => opt.MapFrom(src => Math.Round(src.ForecastValue ?? 0, 0)))
             .ForMember(dest => dest.Method,
                         opt => opt.MapFrom(src => src.Method))
             .ForMember(dest => dest.Trend,
-                       opt => opt.MapFrom(src => src.Trend))
+                       opt => opt.MapFrom(src => Math.Round(src.Trend ?? 0, 2)))
             .ForMember(dest => dest.Seasonal,
-                       opt => opt.MapFrom(src => src.Seasonal))
+                       opt => opt.MapFrom(src => Math.Round(src.Seasonal ?? 0, 2)))
             .ForMember(dest => dest.SeasonalityPeriod,
                        opt => opt.MapFrom(src => src.SeasonalityPeriod))
             .ForMember(dest => dest.LowerBound,
-                       opt => opt.MapFrom(src => src.LowerBound))
+                       opt => opt.MapFrom(src => Math.Round(src.LowerBound ?? 0, 0)))
             .ForMember(dest => dest.UpperBound,
-                       opt => opt.MapFrom(src => src.UpperBound))
+                       opt => opt.MapFrom(src => Math.Round(src.UpperBound ?? 0, 0)))
             .ForMember(dest => dest.CreatedAt,
                        opt => opt.MapFrom(src => src.CreatedAt));
 
@@ -73,11 +73,11 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Method,
                        opt => opt.MapFrom(src => src.Method))
             .ForMember(dest => dest.EOQ,
-                       opt => opt.MapFrom(src => src.EOQ))
+                       opt => opt.MapFrom(src => Math.Round(src.EOQ ?? 0, 0)))
             .ForMember(dest => dest.SafetyStock,
-                        opt => opt.MapFrom(src => src.SafetyStock))
+                        opt => opt.MapFrom(src => Math.Round(src.SafetyStock ?? 0, 0)))
             .ForMember(dest => dest.OptimalInventory,
-                        opt => opt.MapFrom(src => src.OptimalInventory))
+                        opt => opt.MapFrom(src => Math.Round(src.OptimalInventory ?? 0, 0)))
             .ForMember(dest => dest.CreatedAt,
                         opt => opt.MapFrom(src => src.CreatedAt));
     }

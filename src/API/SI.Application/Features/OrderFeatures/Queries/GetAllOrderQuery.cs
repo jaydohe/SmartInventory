@@ -28,10 +28,6 @@ public class GetAllOrderQueryHandler(
         var role = identifierProvider.Role;
         var userId = identifierProvider.UserId;
 
-        var checkUser = await userRepos.BuildQuery
-            .Include(x => x.Employee)
-            .FirstOrDefaultAsync(x => x.Id == userId, cancellationToken);
-
         var queryContext = request.QueryContext;
         var orderQuery = orderRepos.HandleLinqQueryRequestV2(request.QueryContext);
         if (role is "WAREHOUSE_STAFF")

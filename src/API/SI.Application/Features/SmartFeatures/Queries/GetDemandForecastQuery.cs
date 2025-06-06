@@ -42,13 +42,13 @@ public class GetDemandForecastQueryHandler(
                 WarehouseName = f.Warehouse?.Name ?? string.Empty,
                 FromPeriod = f.Period ?? string.Empty,
                 ToPeriod = f.Period ?? string.Empty, // Cùng khoảng thời gian
-                ForecastValue = f.ForecastValue ?? 0,
+                ForecastValue = Math.Round(f.ForecastValue ?? 0, 0),
                 Method = f.Method ?? string.Empty,
-                Trend = f.Trend ?? 0,
-                Seasonal = f.Seasonal ?? 0,
+                Trend = Math.Round(f.Trend ?? 0, 2),
+                Seasonal = Math.Round(f.Seasonal ?? 0, 2),
                 SeasonalityPeriod = f.SeasonalityPeriod ?? 0,
-                LowerBound = f.LowerBound ?? 0,
-                UpperBound = f.UpperBound ?? 0,
+                LowerBound = Math.Round(f.LowerBound ?? 0, 0),
+                UpperBound = Math.Round(f.UpperBound ?? 0, 0),
                 CreatedAt = f.CreatedAt
             }).ToList();
 
@@ -77,13 +77,13 @@ public class GetDemandForecastQueryHandler(
                     WarehouseName = anyItem.Warehouse?.Name ?? string.Empty,
                     FromPeriod = request.FromPeriod,
                     ToPeriod = request.ToPeriod,
-                    ForecastValue = avgForecast,
+                    ForecastValue = Math.Round(avgForecast, 0),
                     Method = anyItem.Method ?? string.Empty,
-                    Trend = avgTrend,
-                    Seasonal = avgSeasonal,
+                    Trend = Math.Round(avgTrend, 2),
+                    Seasonal = Math.Round(avgSeasonal, 2),
                     SeasonalityPeriod = (int)group.Average(f => f.SeasonalityPeriod),
-                    LowerBound = avgLowerBound,
-                    UpperBound = avgUpperBound,
+                    LowerBound = Math.Round(avgLowerBound, 0),
+                    UpperBound = Math.Round(avgUpperBound, 0),
                     CreatedAt = anyItem.CreatedAt // hoặc lấy max(createdAt) tuỳ mục đích
                 };
             })
