@@ -37,6 +37,7 @@ public class GetMeQueryHandler(
             .FirstOrDefaultAsync(cancellationToken);
 
         var getEmployee = await employeeRepos.BuildQuery
+            .Include(e => e.Department)
             .FirstOrDefaultAsync(e => e.Id == getUserId.EmployeeId, cancellationToken);
 
         var result = new GetMeArg
