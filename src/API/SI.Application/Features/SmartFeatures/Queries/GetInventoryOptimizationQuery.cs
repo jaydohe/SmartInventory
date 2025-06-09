@@ -35,9 +35,9 @@ public class GetInventoryOptimizationQueryHandler(
                 WarehouseId = f.WarehouseId,
                 WarehouseName = f.Warehouse?.Name ?? string.Empty,
                 Method = f.Method ?? string.Empty,
-                EOQ = f.EOQ ?? 0,
-                SafetyStock = f.SafetyStock ?? 0,
-                OptimalInventory = (f.EOQ ?? 0) + (f.SafetyStock ?? 0),
+                EOQ = Math.Round(f.EOQ ?? 0, 0),
+                SafetyStock = Math.Round(f.SafetyStock ?? 0, 0),
+                OptimalInventory = Math.Round((f.EOQ ?? 0) + (f.SafetyStock ?? 0), 0),
                 CreatedAt = f.CreatedAt
             }).ToList();
 
