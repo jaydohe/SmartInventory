@@ -8,37 +8,35 @@ import { useGetNotification } from '@/hook/useGetNotification';
 import { useUserPermissions } from '@/hook/usePermissions';
 import { TBuilderQuery } from '@/interface';
 import AuthStore, { authStoreSelectors } from '@/Stores/userStore';
-import { DownOutlined, LoginOutlined, UserOutlined } from '@ant-design/icons';
+import {
+  DownOutlined,
+  LoginOutlined,
+  UserOutlined,
+  BarChartOutlined,
+  BoxPlotOutlined,
+  HomeOutlined,
+  AppstoreOutlined,
+  TeamOutlined,
+  CarOutlined,
+  SettingOutlined,
+  InfoCircleOutlined,
+  ImportOutlined,
+  ExportOutlined,
+  DatabaseOutlined,
+  UserSwitchOutlined,
+  BankOutlined,
+  SafetyOutlined,
+  UsergroupAddOutlined,
+  FileTextOutlined,
+  ToolOutlined,
+  DollarCircleOutlined,
+  BuildOutlined,
+  HistoryOutlined,
+} from '@ant-design/icons';
 import { useQueryClient } from '@tanstack/react-query';
 import { Avatar, Badge, Button, Dropdown, MenuProps, Space, Tabs, TabsProps } from 'antd';
 import { Header } from 'antd/es/layout/layout';
 import { useMemo, useState } from 'react';
-import {
-  FaBox,
-  FaChartBar,
-  FaFileInvoiceDollar,
-  FaHistory,
-  FaInfoCircle,
-  FaReceipt,
-  FaSlidersH,
-  FaTruck,
-  FaTruckLoading,
-  FaUsers,
-  FaUserTie,
-  FaWarehouse,
-} from 'react-icons/fa';
-import { FaBuildingUser } from 'react-icons/fa6';
-import { GiHandTruck } from 'react-icons/gi';
-import { HiMiniBuildingOffice2 } from 'react-icons/hi2';
-import {
-  MdConveyorBelt,
-  MdFactory,
-  MdInventory,
-  MdOutlineCategory,
-  MdSwitchAccount,
-  MdWarehouse,
-  MdWork,
-} from 'react-icons/md';
 import { useLocation, useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 import { NavigateNotifyPage, SIZE_NOTIFY_ALL, TNotifyType } from '../../Constant/NotificationState';
@@ -54,11 +52,7 @@ const generateMenuItems = (permissions: ReturnType<typeof useUserPermissions>): 
 
   // Dashboard - available for all users
   if (permissions.canAccess('Dashboard')) {
-    menuItems.push({
-      label: <span className="">Trang chủ</span>,
-      key: 'dashboard',
-      icon: <FaChartBar />,
-    });
+    menuItems.push(getItem(<span className="">Trang chủ</span>, 'dashboard', <BarChartOutlined />));
   }
 
   // Thiết lập section
@@ -67,188 +61,145 @@ const generateMenuItems = (permissions: ReturnType<typeof useUserPermissions>): 
   // Danh mục sub-menu
   const categoryChildren: MenuItem[] = [];
   if (permissions.canAccess('CategoryProductPage')) {
-    categoryChildren.push({
-      label: <span className="">Sản phẩm</span>,
-      key: 'category/product',
-      icon: <FaBox />,
-    });
+    categoryChildren.push(
+      getItem(<span className="">Sản phẩm</span>, 'category/product', <BoxPlotOutlined />)
+    );
   }
   if (permissions.canAccess('CategoryWarehousePage')) {
-    categoryChildren.push({
-      label: <span className="">Kho</span>,
-      key: 'category/warehouse',
-      icon: <MdWarehouse />,
-    });
+    categoryChildren.push(
+      getItem(<span className="">Kho</span>, 'category/warehouse', <HomeOutlined />)
+    );
   }
   if (categoryChildren.length > 0) {
-    configChildren.push({
-      label: <span className="">Danh mục</span>,
-      key: 'category',
-      icon: <MdOutlineCategory />,
-      children: categoryChildren,
-    });
+    configChildren.push(
+      getItem(
+        <span className="">Danh mục</span>,
+        'category',
+        <AppstoreOutlined />,
+        categoryChildren
+      )
+    );
   }
 
   if (permissions.canAccess('AgencyPage')) {
-    configChildren.push({
-      label: <span className="">Đại lý</span>,
-      key: 'agency',
-      icon: <FaBuildingUser />,
-    });
+    configChildren.push(getItem(<span className="">Đại lý</span>, 'agency', <TeamOutlined />));
   }
 
   if (permissions.canAccess('MaterialSupplierPage')) {
-    configChildren.push({
-      label: <span className="">Nhà cung cấp NVL</span>,
-      key: 'material-supplier',
-      icon: <FaTruck />,
-    });
+    configChildren.push(
+      getItem(<span className="">Nhà cung cấp NVL</span>, 'material-supplier', <CarOutlined />)
+    );
   }
 
   if (permissions.canAccess('SetupPage')) {
-    configChildren.push({
-      label: <span className="">Thiết lập thông số</span>,
-      key: 'set-parameter',
-      icon: <FaSlidersH />,
-    });
+    configChildren.push(
+      getItem(<span className="">Thiết lập thông số</span>, 'set-parameter', <SettingOutlined />)
+    );
   }
 
   if (configChildren.length > 0) {
-    menuItems.push({
-      label: <span className="">Thiết lập</span>,
-      key: 'config',
-      icon: <FaInfoCircle />,
-      children: configChildren,
-    });
+    menuItems.push(
+      getItem(<span className="">Thiết lập</span>, 'config', <InfoCircleOutlined />, configChildren)
+    );
   }
 
   // Kho section
   const warehouseChildren: MenuItem[] = [];
   if (permissions.canAccess('Warehouse')) {
-    warehouseChildren.push({
-      label: <span className="">Kho, bãi</span>,
-      key: 'warehouse',
-      icon: <MdWarehouse />,
-    });
+    warehouseChildren.push(
+      getItem(<span className="">Kho, bãi</span>, 'warehouse', <HomeOutlined />)
+    );
   }
   if (permissions.canAccess('GoodsReceiptPage')) {
-    warehouseChildren.push({
-      label: <span className="">Nhập kho</span>,
-      key: 'goods-receipt',
-      icon: <GiHandTruck />,
-    });
+    warehouseChildren.push(
+      getItem(<span className="">Nhập kho</span>, 'goods-receipt', <ImportOutlined />)
+    );
   }
   if (permissions.canAccess('GoodsIssuePage')) {
-    warehouseChildren.push({
-      label: <span className="">Xuất kho</span>,
-      key: 'goods-issue',
-      icon: <FaTruckLoading />,
-    });
+    warehouseChildren.push(
+      getItem(<span className="">Xuất kho</span>, 'goods-issue', <ExportOutlined />)
+    );
   }
   if (permissions.canAccess('InventoryPage')) {
-    warehouseChildren.push({
-      label: <span className="">Tồn kho</span>,
-      key: 'inventory',
-      icon: <MdInventory />,
-    });
+    warehouseChildren.push(
+      getItem(<span className="">Tồn kho</span>, 'inventory', <DatabaseOutlined />)
+    );
   }
 
   if (warehouseChildren.length > 0) {
-    menuItems.push({
-      label: <span className="">Kho</span>,
-      key: 'manage-warehouse',
-      icon: <FaWarehouse />,
-      children: warehouseChildren,
-    });
+    menuItems.push(
+      getItem(
+        <span className="">Kho</span>,
+        'manage-warehouse',
+        <HomeOutlined />,
+        warehouseChildren
+      )
+    );
   }
 
   // Quản lý nhân sự section
   const hrChildren: MenuItem[] = [];
   if (permissions.canAccess('Employee')) {
-    hrChildren.push({
-      label: <span className="">Nhân sự</span>,
-      key: 'employee',
-      icon: <MdSwitchAccount />,
-    });
+    hrChildren.push(getItem(<span className="">Nhân sự</span>, 'employee', <UserSwitchOutlined />));
   }
   if (permissions.canAccess('User')) {
-    hrChildren.push({
-      label: <span className="">Tài khoản</span>,
-      key: 'user',
-      icon: <FaUserTie />,
-    });
+    hrChildren.push(getItem(<span className="">Tài khoản</span>, 'user', <UserOutlined />));
   }
   if (permissions.canAccess('DepartmentPage')) {
-    hrChildren.push({
-      label: <span className="">Phòng ban</span>,
-      key: 'department',
-      icon: <HiMiniBuildingOffice2 />,
-    });
+    hrChildren.push(getItem(<span className="">Phòng ban</span>, 'department', <BankOutlined />));
   }
   if (permissions.canAccess('PositionPage')) {
-    hrChildren.push({
-      label: <span className="">Chức vụ</span>,
-      key: 'position',
-      icon: <MdWork />,
-    });
+    hrChildren.push(getItem(<span className="">Chức vụ</span>, 'position', <SafetyOutlined />));
   }
 
   if (hrChildren.length > 0) {
-    menuItems.push({
-      label: <span className="">Quản lý nhân sự</span>,
-      key: 'user',
-      icon: <FaUsers />,
-      children: hrChildren,
-    });
+    menuItems.push(
+      getItem(
+        <span className="">Quản lý nhân sự</span>,
+        'user',
+        <UsergroupAddOutlined />,
+        hrChildren
+      )
+    );
   }
 
   // Sản xuất section
   const productionChildren: MenuItem[] = [];
   if (permissions.canAccess('ProductPage')) {
-    productionChildren.push({
-      label: <span className="">Sản phẩm</span>,
-      key: 'product',
-      icon: <FaBox />,
-    });
+    productionChildren.push(
+      getItem(<span className="">Sản phẩm</span>, 'product', <BoxPlotOutlined />)
+    );
   }
   if (permissions.canAccess('OrderPage')) {
-    productionChildren.push({
-      label: <span className="">Đơn hàng</span>,
-      key: 'order',
-      icon: <FaReceipt />,
-    });
+    productionChildren.push(
+      getItem(<span className="">Đơn hàng</span>, 'order', <FileTextOutlined />)
+    );
   }
   if (permissions.canAccess('ProductionCommandPage')) {
-    productionChildren.push({
-      label: <span className="">Lệnh sản xuất</span>,
-      key: 'production-command',
-      icon: <MdConveyorBelt />,
-    });
+    productionChildren.push(
+      getItem(<span className="">Lệnh sản xuất</span>, 'production-command', <ToolOutlined />)
+    );
   }
   if (permissions.canAccess('BomPage')) {
-    productionChildren.push({
-      label: <span className="">Định mức NVL</span>,
-      key: 'bom',
-      icon: <FaFileInvoiceDollar />,
-    });
+    productionChildren.push(
+      getItem(<span className="">Định mức NVL</span>, 'bom', <DollarCircleOutlined />)
+    );
   }
 
   if (productionChildren.length > 0) {
-    menuItems.push({
-      label: <span className="">Sản xuất</span>,
-      key: 'production',
-      icon: <MdFactory />,
-      children: productionChildren,
-    });
+    menuItems.push(
+      getItem(
+        <span className="">Sản xuất</span>,
+        'production',
+        <BuildOutlined />,
+        productionChildren
+      )
+    );
   }
 
   // Lịch sử
   if (permissions.canAccess('Activity')) {
-    menuItems.push({
-      label: <span className="">Lịch Sử</span>,
-      key: 'activity',
-      icon: <FaHistory />,
-    });
+    menuItems.push(getItem(<span className="">Lịch Sử</span>, 'activity', <HistoryOutlined />));
   }
 
   return menuItems;
@@ -287,7 +238,7 @@ export default function HeaderV1({}: HeaderV1Props) {
 
   // Generate menu items based on user permissions
   const menuItems = useMemo(() => generateMenuItems(permissions), [permissions]);
-
+  console.log('menuItems', menuItems, permissions);
   const { getAllNotification, markAsRead } = useGetNotification(useBuilderQuery(filter));
 
   const [isOpenNotify, setIsOpenNotify] = useState<boolean>(false);

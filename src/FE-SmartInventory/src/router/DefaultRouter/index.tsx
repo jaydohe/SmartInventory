@@ -49,13 +49,38 @@ export const DefaultRouter = () => {
               </Suspense>
             }
           >
+            <Route path="/production-command" element={<ProductionCommandPage />}></Route>
+            <Route path="/order" element={<OrderPage />}></Route>
+            <Route path="/agency" element={<AgencyPage />}></Route>
+            <Route path="/inventory" element={<InventoryPage />}></Route>
             <Route path="/self" element={<SelfRouter />}></Route>
-            <Route path="/position" element={<PositionPage />}></Route>
-            <Route path="/department" element={<DepartmentPage />}></Route>
-            <Route path="/category/*" element={<CategoryRouter />}></Route>
-            <Route path="/product" element={<ProductPage />}></Route>
           </Route>
 
+          <Route
+            element={
+              <Suspense fallback={<SkeletonComponent />}>
+                <PrivateRouters roleList={[DEV, ADMIN, WAREHOUSE_STAFF, WAREHOUSE_PRODUCER]} />
+              </Suspense>
+            }
+          >
+            <Route path="/bom" element={<BomPage />}></Route>
+          </Route>
+          <Route
+            element={
+              <Suspense fallback={<SkeletonComponent />}>
+                <PrivateRouters roleList={[WAREHOUSE_STAFF, DEV, ADMIN]} />
+              </Suspense>
+            }
+          >
+            <Route path="/category/*" element={<CategoryRouter />}></Route>
+            <Route path="/goods-issue" element={<GoodsIssuePage />}></Route>
+            <Route path="/goods-receipt" element={<GoodsReceiptPage />}></Route>
+            <Route path="/material-supplier" element={<MaterialSupplierPage />}></Route>
+            <Route path="/activity/*" element={<ActivityRouter />}></Route>
+            <Route path="/warehouse" element={<WarehousePage />}></Route>
+            <Route path="/product" element={<ProductPage />}></Route>{' '}
+            <Route path="/employee/*" element={<EmployeePage />}></Route>
+          </Route>
           <Route
             element={
               <Suspense fallback={<SkeletonComponent />}>
@@ -64,28 +89,10 @@ export const DefaultRouter = () => {
             }
           >
             <Route path="/set-parameter" element={<SetupPage />}></Route>
-            <Route path="/warehouse" element={<WarehousePage />}></Route>
             <Route path="/activity/*" element={<ActivityRouter />}></Route>
-            <Route path="/user/*" element={<UserRouter />}></Route>
-            <Route path="/employee/*" element={<EmployeePage />}></Route>
-          </Route>
-
-          <Route
-            element={
-              <Suspense fallback={<SkeletonComponent />}>
-                <PrivateRouters roleList={[WAREHOUSE_STAFF, DEV, ADMIN]} />
-              </Suspense>
-            }
-          >
-            <Route path="/inventory" element={<InventoryPage />}></Route>
-            <Route path="/goods-issue" element={<GoodsIssuePage />}></Route>
-            <Route path="/goods-receipt" element={<GoodsReceiptPage />}></Route>
-            <Route path="/agency" element={<AgencyPage />}></Route>
-            <Route path="/order" element={<OrderPage />}></Route>
-            <Route path="/production-command" element={<ProductionCommandPage />}></Route>
-            <Route path="/material-supplier" element={<MaterialSupplierPage />}></Route>
-            <Route path="/activity/*" element={<ActivityRouter />}></Route>
-            <Route path="/bom" element={<BomPage />}></Route>
+            <Route path="/user/*" element={<UserRouter />}></Route>{' '}
+            <Route path="/department" element={<DepartmentPage />}></Route>
+            <Route path="/position" element={<PositionPage />}></Route>
           </Route>
         </Route>
 

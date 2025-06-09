@@ -8,6 +8,7 @@ import {
   genProductCommandProcessStatus,
   genProductCommandStatus,
 } from '@/Constant/ProductCommandStatus';
+import { usePermissions } from '@/hook/usePermissions';
 
 interface ProductionCommandTableProps {
   data?: TProductionCommand[];
@@ -32,6 +33,8 @@ const ProductionCommandTable = ({
   onDeleteProductionCommand,
   onViewDetail,
 }: ProductionCommandTableProps) => {
+  const permissions = usePermissions('ProductionCommandPage');
+
   const columns: TableProps<TProductionCommand>['columns'] = [
     {
       title: 'Mã lệnh',
@@ -110,38 +113,44 @@ const ProductionCommandTable = ({
       align: 'center',
       render: (_, record) => (
         <div className="flex gap-2 justify-center">
-          <Tooltip title="Xem chi tiết lệnh sản xuất">
-            <Button
-              color="cyan"
-              variant="solid"
-              shape="round"
-              icon={<EyeOutlined />}
-              onClick={() => onViewDetail(record)}
-              className={'font-medium'}
-            ></Button>
-          </Tooltip>
-          <Tooltip title="Cập nhật tiến độ">
-            <Button
-              color="gold"
-              variant="solid"
-              shape="round"
-              icon={<EditOutlined />}
-              onClick={() => onEditProductionCommand(record)}
-              disabled={record.status === ProductCommandStatus.COMPLETED}
-              className={'font-medium'}
-            ></Button>
-          </Tooltip>
-          <Tooltip title="Xoá lệnh sản xuất">
-            <Button
-              color="red"
-              variant="solid"
-              shape="round"
-              icon={<DeleteOutlined />}
-              onClick={() => onDeleteProductionCommand(record)}
-              disabled={record.status !== ProductCommandStatus.CREATED}
-              className={'font-medium'}
-            ></Button>
-          </Tooltip>
+          {permissions.canRead() && (
+            <Tooltip title="Xem chi tiết lệnh sản xuất">
+              <Button
+                color="cyan"
+                variant="solid"
+                shape="round"
+                icon={<EyeOutlined />}
+                onClick={() => onViewDetail(record)}
+                className={'font-medium'}
+              ></Button>
+            </Tooltip>
+          )}
+          {permissions.canUpdate() && (
+            <Tooltip title="Cập nhật tiến độ">
+              <Button
+                color="gold"
+                variant="solid"
+                shape="round"
+                icon={<EditOutlined />}
+                onClick={() => onEditProductionCommand(record)}
+                disabled={record.status === ProductCommandStatus.COMPLETED}
+                className={'font-medium'}
+              ></Button>
+            </Tooltip>
+          )}
+          {permissions.canDelete() && (
+            <Tooltip title="Xoá lệnh sản xuất">
+              <Button
+                color="red"
+                variant="solid"
+                shape="round"
+                icon={<DeleteOutlined />}
+                onClick={() => onDeleteProductionCommand(record)}
+                disabled={record.status !== ProductCommandStatus.CREATED}
+                className={'font-medium'}
+              ></Button>
+            </Tooltip>
+          )}
         </div>
       ),
     },

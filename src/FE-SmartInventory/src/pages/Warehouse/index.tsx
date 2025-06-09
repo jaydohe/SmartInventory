@@ -17,8 +17,11 @@ import EditWarehouse from './Components/EditWarehouse';
 import CreateWarehouse from './Components/CreateWarehouse';
 import DetailWarehouse from './Components/DetailWarehouse';
 import SearchInput from '@/Components/SearchInput';
+import { usePermissions } from '@/hook/usePermissions';
 
 export default function WarehousePage() {
+  const permissions = usePermissions('Warehouse');
+
   const [isOpenCreateModal, setIsOpenCreateModal] = useState<boolean>(false);
   const [isOpenEditModal, setIsOpenEditModal] = useState<{
     isOpen: boolean;
@@ -238,6 +241,7 @@ export default function WarehousePage() {
       width: 250,
       render: (_, record) => (
         <Space size="middle">
+          {permissions.canRead() && (
           <Tooltip title="Xem chi tiết kho">
             <Button
               color="cyan"
@@ -248,6 +252,8 @@ export default function WarehousePage() {
               className={'font-medium'}
             ></Button>
           </Tooltip>
+          )}
+          {permissions.canUpdate() && (
           <Tooltip title="Cập nhật kho">
             <Button
               color="gold"
@@ -258,6 +264,8 @@ export default function WarehousePage() {
               className={'font-medium'}
             ></Button>{' '}
           </Tooltip>
+          )}
+          {permissions.canDelete() && (
           <Tooltip title="Xoá kho">
             <Button
               color="red"
@@ -268,6 +276,7 @@ export default function WarehousePage() {
               className={'font-medium'}
             ></Button>
           </Tooltip>
+          )}
         </Space>
       ),
     },
@@ -281,14 +290,17 @@ export default function WarehousePage() {
             <HomeOutlined className="text-xl font-medium" />
             Danh sách kho
           </h2>
-          <Button
-            variant="solid"
-            color="primary"
-            onClick={() => handleOpenCreateModal()}
-            className="rounded-2xl w-full sm:w-fit"
-          >
-            Thêm kho
-          </Button>
+
+          {permissions.canCreate() && (
+            <Button
+              variant="solid"
+              color="primary"
+              onClick={() => handleOpenCreateModal()}
+              className="rounded-2xl w-full sm:w-fit"
+            >
+              Thêm kho
+            </Button>
+          )}
         </div>
 
         <div className="w-full sm:w-1/3 justify-end">

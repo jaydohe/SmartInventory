@@ -56,7 +56,7 @@ const EditBom: React.FC<EditBomProps> = ({
   );
 
   return (
-    <div className="p-4">
+    <div className="">
       <Title level={4} className="text-center mb-6">
         Chỉnh sửa định mức nguyên vật liệu
       </Title>
@@ -141,10 +141,8 @@ const EditBom: React.FC<EditBomProps> = ({
                             {availableMaterials.map((material) => (
                               <Option key={material.id} value={material.id}>
                                 <div>
-                                  <div className="font-medium">{material.name}</div>
-                                  <div className="text-xs text-gray-500">
-                                    Mã: {material.code} | Đơn vị: {material.unit}
-                                  </div>
+                                  <span className="font-medium">{material.name}</span>
+                                  Mã: {material.code} | Đơn vị: {material.unit}
                                 </div>
                               </Option>
                             ))}
@@ -203,9 +201,6 @@ const EditBom: React.FC<EditBomProps> = ({
         {/* Buttons */}
         <Form.Item className="mb-0">
           <Space className="w-full justify-end">
-            <Button htmlType="button" onClick={() => form.resetFields()}>
-              Khôi phục
-            </Button>
             <Button type="primary" htmlType="submit" className="bg-blue-600">
               Cập nhật định mức
             </Button>

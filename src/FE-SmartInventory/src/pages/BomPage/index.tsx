@@ -285,7 +285,6 @@ export default function BomPage() {
 
       {/* Modal sửa định mức */}
       <Modal
-        title={<h4 className="font-bold text-2xl text-center">SỬA ĐỊNH MỨC NGUYÊN VẬT LIỆU</h4>}
         className="w-11/12 md:w-4/5 xl:w-3/4"
         open={isOpenEditModal.isOpen}
         onCancel={handleCloseEditModal}

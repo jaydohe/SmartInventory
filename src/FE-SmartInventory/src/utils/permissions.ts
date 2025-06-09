@@ -19,25 +19,23 @@ export const PAGE_PERMISSIONS: {
   CategoryProductPage: {
     [RoleEnumString.ADMIN]: { create: true, read: true, update: true, delete: true },
     [RoleEnumString.DEV]: { create: true, read: true, update: true, delete: true },
-    [RoleEnumString.WAREHOUSE_STAFF]: { create: false, read: true, update: false, delete: false },
     WAREHOUSE_STAFF_MANAGER: { create: true, read: true, update: true, delete: true },
-    WAREHOUSE_STAFF_EMPLOYEE: { create: false, read: true, update: false, delete: false },
+    WAREHOUSE_STAFF_EMPLOYEE: { create: true, read: true, update: false, delete: true },
     [RoleEnumString.WAREHOUSE_PRODUCER]: {
       create: false,
-      read: true,
+      read: false,
       update: false,
       delete: false,
     },
-    [RoleEnumString.SALESMAN]: { create: false, read: true, update: false, delete: false },
+    [RoleEnumString.SALESMAN]: { create: false, read: false, update: false, delete: false },
   },
 
   // Danh mục kho
   CategoryWarehousePage: {
     [RoleEnumString.ADMIN]: { create: true, read: true, update: true, delete: true },
     [RoleEnumString.DEV]: { create: true, read: true, update: true, delete: true },
-    [RoleEnumString.WAREHOUSE_STAFF]: { create: false, read: true, update: false, delete: false },
     WAREHOUSE_STAFF_MANAGER: { create: true, read: true, update: true, delete: true },
-    WAREHOUSE_STAFF_EMPLOYEE: { create: false, read: true, update: false, delete: false },
+    WAREHOUSE_STAFF_EMPLOYEE: { create: true, read: true, update: false, delete: false },
     [RoleEnumString.WAREHOUSE_PRODUCER]: {
       create: false,
       read: false,
@@ -51,9 +49,9 @@ export const PAGE_PERMISSIONS: {
   AgencyPage: {
     [RoleEnumString.ADMIN]: { create: true, read: true, update: true, delete: true },
     [RoleEnumString.DEV]: { create: true, read: true, update: true, delete: true },
-    [RoleEnumString.WAREHOUSE_STAFF]: { create: false, read: true, update: false, delete: false },
-    WAREHOUSE_STAFF_MANAGER: { create: false, read: true, update: false, delete: false },
-    WAREHOUSE_STAFF_EMPLOYEE: { create: false, read: false, update: false, delete: false },
+
+    WAREHOUSE_STAFF_MANAGER: { create: true, read: true, update: true, delete: true },
+    WAREHOUSE_STAFF_EMPLOYEE: { create: true, read: true, update: true, delete: true },
     [RoleEnumString.WAREHOUSE_PRODUCER]: {
       create: false,
       read: false,
@@ -67,9 +65,8 @@ export const PAGE_PERMISSIONS: {
   MaterialSupplierPage: {
     [RoleEnumString.ADMIN]: { create: true, read: true, update: true, delete: true },
     [RoleEnumString.DEV]: { create: true, read: true, update: true, delete: true },
-    [RoleEnumString.WAREHOUSE_STAFF]: { create: false, read: true, update: false, delete: false },
-    WAREHOUSE_STAFF_MANAGER: { create: false, read: true, update: false, delete: false },
-    WAREHOUSE_STAFF_EMPLOYEE: { create: false, read: false, update: false, delete: false },
+    WAREHOUSE_STAFF_MANAGER: { create: true, read: true, update: true, delete: true },
+    WAREHOUSE_STAFF_EMPLOYEE: { create: true, read: true, update: true, delete: true },
     [RoleEnumString.WAREHOUSE_PRODUCER]: {
       create: false,
       read: false,
@@ -83,9 +80,8 @@ export const PAGE_PERMISSIONS: {
   Warehouse: {
     [RoleEnumString.ADMIN]: { create: true, read: true, update: true, delete: true },
     [RoleEnumString.DEV]: { create: true, read: true, update: true, delete: true },
-    [RoleEnumString.WAREHOUSE_STAFF]: { create: false, read: true, update: false, delete: false },
-    WAREHOUSE_STAFF_MANAGER: { create: true, read: true, update: true, delete: true },
-    WAREHOUSE_STAFF_EMPLOYEE: { create: false, read: true, update: false, delete: false },
+    WAREHOUSE_STAFF_MANAGER: { create: false, read: true, update: true, delete: false },
+    WAREHOUSE_STAFF_EMPLOYEE: { create: false, read: false, update: false, delete: false },
     [RoleEnumString.WAREHOUSE_PRODUCER]: {
       create: false,
       read: false,
@@ -99,9 +95,8 @@ export const PAGE_PERMISSIONS: {
   GoodsReceiptPage: {
     [RoleEnumString.ADMIN]: { create: true, read: true, update: true, delete: true },
     [RoleEnumString.DEV]: { create: true, read: true, update: true, delete: true },
-    [RoleEnumString.WAREHOUSE_STAFF]: { create: false, read: true, update: false, delete: false },
     WAREHOUSE_STAFF_MANAGER: { create: true, read: true, update: true, delete: true },
-    WAREHOUSE_STAFF_EMPLOYEE: { create: false, read: true, update: false, delete: false },
+    WAREHOUSE_STAFF_EMPLOYEE: { create: true, read: true, update: true, delete: true },
     [RoleEnumString.WAREHOUSE_PRODUCER]: {
       create: false,
       read: false,
@@ -115,7 +110,6 @@ export const PAGE_PERMISSIONS: {
   GoodsIssuePage: {
     [RoleEnumString.ADMIN]: { create: true, read: true, update: true, delete: true },
     [RoleEnumString.DEV]: { create: true, read: true, update: true, delete: true },
-    [RoleEnumString.WAREHOUSE_STAFF]: { create: true, read: true, update: true, delete: true },
     WAREHOUSE_STAFF_MANAGER: { create: true, read: true, update: true, delete: true },
     WAREHOUSE_STAFF_EMPLOYEE: { create: true, read: true, update: true, delete: true },
     [RoleEnumString.WAREHOUSE_PRODUCER]: {
@@ -131,7 +125,6 @@ export const PAGE_PERMISSIONS: {
   InventoryPage: {
     [RoleEnumString.ADMIN]: { create: false, read: true, update: true, delete: false },
     [RoleEnumString.DEV]: { create: false, read: true, update: true, delete: false },
-    [RoleEnumString.WAREHOUSE_STAFF]: { create: false, read: true, update: true, delete: false },
     WAREHOUSE_STAFF_MANAGER: { create: false, read: true, update: true, delete: false },
     WAREHOUSE_STAFF_EMPLOYEE: { create: false, read: true, update: true, delete: false },
     [RoleEnumString.WAREHOUSE_PRODUCER]: {
@@ -147,61 +140,46 @@ export const PAGE_PERMISSIONS: {
   ProductPage: {
     [RoleEnumString.ADMIN]: { create: true, read: true, update: true, delete: true },
     [RoleEnumString.DEV]: { create: true, read: true, update: true, delete: true },
-    [RoleEnumString.WAREHOUSE_STAFF]: { create: true, read: true, update: true, delete: true },
     WAREHOUSE_STAFF_MANAGER: { create: true, read: true, update: true, delete: true },
     WAREHOUSE_STAFF_EMPLOYEE: { create: true, read: true, update: true, delete: true },
     [RoleEnumString.WAREHOUSE_PRODUCER]: {
       create: false,
-      read: true,
+      read: false,
       update: false,
       delete: false,
     },
-    [RoleEnumString.SALESMAN]: { create: false, read: true, update: false, delete: false },
+    [RoleEnumString.SALESMAN]: { create: false, read: false, update: false, delete: false },
   },
 
   // Đơn hàng
   OrderPage: {
     [RoleEnumString.ADMIN]: { create: true, read: true, update: true, delete: true },
     [RoleEnumString.DEV]: { create: true, read: true, update: true, delete: true },
-    [RoleEnumString.WAREHOUSE_STAFF]: { create: true, read: true, update: true, delete: true },
     WAREHOUSE_STAFF_MANAGER: { create: true, read: true, update: true, delete: true },
     WAREHOUSE_STAFF_EMPLOYEE: { create: true, read: true, update: true, delete: true },
     [RoleEnumString.WAREHOUSE_PRODUCER]: {
       create: false,
-      read: true,
+      read: false,
       update: false,
       delete: false,
     },
-    [RoleEnumString.SALESMAN]: { create: false, read: true, update: true, delete: true },
+    [RoleEnumString.SALESMAN]: { create: true, read: true, update: true, delete: true },
   },
 
   // Lệnh sản xuất
   ProductionCommandPage: {
     [RoleEnumString.ADMIN]: { create: true, read: true, update: true, delete: true },
     [RoleEnumString.DEV]: { create: true, read: true, update: true, delete: true },
-    [RoleEnumString.WAREHOUSE_STAFF]: { create: true, read: true, update: true, delete: true },
     WAREHOUSE_STAFF_MANAGER: { create: true, read: true, update: true, delete: true },
     WAREHOUSE_STAFF_EMPLOYEE: { create: true, read: true, update: true, delete: true },
-    [RoleEnumString.WAREHOUSE_PRODUCER]: { create: false, read: true, update: true, delete: false },
-    [RoleEnumString.SALESMAN]: { create: false, read: true, update: true, delete: false },
-  },
-
-  // Định mức nguyên vật liệu (sẽ cần tạo trang này)
-  MaterialNormPage: {
-    [RoleEnumString.ADMIN]: { create: true, read: true, update: true, delete: true },
-    [RoleEnumString.DEV]: { create: true, read: true, update: true, delete: true },
-    [RoleEnumString.WAREHOUSE_STAFF]: { create: false, read: true, update: false, delete: false },
-    WAREHOUSE_STAFF_MANAGER: { create: true, read: true, update: true, delete: true },
-    WAREHOUSE_STAFF_EMPLOYEE: { create: false, read: true, update: false, delete: false },
-    [RoleEnumString.WAREHOUSE_PRODUCER]: { create: false, read: true, update: true, delete: false },
-    [RoleEnumString.SALESMAN]: { create: false, read: false, update: false, delete: false },
+    [RoleEnumString.WAREHOUSE_PRODUCER]: { create: false, read: true, update: false, delete: false },
+    [RoleEnumString.SALESMAN]: { create: true, read: true, update: true, delete: false },
   },
 
   // Định mức nguyên vật liệu (BOM)
   BomPage: {
     [RoleEnumString.ADMIN]: { create: true, read: true, update: true, delete: true },
     [RoleEnumString.DEV]: { create: true, read: true, update: true, delete: true },
-    [RoleEnumString.WAREHOUSE_STAFF]: { create: false, read: true, update: false, delete: false },
     WAREHOUSE_STAFF_MANAGER: { create: true, read: true, update: true, delete: true },
     WAREHOUSE_STAFF_EMPLOYEE: { create: false, read: true, update: false, delete: false },
     [RoleEnumString.WAREHOUSE_PRODUCER]: { create: false, read: true, update: true, delete: false },
@@ -212,8 +190,7 @@ export const PAGE_PERMISSIONS: {
   Employee: {
     [RoleEnumString.ADMIN]: { create: true, read: true, update: true, delete: true },
     [RoleEnumString.DEV]: { create: true, read: true, update: true, delete: true },
-    [RoleEnumString.WAREHOUSE_STAFF]: { create: false, read: true, update: true, delete: false },
-    WAREHOUSE_STAFF_MANAGER: { create: false, read: true, update: true, delete: false },
+    WAREHOUSE_STAFF_MANAGER: { create: false, read: true, update: false, delete: false },
     WAREHOUSE_STAFF_EMPLOYEE: { create: false, read: false, update: false, delete: false },
     [RoleEnumString.WAREHOUSE_PRODUCER]: {
       create: false,
@@ -228,7 +205,6 @@ export const PAGE_PERMISSIONS: {
   User: {
     [RoleEnumString.ADMIN]: { create: true, read: true, update: true, delete: true },
     [RoleEnumString.DEV]: { create: true, read: true, update: true, delete: true },
-    [RoleEnumString.WAREHOUSE_STAFF]: { create: false, read: false, update: false, delete: false },
     WAREHOUSE_STAFF_MANAGER: { create: false, read: false, update: false, delete: false },
     WAREHOUSE_STAFF_EMPLOYEE: { create: false, read: false, update: false, delete: false },
     [RoleEnumString.WAREHOUSE_PRODUCER]: {
@@ -244,7 +220,6 @@ export const PAGE_PERMISSIONS: {
   DepartmentPage: {
     [RoleEnumString.ADMIN]: { create: true, read: true, update: true, delete: true },
     [RoleEnumString.DEV]: { create: true, read: true, update: true, delete: true },
-    [RoleEnumString.WAREHOUSE_STAFF]: { create: false, read: false, update: false, delete: false },
     WAREHOUSE_STAFF_MANAGER: { create: false, read: false, update: false, delete: false },
     WAREHOUSE_STAFF_EMPLOYEE: { create: false, read: false, update: false, delete: false },
     [RoleEnumString.WAREHOUSE_PRODUCER]: {
@@ -260,7 +235,6 @@ export const PAGE_PERMISSIONS: {
   PositionPage: {
     [RoleEnumString.ADMIN]: { create: true, read: true, update: true, delete: true },
     [RoleEnumString.DEV]: { create: true, read: true, update: true, delete: true },
-    [RoleEnumString.WAREHOUSE_STAFF]: { create: false, read: false, update: false, delete: false },
     WAREHOUSE_STAFF_MANAGER: { create: false, read: false, update: false, delete: false },
     WAREHOUSE_STAFF_EMPLOYEE: { create: false, read: false, update: false, delete: false },
     [RoleEnumString.WAREHOUSE_PRODUCER]: {
@@ -274,10 +248,9 @@ export const PAGE_PERMISSIONS: {
 
   // Lịch sử hoạt động
   Activity: {
-    [RoleEnumString.ADMIN]: { create: false, read: true, update: false, delete: false },
-    [RoleEnumString.DEV]: { create: false, read: true, update: false, delete: false },
-    [RoleEnumString.WAREHOUSE_STAFF]: { create: false, read: true, update: false, delete: false },
-    WAREHOUSE_STAFF_MANAGER: { create: false, read: true, update: false, delete: false },
+    [RoleEnumString.ADMIN]: { create: true, read: true, update: true, delete: true },
+    [RoleEnumString.DEV]: { create: true, read: true, update: true, delete: true },
+    WAREHOUSE_STAFF_MANAGER: { create: false, read: false, update: false, delete: false },
     WAREHOUSE_STAFF_EMPLOYEE: { create: false, read: false, update: false, delete: false },
     [RoleEnumString.WAREHOUSE_PRODUCER]: {
       create: false,
@@ -290,25 +263,23 @@ export const PAGE_PERMISSIONS: {
 
   // Dashboard (Tất cả role đều có thể xem)
   Dashboard: {
-    [RoleEnumString.ADMIN]: { create: false, read: true, update: false, delete: false },
-    [RoleEnumString.DEV]: { create: false, read: true, update: false, delete: false },
-    [RoleEnumString.WAREHOUSE_STAFF]: { create: false, read: true, update: false, delete: false },
-    WAREHOUSE_STAFF_MANAGER: { create: false, read: true, update: false, delete: false },
-    WAREHOUSE_STAFF_EMPLOYEE: { create: false, read: true, update: false, delete: false },
+    [RoleEnumString.ADMIN]: { create: true, read: true, update: true, delete: true },
+    [RoleEnumString.DEV]: { create: true, read: true, update: true, delete: true },
+    WAREHOUSE_STAFF_MANAGER: { create: true, read: true, update: true, delete: true },
+    WAREHOUSE_STAFF_EMPLOYEE: { create: false, read: false, update: false, delete: false },
     [RoleEnumString.WAREHOUSE_PRODUCER]: {
       create: false,
-      read: true,
+      read: false,
       update: false,
       delete: false,
     },
-    [RoleEnumString.SALESMAN]: { create: false, read: true, update: false, delete: false },
+    [RoleEnumString.SALESMAN]: { create: false, read: false, update: false, delete: false },
   },
 
   // Hồ sơ cá nhân (Tất cả role đều có thể xem và cập nhật)
   Self: {
     [RoleEnumString.ADMIN]: { create: false, read: true, update: true, delete: false },
     [RoleEnumString.DEV]: { create: false, read: true, update: true, delete: false },
-    [RoleEnumString.WAREHOUSE_STAFF]: { create: false, read: true, update: true, delete: false },
     WAREHOUSE_STAFF_MANAGER: { create: false, read: true, update: true, delete: false },
     WAREHOUSE_STAFF_EMPLOYEE: { create: false, read: true, update: true, delete: false },
     [RoleEnumString.WAREHOUSE_PRODUCER]: { create: false, read: true, update: true, delete: false },
@@ -319,8 +290,10 @@ export const PAGE_PERMISSIONS: {
   SetupPage: {
     [RoleEnumString.ADMIN]: { create: true, read: true, update: true, delete: true },
     [RoleEnumString.DEV]: { create: true, read: true, update: true, delete: true },
-    [RoleEnumString.WAREHOUSE_STAFF]: { create: false, read: false, update: false, delete: false },
     WAREHOUSE_STAFF_MANAGER: { create: false, read: false, update: false, delete: false },
+    WAREHOUSE_STAFF_EMPLOYEE: { create: false, read: false, update: false, delete: false },
+    [RoleEnumString.WAREHOUSE_PRODUCER]: { create: false, read: false, update: false, delete: false },
+    [RoleEnumString.SALESMAN]: { create: false, read: false, update: false, delete: false },
   },
 };
 
@@ -342,7 +315,7 @@ export const checkPermission = (
   } else {
     roleKey = userRole;
   }
-
+  // console.log('roleKey', roleKey, PAGE_PERMISSIONS[pageName]);
   const permissions =
     PAGE_PERMISSIONS[pageName][roleKey as keyof (typeof PAGE_PERMISSIONS)[typeof pageName]];
   return permissions ? (permissions as Permission)[action] : false;

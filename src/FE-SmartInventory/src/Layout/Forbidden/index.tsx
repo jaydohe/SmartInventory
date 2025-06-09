@@ -19,7 +19,7 @@ export default function Forbidden() {
           <Button
             onClick={() => {
               ForbiddenStore.getState().setForbidden(false);
-              navigate('/agency');
+              navigate('/self');
             }}
             type="primary"
             size="large"
@@ -34,7 +34,6 @@ export default function Forbidden() {
             danger
             className="w-full font-semibold text-base  "
             onClick={() => {
-              console.log(123);
               AuthStore.getState().logOut();
               navigate('/login');
             }}

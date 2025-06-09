@@ -4,6 +4,7 @@ import { genProductTypes } from '@/Constant/ProductTypes';
 import { useBuilderQuery } from '@/hook';
 import { TBuilderQuery } from '@/interface';
 import { TCreateOrder, TOrder, TUpdateOrderStatus } from '@/interface/TOder';
+import { TProductionCommandRequest } from '@/interface/TProductionCommand';
 import { ExclamationCircleFilled, ShoppingCartOutlined } from '@ant-design/icons';
 import { Button, Descriptions, List, Modal, Select, Tabs, TabsProps, Tag } from 'antd';
 import { useEffect, useState } from 'react';
@@ -13,6 +14,7 @@ import { useQueryWarehouse } from '@/hook/useQueryWarehouse';
 import CreateOrder from './Components/CreateOrder';
 import OrderTable from './Components/OrderTable';
 import { useQueryOrder } from './Hook/useQueryOrder';
+import { useQueryProductionCommand } from '../ProductionCommandPage/Hook/useQueryProductionCommand';
 
 import { usePermissions } from '@/hook/usePermissions';
 
@@ -29,6 +31,7 @@ export default function OrderPage() {
   // Bộ lọc cho agencies, products và warehouses
   const [filter] = useState<TBuilderQuery>({
     isAsc: false,
+
     appendQuery: [
       {
         deletedOn: {
@@ -130,6 +133,7 @@ export default function OrderPage() {
   }, [activeTab]);
   const [orderFilter, setOrderFilter] = useState<TBuilderQuery>({
     isAsc: false,
+    orderBy: 'createdAt',
     toPaging: {
       page: 1,
       pageSize: 10,
@@ -155,6 +159,11 @@ export default function OrderPage() {
 
   const orderParams = useBuilderQuery(orderFilter);
   const { getAllOrder, createOrder, deleteOrder, updateOrderStatus } = useQueryOrder(orderParams);
+
+  // Hook cho production command
+  const { createProductionCommandRequest } = useQueryProductionCommand('', {
+    enabled: false,
+  });
 
   const { data: listOrder, isLoading: isLoadingOrder } = getAllOrder;
 
@@ -242,6 +251,22 @@ export default function OrderPage() {
         updateOrderStatus.mutate({
           id: order.id,
           data: updateData,
+        });
+      },
+    });
+  };
+
+  const handleRequestProductionCommand = (order: TOrder) => {
+    Modal.confirm({
+      title: 'Yêu cầu lệnh sản xuất',
+      icon: <ExclamationCircleFilled style={{ fontSize: '22px', color: 'blue' }} />,
+      content: 'Bạn có muốn tạo yêu cầu lệnh sản xuất cho đơn hàng này?',
+      okText: 'Xác nhận',
+      cancelText: 'Huỷ',
+      onOk: async () => {
+        createProductionCommandRequest.mutate({
+          orderId: order.id,
+          wareHouseId: order.warehouseId,
         });
       },
     });
@@ -466,6 +491,19 @@ export default function OrderPage() {
           <Button key="back" onClick={handleCloseDetailModal}>
             Đóng
           </Button>,
+          isOpenDetailModal.order &&
+            permissions.canUpdate() &&
+            (isOpenDetailModal.order.orderStatus === OrderStatus.NEW ||
+              isOpenDetailModal.order.orderStatus === OrderStatus.INPROCESS) && (
+              <Button
+                key="production"
+                type="primary"
+                onClick={() => handleRequestProductionCommand(isOpenDetailModal.order!)}
+                loading={createProductionCommandRequest.isPending}
+              >
+                Yêu cầu lệnh sản xuất
+              </Button>
+            ),
         ]}
       >
         {isOpenDetailModal.order && (

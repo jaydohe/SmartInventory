@@ -2,10 +2,9 @@ import React, { useState } from 'react';
 import { Menu, Button } from 'antd';
 import type { MenuProps } from 'antd';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { MenuOutlined } from '@ant-design/icons';
+import { MenuOutlined, AppstoreOutlined } from '@ant-design/icons';
 import { useWindowSize } from '@/utils/useWindowSize';
 export type MenuItem = Required<MenuProps>['items'][number];
-import { BsMenuAppFill } from 'react-icons/bs';
 
 interface ResponsiveMenuProps {
   items: MenuItem[];
@@ -39,7 +38,7 @@ const ResponsiveMenu: React.FC<ResponsiveMenuProps> = ({ items }) => {
             size="large"
             icon={
               isMenuOpen ? (
-                <BsMenuAppFill className="text-2xl" />
+                <AppstoreOutlined className="text-2xl" />
               ) : (
                 <MenuOutlined className="text-2xl" />
               )
@@ -50,11 +49,7 @@ const ResponsiveMenu: React.FC<ResponsiveMenuProps> = ({ items }) => {
         </div>
       )}
 
-      <div
-        className={`menu-container  ${
-          isMobile ? (isMenuOpen ? 'show' : 'hide') : ''
-        }`}
-      >
+      <div className={`menu-container  ${isMobile ? (isMenuOpen ? 'show' : 'hide') : ''}`}>
         <Menu
           mode={isMobile ? 'inline' : 'horizontal'}
           className={`responsive-menu  z-[1000000] ${isMobile ? 'mobile-menu' : ''}`}
