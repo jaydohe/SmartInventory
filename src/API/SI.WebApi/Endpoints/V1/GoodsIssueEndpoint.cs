@@ -25,7 +25,7 @@ public class GoodsIssueEndpoint : IEndpoint
         goodsIssueGR.MapGet("/get-all", GetAllGoodsIssueAsync);
         goodsIssueGR.MapGet("/get-by-id/{id}", GetGoodsIssueAsync);
         goodsIssueGR.MapPost("/create", CreateGoodsIssueAsync);
-        goodsIssueGR.MapPatch("/update/{id}", UpdateGoodsIssueAsync);
+        goodsIssueGR.MapPatch("/update/{code}", UpdateGoodsIssueAsync);
         goodsIssueGR.MapDelete("/delete/{id}", DelGoodsIssueAsync);
 
         return endpoints;
