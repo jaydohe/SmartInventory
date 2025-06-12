@@ -11,9 +11,9 @@ using SI.Domain.Enums;
 
 namespace SI.Application.Features.GoodsIssueFeatures.Commands;
 
-public class UpdateGoodsIssueCommand(string id, UpdateGoodsIssueArg arg) : ICommand<OkResponse>
+public class UpdateGoodsIssueCommand(string code, UpdateGoodsIssueArg arg) : ICommand<OkResponse>
 {
-    public string Id { get; set; } = id;
+    public string Code { get; set; } = code;
     public UpdateGoodsIssueArg Arg { get; set; } = arg;
     public async Task<ValidationResult> ValidateAsync(CancellationToken cancellationToken = default)
     {
@@ -36,7 +36,7 @@ public class UpdateGoodsIssueCommandHandler(
         var userId = identifierProvider.UserId;
 
         var checkGoodsIssue = await goodsIssueRepos.BuildQuery
-                .FirstOrDefaultAsync(x => x.Id == request.Id && x.DeletedOn == null, cancellationToken);
+                .FirstOrDefaultAsync(x => x.Code == request.Code && x.DeletedOn == null, cancellationToken);
         if (checkGoodsIssue is null)
             return CTBaseResult.NotFound("Phiếu xuất hàng");
         if (checkGoodsIssue.Status == GoodsStatus.CANCELED)

@@ -48,8 +48,8 @@ public class GoodsIssueEndpoint : IEndpoint
             .ToOk(e => Results.Ok(e));
 
     private async Task<IResult> UpdateGoodsIssueAsync(
-        [FromServices] IMediator mediator, string id, [FromBody] UpdateGoodsIssueArg arg)
-        => (await mediator.Send(new UpdateGoodsIssueCommand(id, arg)))
+        [FromServices] IMediator mediator, string code, [FromBody] UpdateGoodsIssueArg arg)
+        => (await mediator.Send(new UpdateGoodsIssueCommand(code, arg)))
             .ToOk(e => Results.Ok(e));
 
     private async Task<IResult> DelGoodsIssueAsync(
