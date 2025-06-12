@@ -8,7 +8,7 @@ export enum OrderStatus {
 
 /** Tra cứu thuộc tính hiển thị */
 export const genOrderStatus = {
-  [OrderStatus.NEW]: { label: 'Đang tạo mới', color: 'cyan' },
+  [OrderStatus.NEW]: { label: 'Tạo mới', color: 'cyan' },
   [OrderStatus.INPROCESS]: { label: 'Đang xử lý', color: 'processing' },
   [OrderStatus.DELIVERED]: { label: 'Đã giao', color: 'success' },
   [OrderStatus.REFUNDED]: { label: 'Đã hoàn tiền', color: 'volcano' },
