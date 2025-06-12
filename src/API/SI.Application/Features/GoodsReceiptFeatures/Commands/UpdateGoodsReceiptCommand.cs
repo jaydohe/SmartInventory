@@ -12,9 +12,9 @@ using SI.Domain.Enums;
 
 namespace SI.Application.Features.GoodsReceiptFeatures.Commands;
 
-public class UpdateGoodsReceiptCommand(string code, UpdateGoodsReceiptArg arg) : ICommand<OkResponse>
+public class UpdateGoodsReceiptCommand(string id, UpdateGoodsReceiptArg arg) : ICommand<OkResponse>
 {
-    public string Code { get; set; } = code;
+    public string Id { get; set; } = id;
     public UpdateGoodsReceiptArg Arg { get; set; } = arg;
     public async Task<ValidationResult> ValidateAsync(CancellationToken cancellationToken = default)
     {
@@ -46,7 +46,7 @@ public class UpdateGoodsReceiptCommandHandler(
             return CTBaseResult.UnProcess("Chỉ có quản lý được truy cập.");
 
         var checkGoodsReceipt = await goodsReceiptRepos.BuildQuery
-                .FirstOrDefaultAsync(x => x.Code == request.Code && x.DeletedOn == null, cancellationToken);
+                .FirstOrDefaultAsync(x => x.Id == request.Id && x.DeletedOn == null, cancellationToken);
         if (checkGoodsReceipt is null)
             return CTBaseResult.NotFound("Phiếu nhập hàng");
 
