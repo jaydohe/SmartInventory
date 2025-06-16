@@ -28,7 +28,7 @@ export const productionCommandApi = {
   },
   //Yêu cầu lệnh sản xuất
   createProductionCommandRequest: async (data: TProductionCommandRequest) => {
-    const url = 'api/v1/production-command/create-request';
+    const url = 'api/v1/production-command/request';
     const res = await axiosClient.post(url, data);
     return res.data;
   },
