@@ -172,7 +172,7 @@ export const PAGE_PERMISSIONS: {
     [RoleEnumString.DEV]: { create: true, read: true, update: true, delete: true },
     WAREHOUSE_STAFF_MANAGER: { create: true, read: true, update: true, delete: true },
     WAREHOUSE_STAFF_EMPLOYEE: { create: true, read: true, update: true, delete: true },
-    [RoleEnumString.WAREHOUSE_PRODUCER]: { create: false, read: true, update: false, delete: false },
+    [RoleEnumString.WAREHOUSE_PRODUCER]: { create: false, read: true, update: true, delete: false },
     [RoleEnumString.SALESMAN]: { create: true, read: true, update: true, delete: false },
   },
 
