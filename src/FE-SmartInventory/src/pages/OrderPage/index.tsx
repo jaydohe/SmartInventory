@@ -218,6 +218,11 @@ export default function OrderPage() {
               selectedStatus = value;
             }}
           >
+            <Select.Option value={OrderStatus.NEW}>
+              <Tag color={genOrderStatus[OrderStatus.NEW].color}>
+                {genOrderStatus[OrderStatus.NEW].label}
+              </Tag>
+            </Select.Option>
             <Select.Option value={OrderStatus.INPROCESS}>
               <Tag color={genOrderStatus[OrderStatus.INPROCESS].color}>
                 {genOrderStatus[OrderStatus.INPROCESS].label}
