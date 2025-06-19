@@ -18,6 +18,7 @@ public class GetMeQueryHandler(
     IRepository<User> userRepos,
     IRepository<Warehouse> wareRepos,
     IRepository<Employee> employeeRepos,
+    IRepository<Position> positionRepos,
     IUserIdentifierProvider userIdentifier) 
         : IQueryHandler<GetMeQuery, OkDynamicResponse>
 {
@@ -25,6 +26,7 @@ public class GetMeQueryHandler(
     {
         var userId = userIdentifier.UserId;
         var warehouseId = userIdentifier.WarehouseId;
+        var positionId = userIdentifier.PositionId;
 
         var getUserId = await userRepos.BuildQuery
             .FirstOrDefaultAsync(e => e.Id == userId, cancellationToken);
@@ -40,10 +42,15 @@ public class GetMeQueryHandler(
             .Include(e => e.Department)
             .FirstOrDefaultAsync(e => e.Id == getUserId.EmployeeId, cancellationToken);
 
+        var positionName = await positionRepos.BuildQuery
+            .Where(e => e.Id == positionId)
+            .Select(e => e.Name)
+            .FirstOrDefaultAsync(cancellationToken);
+
         var result = new GetMeArg
         {
-            PositionId = getEmployee?.PositionId ?? "null",
-            PositionName = getEmployee?.Position?.Name ?? "null",
+            PositionId = positionId,
+            PositionName = positionName ?? "null",
             UserId = userId,
             Code = getEmployee?.Code ?? "null",
             Name = getUserId.Name,

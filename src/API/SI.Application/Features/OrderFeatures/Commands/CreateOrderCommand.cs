@@ -39,6 +39,8 @@ public class CreateOrderCommandHandler(
 
         var userId = identifierProvider.UserId;
         var warehouseId = identifierProvider.WarehouseId;
+        if (warehouseId is "null" && request.Arg.WarehouseId is null)
+            return CTBaseResult.UnProcess("Kho hàng không được để trống nếu người dùng không có kho hàng mặc định.");
 
         var checkAgency = await agencyRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Id == request.Arg.AgencyId && x.DeletedOn == null, cancellationToken);
@@ -75,7 +77,7 @@ public class CreateOrderCommandHandler(
 
         var newOrder = new Order
         {
-            WarehouseId = warehouseId is "null" ? warehouseId : request.Arg.WarehouseId,
+            WarehouseId = warehouseId is null ? warehouseId : request.Arg.WarehouseId,
             Code = CodeGenerationUtils.GenerateCodeFromName(checkAgency.Name),
             UserId = userId,
             AgencyId = request.Arg.AgencyId,

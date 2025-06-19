@@ -8,7 +8,7 @@ export enum ProductCommandProcessStatus {
 
 export const genProductCommandProcessStatus = {
   [ProductCommandProcessStatus.PREPARATION]: {
-    label: 'Đang chuẩn bị',
+    label: 'Đang chuẩn bị nguyên vật liệu',
     color: 'volcano',
     value: ProductCommandProcessStatus.PREPARATION,
   },
@@ -18,12 +18,12 @@ export const genProductCommandProcessStatus = {
     value: ProductCommandProcessStatus.PRODUCTION,
   },
   [ProductCommandProcessStatus.QUALITYCONTROL]: {
-    label: 'Kiểm tra chất lượng',
+    label: 'Kiểm tra chất lượng hàng hóa',
     color: 'gold',
     value: ProductCommandProcessStatus.QUALITYCONTROL,
   },
   [ProductCommandProcessStatus.PACKAGING]: {
-    label: 'Đóng gói',
+    label: 'Đóng gói hàng hóa',
     color: 'cyan',
     value: ProductCommandProcessStatus.PACKAGING,
   },

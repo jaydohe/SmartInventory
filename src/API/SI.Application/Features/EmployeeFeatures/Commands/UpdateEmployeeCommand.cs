@@ -53,14 +53,6 @@ public class UpdateEmployeeCommandHandler(
             .FirstOrDefaultAsync(x => x.Id == request.Id && x.DeletedOn == null, cancellationToken);
         if (checkEmp is null)
             return CTBaseResult.NotFound("Nhân viên");
-        if (request.Arg.Name != null && checkEmp.Name == request.Arg.Name)
-            return CTBaseResult.UnProcess("Kho không có thay đổi.");
-        if (request.Arg.PhoneNumber != null && checkEmp.PhoneNumber == request.Arg.PhoneNumber)
-            return CTBaseResult.UnProcess("Số điện thoại không có thay đổi.");
-        if (request.Arg.Email != null && checkEmp.Email == request.Arg.Email)
-            return CTBaseResult.UnProcess("Email không có thay đổi.");
-        if (request.Arg.Address != null && checkEmp.Address == request.Arg.Address)
-            return CTBaseResult.UnProcess("Địa chỉ không có thay đổi.");
 
         var checkDepartment = await departmentRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Id == request.Arg.DepartmentId && x.DeletedOn == null, cancellationToken);
