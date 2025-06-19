@@ -32,7 +32,7 @@ jobs:
       - name: Install & Build FE
         working-directory: src/FE-SmartInventory
         run: |
-          npm install
+          npm install --legacy-peer-deps
           npm run build
 
       # 4) Deploy the already-built dist folder to Azure
