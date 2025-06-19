@@ -11,27 +11,42 @@ on:
 
 jobs:
   build_and_deploy_job:
-    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
+    if: github.event_name == 'push' ||
+        (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
     name: Build and Deploy Job
     steps:
+      # 1) Checkout your code
       - uses: actions/checkout@v3
         with:
           submodules: true
           lfs: false
-      - name: Build And Deploy
-        id: builddeploy
+
+      # 2) Use Node 20 for your build
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.x'
+
+      # 3) Install dependencies & build the React app
+      - name: Install & Build FE
+        working-directory: src/FE-SmartInventory
+        run: |
+          npm install
+          npm run build
+
+      # 4) Deploy the already-built dist folder to Azure
+      - name: Deploy to Azure Static Web Apps
         uses: Azure/static-web-apps-deploy@v1
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_AGREEABLE_GRASS_0FFF7A41E }}
-          repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)
-          action: "upload"
-          ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
-          # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
-          app_location: "src/FE-SmartInventory" # App source code path
-          api_location: "" # Api source code path - optional
-          output_location: "src/FE-SmartInventory/dist" # Built app content directory - optional
-          ###### End of Repository/Build Configurations ######
+          repo_token:      ${{ secrets.GITHUB_TOKEN }}
+          action:          upload
+
+          # Point directly at your built files
+          app_location:    "src/FE-SmartInventory/dist"
+          api_location:    ""                     # no Functions in this repo
+          skip_app_build:  true                   # skip Oryx since you’ve already built
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
