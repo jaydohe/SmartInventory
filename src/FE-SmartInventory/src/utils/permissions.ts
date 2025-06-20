@@ -129,7 +129,7 @@ export const PAGE_PERMISSIONS: {
     WAREHOUSE_STAFF_EMPLOYEE: { create: false, read: true, update: true, delete: false },
     [RoleEnumString.WAREHOUSE_PRODUCER]: {
       create: false,
-      read: true,
+      read: false,
       update: false,
       delete: false,
     },
