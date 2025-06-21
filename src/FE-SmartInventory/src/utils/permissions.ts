@@ -173,7 +173,7 @@ export const PAGE_PERMISSIONS: {
     WAREHOUSE_STAFF_MANAGER: { create: true, read: true, update: true, delete: true },
     WAREHOUSE_STAFF_EMPLOYEE: { create: true, read: true, update: true, delete: true },
     [RoleEnumString.WAREHOUSE_PRODUCER]: { create: false, read: true, update: true, delete: false },
-    [RoleEnumString.SALESMAN]: { create: true, read: true, update: true, delete: false },
+    [RoleEnumString.SALESMAN]: { create: false, read: false, update: false, delete: false },
   },
 
   // Định mức nguyên vật liệu (BOM)
