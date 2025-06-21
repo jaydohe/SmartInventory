@@ -2,29 +2,31 @@ import { Button, Form, Input, Select, Space, InputNumber, DatePicker } from 'ant
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { TCreateGoodsIssue } from '@/interface/TGoodsIssuse';
 import { TProduct } from '@/interface/TProduct';
+import { TOrder } from '@/interface/TOder';
 import { ProductTypes } from '@/Constant/ProductTypes';
+import { OrderStatus } from '@/Constant/OderStatus';
 import dayjs from 'dayjs';
 
 interface CreateGoodsIssueProps {
   handleCreateGoodsIssue: (data: TCreateGoodsIssue) => void;
-  agencies: { id: string; name: string }[];
+  orders: TOrder[];
   products: TProduct[];
   isLoadingProducts: boolean;
-  isLoadingAgencies: boolean;
+  isLoadingOrders: boolean;
 }
 
 const CreateGoodsIssue = ({
   handleCreateGoodsIssue,
-  agencies,
+  orders,
   products,
   isLoadingProducts,
-  isLoadingAgencies,
+  isLoadingOrders,
 }: CreateGoodsIssueProps) => {
   const [form] = Form.useForm();
 
   const onFinish = (values: any) => {
     const formattedData: TCreateGoodsIssue = {
-      orderId: values.agencyId, // Tạm thời sử dụng agencyId làm orderId
+      orderId: values.orderId,
       note: values.note || '',
       details: values.details.map((detail: any) => ({
         productId: detail.productId,
@@ -45,6 +47,14 @@ const CreateGoodsIssue = ({
       value: product.id,
     }));
 
+  // Lọc chỉ lấy các đơn hàng có trạng thái INPROCESS hoặc NEW
+  const orderOptions = orders
+    ?.filter((order) => order.orderStatus !== OrderStatus.CANCELED)
+    .map((order) => ({
+      label: `${order.code} - ${order.warehouseId}`,
+      value: order.id,
+    }));
+
   const disabledDate = (current: dayjs.Dayjs) => {
     // Không cho chọn ngày trong quá khứ
     return current && current < dayjs().startOf('day');
@@ -62,29 +72,29 @@ const CreateGoodsIssue = ({
       }}
     >
       <Form.Item
-        name="agencyId"
-        label="Đại lý/Khách hàng"
-        rules={[{ required: true, message: 'Vui lòng chọn đại lý/khách hàng' }]}
+        name="orderId"
+        label="Đơn hàng"
+        rules={[{ required: true, message: 'Vui lòng chọn đơn hàng' }]}
       >
         <Select
           showSearch
-          placeholder="Chọn đại lý/khách hàng"
+          placeholder="Chọn đơn hàng"
           optionFilterProp="children"
-          loading={isLoadingAgencies}
-          options={agencies.map((agency) => ({
-            label: agency.name,
-            value: agency.id,
-          }))}
+          loading={isLoadingOrders}
+          options={orderOptions}
+          filterOption={(input, option) =>
+            (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+          }
         />
       </Form.Item>
 
-      <Form.Item
+      {/* <Form.Item
         name="receiverName"
         label="Người nhận hàng"
         rules={[{ required: true, message: 'Vui lòng nhập tên người nhận hàng' }]}
       >
         <Input placeholder="Nhập tên người nhận hàng" />
-      </Form.Item>
+      </Form.Item> */}
 
       <Form.Item
         name="deliveryDate"
@@ -123,6 +133,9 @@ const CreateGoodsIssue = ({
                     style={{ width: 300 }}
                     loading={isLoadingProducts}
                     options={productOptions}
+                    filterOption={(input, option) =>
+                      (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                    }
                   />
                 </Form.Item>
                 <Form.Item

@@ -9,6 +9,7 @@ import {
   PlusOutlined,
   SettingOutlined,
   ToolOutlined,
+  EditOutlined,
 } from '@ant-design/icons';
 import {
   Button,
@@ -46,11 +47,14 @@ import { useQueryWarehouse } from '@/hook/useQueryWarehouse';
 import { useQueryEmployee } from '../Employee/Hook/useEmployeePage';
 import { useQueryDepartment } from '../DepartmentPage/Hook/useQueryDepartment';
 
+import { usePermissions } from '@/hook/usePermissions';
+
 const { Title, Text } = Typography;
 const { TabPane } = Tabs;
 
 export default function User() {
   const role = authStoreSelectors.use.role();
+  const permissions = usePermissions('User');
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
   const [isDrawerVisible, setIsDrawerVisible] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
@@ -74,8 +78,6 @@ export default function User() {
       },
     ],
   });
-
-
 
   const { getAllDepartment } = useQueryDepartment(useBuilderQuery(filterEmployee), {
     enabled: role === RoleEnumString.DEV,
@@ -192,46 +194,45 @@ export default function User() {
     {
       title: 'Thao tác',
       key: 'action',
+      align: 'center',
+      width: 200,
       render: (_, record) => (
         <Space size="middle">
-          <Tooltip title="Chi tiết">
+          <Tooltip title="Cập nhật tài khoản">
             <Button
-              className="rounded-2xl"
-              size="middle"
-              color="primary"
+              color="gold"
               variant="solid"
-              icon={<InfoCircleOutlined />}
+              shape="round"
+              icon={<EditOutlined />}
               onClick={() => handleOpenDrawer(record.id)}
-            >
-              Chi tiết
-            </Button>
+              className={'font-medium'}
+            ></Button>
           </Tooltip>
-          {role === RoleEnumString.DEV && (
-            <Tooltip title="Xóa người dùng">
-              <Popconfirm
-                title="Bạn có chắc chắn muốn xóa người dùng này không?"
-                onConfirm={() => handleDeleteUser(record.id)}
-                okText="Có"
-                cancelText="Không"
+
+          <Tooltip title="Xóa người dùng">
+            <Popconfirm
+              title="Bạn có chắc chắn muốn xóa người dùng này không?"
+              onConfirm={() => handleDeleteUser(record.id)}
+              okText="Có"
+              cancelText="Không"
+            >
+              <Button
+                color="danger"
+                variant="solid"
+                className="rounded-2xl"
+                icon={<DeleteOutlined />}
               >
-                <Button
-                  color="danger"
-                  variant="solid"
-                  className="rounded-2xl"
-                  icon={<DeleteOutlined />}
-                >
-                  Xóa
-                </Button>
-              </Popconfirm>
-            </Tooltip>
-          )}
+                Xóa
+              </Button>
+            </Popconfirm>
+          </Tooltip>
         </Space>
       ),
     },
   ];
 
   const columns: ColumnsType<TUser> =
-    role === RoleEnumString.DEV || role === RoleEnumString.ADMIN
+    permissions.canDelete() || permissions.canUpdate()
       ? [...commonColumns, ...actionColumn]
       : commonColumns;
 
@@ -269,7 +270,7 @@ export default function User() {
         <Title level={2} className="mb-0 uppercase text-center text-pretty ">
           Quản lý Tài khoản
         </Title>
-        {role === RoleEnumString.ADMIN && (
+        {permissions.canCreate() && (
           <Button
             variant="solid"
             color="primary"

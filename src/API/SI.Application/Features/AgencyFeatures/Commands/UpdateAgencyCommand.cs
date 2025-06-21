@@ -51,11 +51,6 @@ public class UpdateAgencyCommandHandler(
         if (checkAgency is null)
             return CTBaseResult.NotFound("Đại lý");
 
-        var checkExist = await agencyRepos.BuildQuery
-            .FirstOrDefaultAsync(x => x.Name == request.Arg.Name && x.DeletedOn == null, cancellationToken);
-        if (checkExist != null)
-            return CTBaseResult.UnProcess("Đại lý đã tồn tại.");
-
         if (request.Arg.Name != null)
         {
             checkAgency.Code = CodeGenerationUtils.GenerateCodeFromName(request.Arg.Name);

@@ -18,7 +18,11 @@ import SearchInput from '@/Components/SearchInput';
 import ProductTable from './Components/ProductTable';
 import { ProductTypes } from '@/Constant/ProductTypes';
 
+import { usePermissions } from '@/hook/usePermissions';
+
 export default function ProductPage() {
+  const permissions = usePermissions('ProductPage');
+
   const [activeTab, setActiveTab] = useState<string>('1'); // Tab sản phẩm là tab mặc định
 
   const [isOpenCreateModal, setIsOpenCreateModal] = useState<boolean>(false);
@@ -287,14 +291,16 @@ export default function ProductPage() {
         <div>
           <div className="flex items-center justify-between flex-wrap gap-4 mb-4">
             <div className="flex items-center justify-center flex-wrap gap-3">
-              <Button
-                variant="solid"
-                color="primary"
-                onClick={() => handleOpenCreateModal()}
-                className="rounded-2xl w-full sm:w-fit"
-              >
-                Thêm sản phẩm
-              </Button>
+              {permissions.canCreate() && (
+                <Button
+                  variant="solid"
+                  color="primary"
+                  onClick={() => handleOpenCreateModal()}
+                  className="rounded-2xl w-full sm:w-fit"
+                >
+                  Thêm sản phẩm
+                </Button>
+              )}
             </div>
 
             <div className="w-full sm:w-1/3 justify-end">
@@ -317,6 +323,7 @@ export default function ProductPage() {
             onDeleteProduct={(product) =>
               showConfirmNotify('Xóa sản phẩm', 'Bạn có muốn xóa sản phẩm này?', product)
             }
+            permissions={permissions}
           />
         </div>
       ),
@@ -333,14 +340,16 @@ export default function ProductPage() {
         <div>
           <div className="flex items-center justify-between flex-wrap gap-4 mb-4">
             <div className="flex items-center justify-center flex-wrap gap-3">
-              <Button
-                variant="solid"
-                color="primary"
-                onClick={() => handleOpenCreateModal()}
-                className="rounded-2xl w-full sm:w-fit"
-              >
-                Thêm nguyên vật liệu
-              </Button>
+              {permissions.canCreate() && (
+                <Button
+                  variant="solid"
+                  color="primary"
+                  onClick={() => handleOpenCreateModal()}
+                  className="rounded-2xl w-full sm:w-fit"
+                >
+                  Thêm nguyên vật liệu
+                </Button>
+              )}
             </div>
 
             <div className="w-full sm:w-1/3 justify-end">
@@ -367,6 +376,7 @@ export default function ProductPage() {
                 product
               )
             }
+            permissions={permissions}
           />
         </div>
       ),

@@ -1,5 +1,5 @@
 import { Button, Card, Form, Input, Avatar, Row, Col, Descriptions, Modal } from 'antd';
-import { UserOutlined} from '@ant-design/icons';
+import { UserOutlined, EditOutlined, LockOutlined } from '@ant-design/icons';
 import { getUserInfo } from '@/hook/useAuthHRM';
 import { IUpdatePasswordSelf, IUpdateUserInfo } from '../../interface/ISelf';
 import { useState } from 'react';
@@ -7,8 +7,6 @@ import { useQueryClient } from '@tanstack/react-query';
 import { QueryKeys, RoleEnumString } from '@/Constant';
 import { authStoreSelectors } from '@/Stores/userStore';
 import RoleTag from '../User/Components/RoleTag';
-import { RiLockPasswordFill } from 'react-icons/ri';
-import { FaRegEdit } from 'react-icons/fa';
 
 export default function SelfInfo() {
   const queryClient = useQueryClient();
@@ -125,14 +123,14 @@ export default function SelfInfo() {
                 <Avatar size={120} icon={<UserOutlined />} className="mb-4 bg-primary" />
                 <h3 className="mb-2 text-xl font-semibold">{selfInfo?.data.name}</h3>
                 <p className="font-medium text-base flex items-center justify-center gap-2">
-                    {selfInfo?.data.wareName} <RoleTag role={role as RoleEnumString} />
+                  {selfInfo?.data.wareName} <RoleTag role={role as RoleEnumString} />
                 </p>
 
                 <Row gutter={[16, 16]} className="mt-4">
                   <Col xs={24} sm={12} md={12} lg={12} xl={12}>
                     <Button
                       type="primary"
-                      icon={<FaRegEdit />}
+                      icon={<EditOutlined />}
                       onClick={() => setInfoModalVisible(true)}
                       block
                       className="rounded-2xl text-base font-medium"
@@ -143,7 +141,7 @@ export default function SelfInfo() {
                   <Col xs={24} sm={12} md={12} lg={12} xl={12}>
                     <Button
                       type="primary"
-                      icon={<RiLockPasswordFill  />}
+                      icon={<LockOutlined />}
                       onClick={() => setPasswordModalVisible(true)}
                       block
                       className="rounded-2xl text-base font-medium bg-colorLink hover:bg-colorLinkHover"
@@ -161,17 +159,17 @@ export default function SelfInfo() {
               <Descriptions layout="horizontal" column={1} bordered size="small">
                 <Descriptions.Item label="Tên Người Dùng">{selfInfo?.data.name}</Descriptions.Item>
 
-                <Descriptions.Item label="Tên Đăng Nhập">{selfInfo?.data.loginName}</Descriptions.Item>
+                <Descriptions.Item label="Tên Đăng Nhập">
+                  {selfInfo?.data.loginName}
+                </Descriptions.Item>
                 <Descriptions.Item label="Phòng ban">
                   {selfInfo?.data.positionName === 'null'
-                  ? 'Không có'
-                  : selfInfo?.data.positionName}
+                    ? 'Không có'
+                    : selfInfo?.data.positionName}
                 </Descriptions.Item>
                 <Descriptions.Item label="Đơn vị kho">
-                  {selfInfo?.data.wareName === 'null'
-                  ? 'Không có'
-                  : selfInfo?.data.wareName}
-                  </Descriptions.Item>
+                  {selfInfo?.data.wareName === 'null' ? 'Không có' : selfInfo?.data.wareName}
+                </Descriptions.Item>
                 <Descriptions.Item label="Giới tính">
                   {selfInfo?.data.gender === 'FEMALE'
                     ? 'Nữ'
@@ -179,7 +177,9 @@ export default function SelfInfo() {
                     ? 'Nam'
                     : 'Khác'}
                 </Descriptions.Item>
-                <Descriptions.Item label="Số điện thoại">{selfInfo?.data.phoneNumber}</Descriptions.Item>
+                <Descriptions.Item label="Số điện thoại">
+                  {selfInfo?.data.phoneNumber}
+                </Descriptions.Item>
                 <Descriptions.Item label="Email">{selfInfo?.data.email}</Descriptions.Item>
                 <Descriptions.Item label="Địa chỉ">{selfInfo?.data.address}</Descriptions.Item>
               </Descriptions>

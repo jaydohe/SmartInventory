@@ -21,7 +21,7 @@ export function getChildrenItem(type: string, label: React.ReactNode, key: React
 export function getItem(
   label: React.ReactNode,
   key: React.Key,
-  icon?: React.ReactNode,
+  icon?: React.ReactNode | JSX.Element | React.ReactElement,
   children?: MenuItem[] | MenuChildren[],
   // disabled?: boolean
   popupClassName?: string
@@ -57,4 +57,3 @@ export function getInitials(name: string) {
     .join('')
     .toUpperCase();
 }
-

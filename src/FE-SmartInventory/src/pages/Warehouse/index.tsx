@@ -7,7 +7,7 @@ import {
   ExclamationCircleFilled,
   HomeOutlined,
 } from '@ant-design/icons';
-import { Button, Modal, Space, Table, Tag, Typography } from 'antd';
+import { Button, Modal, Space, Table, Tag, Tooltip, Typography } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { useState } from 'react';
 
@@ -17,8 +17,11 @@ import EditWarehouse from './Components/EditWarehouse';
 import CreateWarehouse from './Components/CreateWarehouse';
 import DetailWarehouse from './Components/DetailWarehouse';
 import SearchInput from '@/Components/SearchInput';
+import { usePermissions } from '@/hook/usePermissions';
 
 export default function WarehousePage() {
+  const permissions = usePermissions('Warehouse');
+
   const [isOpenCreateModal, setIsOpenCreateModal] = useState<boolean>(false);
   const [isOpenEditModal, setIsOpenEditModal] = useState<{
     isOpen: boolean;
@@ -238,36 +241,42 @@ export default function WarehousePage() {
       width: 250,
       render: (_, record) => (
         <Space size="middle">
-          <Button
-            color="cyan"
-            variant="solid"
-            shape="round"
-            icon={<EyeOutlined />}
-            onClick={() => handleViewDetail(record.id)}
-            className={'font-medium'}
-          >
-            {/* Chi tiết */}
-          </Button>
-          <Button
-            color="gold"
-            variant="solid"
-            shape="round"
-            icon={<EditOutlined />}
-            onClick={() => handleEditWarehouse(record)}
-            className={'font-medium'}
-          >
-            {/* Cập nhật */}
-          </Button>
-          <Button
-            color="red"
-            variant="solid"
-            shape="round"
-            icon={<DeleteOutlined />}
-            onClick={() => showConfirmDelete('Xóa kho', 'Bạn có muốn xóa kho này?', record)}
-            className={'font-medium'}
-          >
-            {/* Xoá */}
-          </Button>
+          {permissions.canRead() && (
+          <Tooltip title="Xem chi tiết kho">
+            <Button
+              color="cyan"
+              variant="solid"
+              shape="round"
+              icon={<EyeOutlined />}
+              onClick={() => handleViewDetail(record.id)}
+              className={'font-medium'}
+            ></Button>
+          </Tooltip>
+          )}
+          {permissions.canUpdate() && (
+          <Tooltip title="Cập nhật kho">
+            <Button
+              color="gold"
+              variant="solid"
+              shape="round"
+              icon={<EditOutlined />}
+              onClick={() => handleEditWarehouse(record)}
+              className={'font-medium'}
+            ></Button>{' '}
+          </Tooltip>
+          )}
+          {permissions.canDelete() && (
+          <Tooltip title="Xoá kho">
+            <Button
+              color="red"
+              variant="solid"
+              shape="round"
+              icon={<DeleteOutlined />}
+              onClick={() => showConfirmDelete('Xóa kho', 'Bạn có muốn xóa kho này?', record)}
+              className={'font-medium'}
+            ></Button>
+          </Tooltip>
+          )}
         </Space>
       ),
     },
@@ -281,14 +290,17 @@ export default function WarehousePage() {
             <HomeOutlined className="text-xl font-medium" />
             Danh sách kho
           </h2>
-          <Button
-            variant="solid"
-            color="primary"
-            onClick={() => handleOpenCreateModal()}
-            className="rounded-2xl w-full sm:w-fit"
-          >
-            Thêm kho
-          </Button>
+
+          {permissions.canCreate() && (
+            <Button
+              variant="solid"
+              color="primary"
+              onClick={() => handleOpenCreateModal()}
+              className="rounded-2xl w-full sm:w-fit"
+            >
+              Thêm kho
+            </Button>
+          )}
         </div>
 
         <div className="w-full sm:w-1/3 justify-end">

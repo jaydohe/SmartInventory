@@ -7,190 +7,232 @@ using SI.Domain.Entities;
 using SI.Domain.Entities.Orders;
 using SI.Domain.Enums;
 using System.Globalization;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace SI.Infrastructure.Integrations.CronJob;
-
-public class HoltWintersJob(
-    IRepository<OrderDetail> orderDetailRepository,
-    IRepository<Forecast> forecastRepository,
-    IUnitOfWork unitOfWork,
-    ILogger<HoltWintersJob> logger
-) : IJob
+namespace SI.Infrastructure.Integrations.CronJob
 {
-    public async Task Execute(IJobExecutionContext context)
+    public static class TimeSeriesUtils
     {
-        var now = DateTimeOffset.UtcNow;
-
-        // Xóa các bản ghi Holt-Winters cũ cho 3 tháng tới
-        var periodsToClean = new[]
+        public static List<double> BuildContinuousHistory(
+            List<(int Year, int Month, double Quantity)> raw
+        )
         {
-                now.AddMonths(1).ToString("yyyy-MM", CultureInfo.InvariantCulture),
-                now.AddMonths(2).ToString("yyyy-MM", CultureInfo.InvariantCulture),
-                now.AddMonths(3).ToString("yyyy-MM", CultureInfo.InvariantCulture)
-        };
+            if (!raw.Any()) return new List<double>();
 
-        var allHW = await forecastRepository.BuildQuery
-            .Where(x => x.Method == "HW-Additive")
-            .ToListAsync();
+            var startDate = new DateTime(raw.Min(x => x.Year), raw.Min(x => x.Month), 1);
+            var endDate = new DateTime(raw.Max(x => x.Year), raw.Max(x => x.Month), 1);
 
-        var oldHWRecords = allHW
-            .Where(x => periodsToClean.Contains(x.Period))
-            .ToList();
+            var continuous = new List<DateTime>();
+            for (var dt = startDate; dt <= endDate; dt = dt.AddMonths(1))
+                continuous.Add(dt);
 
-        if (oldHWRecords.Any())
-        {
-            foreach (var record in oldHWRecords)
-            { 
-                forecastRepository.Remove(record);
-            }
+            var dict = raw.ToDictionary(
+                x => new DateTime(x.Year, x.Month, 1),
+                x => x.Quantity);
+
+            return continuous
+                .Select(dt => dict.TryGetValue(dt, out var qty) ? qty : 0.0)
+                .ToList();
         }
 
-        // Lấy tất cả các đơn hàng đã hoàn thành
-        var getAllOrderDetail = await orderDetailRepository.BuildQuery
-            .Include(x => x.Order)
-            .Where(x => x.Order != null && x.Order.OrderStatus == OrderStatus.DELIVERED)
-            .GroupBy(x => new { x.ProductId, x.Order.WarehouseId })
-            .Select(g => new
-            {
-                g.Key.ProductId,
-                g.Key.WarehouseId,
-            })
-            .ToListAsync();
-
-        foreach (var item in getAllOrderDetail)
+        public static double Percentile(this List<double> sequence, double p)
         {
-            var history = await orderDetailRepository.BuildQuery
-                .Include(x => x.Order)
-                .Where(x => x.ProductId == item.ProductId &&
-                            x.Order.WarehouseId == item.WarehouseId)
-                .GroupBy(o => new { o.Order.CreatedAt.UtcDateTime.Year, o.Order.CreatedAt.UtcDateTime.Month })
-                .OrderBy(g => g.Key.Year).ThenBy(g => g.Key.Month)
-                .Select(g => (double)g.Sum(x => x.Quantity))
-                .ToListAsync();
+            if (!sequence.Any()) return 0;
+            var sorted = sequence.OrderBy(x => x).ToArray();
+            var idx = (int)Math.Ceiling((sorted.Length * p) / 100) - 1;
+            idx = Math.Max(0, Math.Min(sorted.Length - 1, idx));
+            return sorted[idx];
+        }
+    }
 
-            if (history.Count < 6)
-            {
-                logger.LogWarning("Dữ liệu không đủ để tính Holt-Winters.");
-                continue;
-            }
+    public class HoltWintersResult
+    {
+        public double[] Level { get; init; }
+        public double[] Trend { get; init; }
+        public double[] Seasonal { get; init; }
+        public List<double> Residuals { get; init; }
+    }
 
-            double alpha = 0.3, beta = 0.05, gamma = 0.1;
-            int m = Math.Min(12, history.Count / 2);
+    public static class HoltWintersModel
+    {
+        public static HoltWintersResult Fit(
+            List<double> history,
+            double alpha,
+            double beta,
+            double gamma,
+            int m
+        )
+        {
             int T = history.Count;
-
             var level = new double[T];
             var trend = new double[T];
             var seasonal = new double[m];
+            var residuals = new List<double>(T - 1);
 
-            // 1. Level = trung bình của chu kỳ đầu
-            var firstPeriod = history.Take(m).ToList();
-            level[0] = firstPeriod.Average();
+            // Initialize level & trend
+            level[0] = history.Take(m).Average();
+            trend[0] = (history.Skip(m).Take(m).Average() - level[0]) / m;
 
-            // 2. Trend = slope trung bình giữa 2 chu kỳ đầu
-            if (history.Count >= 2 * m)
+            // Initialize seasonal averages over K cycles
+            int K = T / m;
+            for (int j = 0; j < m; j++)
             {
-                var secondPeriod = history.Skip(m).Take(m).ToList();
-                var firstAvg = firstPeriod.Average();
-                var secondAvg = secondPeriod.Average();
-                trend[0] = (secondAvg - firstAvg) / (double)m;
-
-                // CAP TREND để tránh quá lớn
-                var avgHistorical = history.Average();
-                var maxTrend = avgHistorical * 0.1; // Trend không quá 10% average
-                trend[0] = Math.Max(-maxTrend, Math.Min(maxTrend, trend[0]));
-            }
-            else
-            {
-                trend[0] = 0; // Không đủ data thì trend = 0
+                double sum = 0;
+                for (int k = 0; k < K; k++)
+                {
+                    var periodAvg = history.Skip(k * m).Take(m).Average();
+                    sum += history[j + k * m] - periodAvg;
+                }
+                seasonal[j] = sum / K;
             }
 
-            // 3. Seasonal = detrended values
-            for (int i = 0; i < m && i < history.Count; i++)
-            {
-                seasonal[i] = history[i] - level[0];
-            }
-
-            // HOLT-WINTERS ITERATIONS
+            // Iterations
             for (int t = 1; t < T; t++)
             {
-                double lastLevel = level[t - 1];
-                double lastTrend = trend[t - 1];
-                double lastSeason = seasonal[t % m];
+                var lastL = level[t - 1];
+                var lastT = trend[t - 1];
+                var lastS = seasonal[t % m];
 
-                // Level smoothing
-                level[t] = alpha * (history[t] - lastSeason) + (1 - alpha) * (lastLevel + lastTrend);
+                level[t] = alpha * (history[t] - lastS) + (1 - alpha) * (lastL + lastT);
+                trend[t] = beta * (level[t] - lastL) + (1 - beta) * lastT;
+                seasonal[t % m] = gamma * (history[t] - level[t]) + (1 - gamma) * lastS;
 
-                // Trend smoothing với constraint
-                var newTrend = beta * (level[t] - lastLevel) + (1 - beta) * lastTrend;
-                var maxTrendConstraint = level[t] * 0.15; // Trend không quá 15% level
-                trend[t] = Math.Max(-maxTrendConstraint, Math.Min(maxTrendConstraint, newTrend));
-
-                // Seasonal smoothing
-                seasonal[t % m] = gamma * (history[t] - level[t]) + (1 - gamma) * lastSeason;
+                // 1-step residual
+                double oneStep = lastL + lastT + seasonal[t % m];
+                residuals.Add(history[t] - oneStep);
             }
 
-            // VALIDATION CUỐI
-            double stdDev = Statistics.StandardDeviation(history);
-            var avgLevel = level.Average();
-            var avgTrend = Math.Abs(trend.Average());
-
-            // Kiểm tra tính hợp lý
-            if (avgTrend > avgLevel * 0.2) // Trend quá lớn
+            return new HoltWintersResult
             {
-                logger.LogWarning($"Trend quá cao ({avgTrend:F2}) so với Level ({avgLevel:F2}) của ProductId: {item.ProductId}");
-                // Giảm trend xuống
-                for (int i = 0; i < trend.Length; i++)
-                {
-                    trend[i] *= 0.1; // Giảm 90% trend
-                }
-            }
-
-            // FORECAST 3 THÁNG
-            for (int h = 1; h <= 3; h++)
-            {
-                int t = T - 1;
-                double s = seasonal[(t + h) % m];
-                double baseForecast = level[t] + h * trend[t] + s;
-
-                // CONSTRAINT FORECAST
-                var maxHistorical = history.Max();
-                var avgHistorical = history.Average();
-
-                // Forecast không quá 300% max historical
-                double forecast = Math.Min(baseForecast, maxHistorical * 3);
-
-                // Forecast không âm
-                forecast = Math.Max(0, forecast);
-
-                // Confidence intervals hợp lý hơn
-                double lowerBound = Math.Max(0, forecast - 1.96 * stdDev);
-                double upperBound = forecast + 1.96 * stdDev;
-
-                var fc = new Forecast
-                {
-                    ProductId = item.ProductId,
-                    WarehouseId = item.WarehouseId,
-                    Method = "HW-Additive",
-                    Period = now.AddMonths(h).ToString("yyyy-MM", CultureInfo.InvariantCulture),
-                    ForecastValue = Math.Round(forecast),
-                    Level = level[t],
-                    Trend = trend[t],
-                    Seasonal = s,
-                    ModelParameters = $"{{\"alpha\":{alpha},\"beta\":{beta},\"gamma\":{gamma},\"m\":{m}}}",
-                    SeasonalityPeriod = m,
-                    LowerBound = lowerBound,
-                    UpperBound = upperBound,
-                    CreatedAt = DateTimeOffset.UtcNow
-                };
-                forecastRepository.Add(fc);
-            }
+                Level = level,
+                Trend = trend,
+                Seasonal = seasonal,
+                Residuals = residuals
+            };
         }
 
-        var ret = await unitOfWork.SaveChangeAsync();
-        if (ret < 0)
+        public static (double Forecast, double Lower, double Upper) Forecast(
+            HoltWintersResult hw,
+            int h,
+            double stdRes,
+            double minLimit,
+            double maxLimit
+        )
         {
-            logger.LogWarning($"Failure to saving.");
-            return;
+            int m = hw.Seasonal.Length;
+            int T = hw.Level.Length;
+            double s = hw.Seasonal[(T - 1 + h) % m];
+            double baseFc = hw.Level[T - 1] + h * hw.Trend[T - 1] + s;
+
+            // Constraint
+            double fc = Math.Max(minLimit, Math.Min(baseFc, maxLimit));
+
+            double lower = Math.Max(minLimit, fc - 1.96 * stdRes);
+            double upper = fc + 1.96 * stdRes;
+            return (fc, lower, upper);
+        }
+    }
+
+    public class HoltWintersJob : IJob
+    {
+        private readonly IRepository<OrderDetail> _orderDetailRepo;
+        private readonly IRepository<Forecast> _fcRepo;
+        private readonly IUnitOfWork _uow;
+        private readonly ILogger<HoltWintersJob> _logger;
+
+        public HoltWintersJob(
+            IRepository<OrderDetail> orderDetailRepository,
+            IRepository<Forecast> forecastRepository,
+            IUnitOfWork unitOfWork,
+            ILogger<HoltWintersJob> logger
+        )
+        {
+            _orderDetailRepo = orderDetailRepository;
+            _fcRepo = forecastRepository;
+            _uow = unitOfWork;
+            _logger = logger;
+        }
+
+        public async Task Execute(IJobExecutionContext context)
+        {
+            var now = DateTimeOffset.UtcNow;
+
+            // Xóa forecast cũ
+            var toClean = new[]
+            {
+                now.AddMonths(1).ToString("yyyy-MM", CultureInfo.InvariantCulture),
+                now.AddMonths(2).ToString("yyyy-MM", CultureInfo.InvariantCulture),
+                now.AddMonths(3).ToString("yyyy-MM", CultureInfo.InvariantCulture)
+            };
+            var old = await _fcRepo.BuildQuery
+                .Where(x => x.Method == "HW-Additive" && toClean.Contains(x.Period))
+                .ToListAsync();
+            old.ForEach(r => _fcRepo.Remove(r));
+            await _uow.SaveChangeAsync();
+
+            // Lấy danh sách product+warehouse
+            var combos = await _orderDetailRepo.BuildQuery
+                .Include(x => x.Order)
+                .Where(x => x.Order.OrderStatus == OrderStatus.DELIVERED)
+                .GroupBy(x => new { x.ProductId, x.Order.WarehouseId })
+                .Select(g => new { g.Key.ProductId, g.Key.WarehouseId })
+                .ToListAsync();
+
+            foreach (var item in combos)
+            {
+                // Raw history: lấy Year/Month/Quantity
+                var rawAnon = await _orderDetailRepo.BuildQuery
+                    .Include(x => x.Order)
+                    .Where(x => x.ProductId == item.ProductId && x.Order.WarehouseId == item.WarehouseId)
+                    .GroupBy(o => new { Year = o.Order.CreatedAt.Year, Month = o.Order.CreatedAt.Month })
+                    .Select(g => new { g.Key.Year, g.Key.Month, Quantity = g.Sum(x => x.Quantity) })
+                    .ToListAsync();
+
+                // Chuyển sang List<(int, int, double)>
+                var raw = rawAnon
+                    .Select(x => (x.Year, x.Month, (double)x.Quantity))
+                    .ToList();
+
+                var history = TimeSeriesUtils.BuildContinuousHistory(raw);
+                if (history.Count < 6)
+                {
+                    _logger.LogWarning("Data too short for HW: {Product}", item.ProductId);
+                    continue;
+                }
+
+                double alpha = 0.3, beta = 0.05, gamma = 0.1;
+                int m = Math.Min(12, history.Count / 2);
+                var hw = HoltWintersModel.Fit(history, alpha, beta, gamma, m);
+                double stdRes = Statistics.StandardDeviation(hw.Residuals);
+
+                double maxHist = history.Max() * 3;
+                double minHist = 0;
+
+                for (int h = 1; h <= 3; h++)
+                {
+                    var (fc, lower, upper) = HoltWintersModel.Forecast(hw, h, stdRes, minHist, maxHist);
+                    _fcRepo.Add(new Forecast
+                    {
+                        ProductId = item.ProductId,
+                        WarehouseId = item.WarehouseId,
+                        Method = "HW-Additive",
+                        Period = now.AddMonths(h).ToString("yyyy-MM", CultureInfo.InvariantCulture),
+                        ForecastValue = Math.Round(fc),
+                        Level = hw.Level.Last(),
+                        Trend = hw.Trend.Last(),
+                        Seasonal = hw.Seasonal[(history.Count - 1 + h) % m],
+                        LowerBound = lower,
+                        UpperBound = upper,
+                        ModelParameters = $"{{\"alpha\":{alpha},\"beta\":{beta},\"gamma\":{gamma},\"m\":{m}}}",
+                        SeasonalityPeriod = m,
+                        CreatedAt = DateTimeOffset.UtcNow
+                    });
+                }
+
+                await _uow.SaveChangeAsync();
+            }
         }
     }
 }

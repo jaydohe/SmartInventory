@@ -6,7 +6,7 @@ import {
   ExclamationCircleFilled,
   UnorderedListOutlined,
 } from '@ant-design/icons';
-import { Button, Modal, Space, Table, Typography } from 'antd';
+import { Button, Modal, Space, Table, Typography, Tooltip } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { useState } from 'react';
 
@@ -16,7 +16,12 @@ import EditCategoryProduct from './Components/EditCategoryProduct';
 import CreateCategoryProduct from './Components/CreateCategoryProduct';
 import SearchInput from '@/Components/SearchInput';
 
+import { usePermissions } from '@/hook/usePermissions';
+
+
 export default function CategoryProductPage() {
+  const permissions = usePermissions('CategoryProductPage');
+
   const [isOpenCreateModal, setIsOpenCreateModal] = useState<boolean>(false);
   const [isOpenEditModal, setIsOpenEditModal] = useState<{
     isOpen: boolean;
@@ -193,30 +198,41 @@ export default function CategoryProductPage() {
       title: 'Thao tác',
       key: 'action',
       align: 'center',
+      width: 200,
       render: (_, record) => (
         <Space size="middle">
-          <Button
-            color="gold"
-            variant="solid"
-            shape="round"
-            icon={<EditOutlined />}
-            onClick={() => handleEditCategoryProduct(record)}
-            className={'font-medium'}
-          >
-            Cập nhật
-          </Button>
-          <Button
-            color="red"
-            variant="solid"
-            shape="round"
-            icon={<DeleteOutlined />}
-            onClick={() =>
-              showConfirmDelete('Xóa danh mục', 'Bạn có muốn xóa danh mục sản phẩm này?', record)
-            }
-            className={'font-medium'}
-          >
-            Xoá
-          </Button>
+
+          {permissions.canUpdate() && (
+            <Tooltip title="Cập nhật danh mục">
+              <Button
+                color="gold"
+                variant="solid"
+                shape="round"
+                icon={<EditOutlined />}
+                onClick={() => handleEditCategoryProduct(record)}
+                className={'font-medium'}
+              ></Button>
+            </Tooltip>
+          )}
+          {permissions.canDelete() && (
+            <Tooltip title="Xoá danh mục">
+              <Button
+                color="red"
+                variant="solid"
+                shape="round"
+                icon={<DeleteOutlined />}
+                onClick={() =>
+                  showConfirmDelete(
+                    'Xóa danh mục',
+                    'Bạn có muốn xóa danh mục sản phẩm này?',
+                    record
+                  )
+                }
+                className={'font-medium'}
+              ></Button>
+            </Tooltip>
+          )}
+
         </Space>
       ),
     },
@@ -230,14 +246,16 @@ export default function CategoryProductPage() {
             <UnorderedListOutlined className="text-xl font-medium" />
             Danh sách danh mục sản phẩm
           </h2>
-          <Button
-            variant="solid"
-            color="primary"
-            onClick={() => handleOpenCreateModal()}
-            className="rounded-2xl w-full sm:w-fit"
-          >
-            Thêm danh mục
-          </Button>
+          {permissions.canCreate() && (
+            <Button
+              variant="solid"
+              color="primary"
+              onClick={() => handleOpenCreateModal()}
+              className="rounded-2xl w-full sm:w-fit"
+            >
+              Thêm danh mục
+            </Button>
+          )}
         </div>
 
         <div className="w-full sm:w-1/3 justify-end">

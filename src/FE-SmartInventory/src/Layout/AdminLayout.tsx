@@ -20,7 +20,7 @@ const AdminLayout: React.FC = () => {
   const forbidden = forbiddenStoreSelectors.use.isForbidden();
   const userId = authStoreSelectors.use.userId();
   const wareId = authStoreSelectors.use.warehouseId();
-
+  console.log('forbidden', forbidden);
   const { connection } = useContext(SignalRContext);
 
   useEffect(() => {

@@ -15,6 +15,7 @@ export type TAuthState = {
   positionId: string | null;
   employeeId: string | null;
   role: string | null;
+  isManager: boolean | null;
 };
 
 type Actions = {
@@ -43,13 +44,13 @@ const userInfo: TAuthState = {
     localStorage.getItem('refreshToken') && localStorage.getItem('accessToken') ? true : false,
   refreshToken: localStorage.getItem('refreshToken') ?? null,
   accessToken: localStorage.getItem('accessToken') ?? null,
-  
+  isManager: getByDecodedToken('isManager')?.toLowerCase() === 'true' ? true : false,
   userId: getByDecodedToken('userId'),
   warehouseId: getByDecodedToken('warehouseId'),
   name: getByDecodedToken('name'),
   positionId: getByDecodedToken('positionId'),
   employeeId: getByDecodedToken('employeeId'),
-  role: getByDecodedToken('role')
+  role: getByDecodedToken('role'),
 };
 
 const AuthStore = create<TAuthState & Actions>()(
@@ -64,7 +65,7 @@ const AuthStore = create<TAuthState & Actions>()(
         state.isLogin = true;
         state.accessToken = loginRes.accessToken;
         state.refreshToken = loginRes.refreshToken;
-
+        state.isManager = getByDecodedToken('isManager')?.toLowerCase() === 'true' ? true : false;
         state.userId = getByDecodedToken('userId');
         state.warehouseId = getByDecodedToken('warehouseId');
         state.name = getByDecodedToken('name');
@@ -81,6 +82,7 @@ const AuthStore = create<TAuthState & Actions>()(
         state.accessToken = loginRes.accessToken;
         state.refreshToken = loginRes.refreshToken;
         state.isLogin = true;
+        state.isManager = getByDecodedToken('isManager')?.toLowerCase() === 'true' ? true : false;
         state.userId = getByDecodedToken('userId');
         state.warehouseId = getByDecodedToken('warehouseId');
         state.name = getByDecodedToken('name');
@@ -98,7 +100,7 @@ const AuthStore = create<TAuthState & Actions>()(
         state.isLogin = false;
         state.accessToken = null;
         state.refreshToken = null;
-
+        state.isManager = null;
         state.userId = null;
         state.warehouseId = null;
         state.name = null;

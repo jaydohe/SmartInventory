@@ -5,39 +5,38 @@ import NotificationCom from '@/Components/Notification';
 import { ADMIN, WAREHOUSE_STAFF, WAREHOUSE_PRODUCER, SALESMAN } from '@/Constant';
 import { useBuilderQuery } from '@/hook';
 import { useGetNotification } from '@/hook/useGetNotification';
+import { useUserPermissions } from '@/hook/usePermissions';
 import { TBuilderQuery } from '@/interface';
 import AuthStore, { authStoreSelectors } from '@/Stores/userStore';
-import { DownOutlined, LoginOutlined, UserOutlined } from '@ant-design/icons';
+import {
+  DownOutlined,
+  LoginOutlined,
+  UserOutlined,
+  BarChartOutlined,
+  BoxPlotOutlined,
+  HomeOutlined,
+  AppstoreOutlined,
+  TeamOutlined,
+  CarOutlined,
+  SettingOutlined,
+  InfoCircleOutlined,
+  ImportOutlined,
+  ExportOutlined,
+  DatabaseOutlined,
+  UserSwitchOutlined,
+  BankOutlined,
+  SafetyOutlined,
+  UsergroupAddOutlined,
+  FileTextOutlined,
+  ToolOutlined,
+  DollarCircleOutlined,
+  BuildOutlined,
+  HistoryOutlined,
+} from '@ant-design/icons';
 import { useQueryClient } from '@tanstack/react-query';
 import { Avatar, Badge, Button, Dropdown, MenuProps, Space, Tabs, TabsProps } from 'antd';
 import { Header } from 'antd/es/layout/layout';
-import { useState } from 'react';
-import {
-  FaBox,
-  FaChartBar,
-  FaFileInvoiceDollar,
-  FaHistory,
-  FaInfoCircle,
-  FaReceipt,
-  FaSlidersH,
-  FaTruck,
-  FaTruckLoading,
-  FaUsers,
-  FaUserTie,
-  FaWarehouse,
-} from 'react-icons/fa';
-import { FaBuildingUser } from 'react-icons/fa6';
-import { GiHandTruck } from 'react-icons/gi';
-import { HiMiniBuildingOffice2 } from 'react-icons/hi2';
-import {
-  MdConveyorBelt,
-  MdFactory,
-  MdInventory,
-  MdOutlineCategory,
-  MdSwitchAccount,
-  MdWarehouse,
-  MdWork,
-} from 'react-icons/md';
+import { useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 import { NavigateNotifyPage, SIZE_NOTIFY_ALL, TNotifyType } from '../../Constant/NotificationState';
@@ -47,332 +46,178 @@ import NotificationStore, { notificationStoreSelectors } from '@/Stores/notifica
 
 export type MenuItem = Required<MenuProps>['items'][number];
 
-const Admin: MenuItem[] = [
-  {
-    label: <span className="">Thiết lập</span>,
-    key: 'dashboard',
-    icon: <FaInfoCircle />,
-    children: [
-      {
-        label: <span className="">Danh mục</span>,
-        key: 'category',
-        icon: <MdOutlineCategory />,
-        children: [
-          {
-            label: <span className="">Sản phẩm</span>,
-            key: 'category/product',
-            icon: <FaBox />,
-          },
-          {
-            label: <span className="">Kho</span>,
-            key: 'category/warehouse',
-            icon: <MdWarehouse />,
-          },
-        ],
-      },
-      {
-        label: <span className="">Đại lý</span>,
-        key: 'agency',
-        icon: <FaBuildingUser />,
-      },
-      {
-        label: <span className="">Nhà cung cấp NVL</span>,
-        key: 'material-supplier',
-        icon: <FaTruck />,
-      },
-      {
-        label: <span className="">Thiết lập thông số</span>,
-        key: 'set-parameter',
-        icon: <FaSlidersH />,
-      },
-      {
-        label: <span className="">Thông minh</span>,
-        key: 'smart-management',
-        icon: <FaChartBar />,
-      },
-    ],
-  },
-  {
-    label: <span className="">Kho</span>,
-    key: 'manage-warehouse',
-    icon: <FaWarehouse />,
-    children: [
-      {
-        label: <span className="">Kho, bãi</span>,
-        key: 'warehouse',
-        icon: <MdWarehouse />,
-      },
-      {
-        label: <span className="">Nhập kho</span>,
-        key: 'goods-receipt',
-        icon: <GiHandTruck />,
-      },
-      {
-        label: <span className="">Xuất kho</span>,
-        key: 'goods-issue',
-        icon: <FaTruckLoading />,
-      },
-      {
-        label: <span className="">Tồn kho</span>,
-        key: 'inventory',
-        icon: <MdInventory />,
-      },
-    ],
-  },
-  {
-    label: <span className="">Quản lý nhân sự</span>,
-    key: 'user',
-    icon: <FaUsers />,
-    children: [
-      {
-        label: <span className="">Nhân sự</span>,
-        key: 'employee',
-        icon: <MdSwitchAccount />,
-      },
-      {
-        label: <span className="">Tài khoản</span>,
-        key: 'user',
-        icon: <FaUserTie />,
-      },
-      {
-        label: <span className="">Phòng ban</span>,
-        key: 'department',
-        icon: <HiMiniBuildingOffice2 />,
-      },
+// Function to generate menu items based on user permissions
+const generateMenuItems = (permissions: ReturnType<typeof useUserPermissions>): MenuItem[] => {
+  const menuItems: MenuItem[] = [];
 
-      {
-        label: <span className="">Chức vụ</span>,
-        key: 'position',
-        icon: <MdWork />,
-      },
-    ],
-  },
-  {
-    label: <span className="">Sản xuất</span>,
-    key: 'production',
-    icon: <MdFactory />,
-    children: [
-      {
-        label: <span className="">Sản phẩm</span>,
-        key: 'product',
-        icon: <FaBox />,
-      },
-      {
-        label: <span className="">Đơn hàng</span>,
-        key: 'order',
-        icon: <FaReceipt />,
-      },
-      {
-        label: <span className="">Lệnh sản xuất</span>,
-        key: 'production-command',
-        icon: <MdConveyorBelt />,
-      },
-      {
-        label: <span className="">Định mức NVL</span>,
-        key: 'bom',
-        icon: <FaFileInvoiceDollar />,
-      },
-    ],
-  },
-  {
-    label: <span className="">Lịch Sử</span>,
-    key: 'activity',
-    icon: <FaHistory />,
-  },
-];
-const Warehouse_staff: MenuItem[] = [
-  {
-    label: <span className="">Thiết lập</span>,
-    key: 'dashboard',
-    icon: <FaInfoCircle />,
-    children: [
-      {
-        label: <span className="">Nhân sự</span>,
-        key: 'employee',
-        icon: <FaUserTie />,
-      },
-      {
-        label: <span className="">Phòng ban</span>,
-        key: 'department',
-        icon: <HiMiniBuildingOffice2 />,
-      },
-      {
-        label: <span className="">Danh mục</span>,
-        key: 'category',
-        icon: <MdOutlineCategory />,
-      },
-      {
-        label: <span className="">Đại lý</span>,
-        key: 'agency',
-        icon: <FaBuildingUser />,
-      },
-      {
-        label: <span className="">Nhà cung cấp NVL</span>,
-        key: 'material-supplier',
-        icon: <FaTruck />,
-      },
-      {
-        label: <span className="">Thông minh</span>,
-        key: 'smart-management',
-        icon: <FaChartBar />,
-      },
-    ],
-  },
-  {
-    label: <span className="">Kho</span>,
-    key: 'manage-warehouse',
-    icon: <FaWarehouse />,
-    children: [
-      {
-        label: <span className="">Kho, bãi</span>,
-        key: 'warehouse',
-        icon: <MdWarehouse />,
-      },
-      {
-        label: <span className="">Nhập kho</span>,
-        key: 'goods-receipt',
-        icon: <GiHandTruck />,
-      },
-      {
-        label: <span className="">Xuất kho</span>,
-        key: 'goods-issue',
-        icon: <FaTruckLoading />,
-      },
-      {
-        label: <span className="">Tồn kho</span>,
-        key: 'inventory',
-        icon: <MdInventory />,
-      },
-    ],
-  },
-  {
-    label: <span className="">Sản xuất</span>,
-    key: 'production',
-    icon: <MdFactory />,
-    children: [
-      {
-        label: <span className="">Sản phẩm</span>,
-        key: 'product',
-        icon: <FaBox />,
-      },
-      {
-        label: <span className="">Đơn hàng</span>,
-        key: 'order',
-        icon: <FaReceipt />,
-      },
-      {
-        label: <span className="">Lệnh sản xuất</span>,
-        key: 'production-command',
-        icon: <MdConveyorBelt />,
-      },
-      {
-        label: <span className="">Định mức NVL</span>,
-        key: 'bom',
-        icon: <FaFileInvoiceDollar />,
-      },
-    ],
-  },
-  {
-    label: <span className="">Lịch Sử</span>,
-    key: 'activity',
-    icon: <FaHistory />,
-  },
-];
-const Warehouse_producer: MenuItem[] = [
-  {
-    label: <span className="">Kho</span>,
-    key: 'manage-warehouse',
-    icon: <FaWarehouse />,
-    children: [
-      {
-        label: <span className="">Tồn kho</span>,
-        key: 'inventory',
-        icon: <MdInventory />,
-      },
-    ],
-  },
-  {
-    label: <span className="">Sản xuất</span>,
-    key: 'production',
-    icon: <MdFactory />,
-    children: [
-      {
-        label: <span className="">Sản phẩm</span>,
-        key: 'product',
-        icon: <FaBox />,
-      },
-      {
-        label: <span className="">Lệnh sản xuất</span>,
-        key: 'production-command',
-        icon: <MdConveyorBelt />,
-      },
-      {
-        label: <span className="">Định mức NVL</span>,
-        key: 'bom',
-        icon: <FaFileInvoiceDollar />,
-      },
-    ],
-  },
-];
-const Salesman: MenuItem[] = [
-  {
-    label: <span className="">Thiết lập</span>,
-    key: 'dashboard',
-    icon: <FaInfoCircle />,
-    children: [
-      {
-        label: <span className="">Đại lý</span>,
-        key: 'agency',
-        icon: <FaBuildingUser />,
-      },
-    ],
-  },
-  {
-    label: <span className="">Kho</span>,
-    key: 'manage-warehouse',
-    icon: <FaWarehouse />,
-    children: [
-      {
-        label: <span className="">Tồn kho</span>,
-        key: 'inventory',
-        icon: <MdInventory />,
-      },
-    ],
-  },
-  {
-    label: <span className="">Sản xuất</span>,
-    key: 'production',
-    icon: <MdFactory />,
-    children: [
-      {
-        label: <span className="">Sản phẩm</span>,
-        key: 'product',
-        icon: <FaBox />,
-      },
-      {
-        label: <span className="">Đơn hàng</span>,
-        key: 'order',
-        icon: <FaReceipt />,
-      },
-      {
-        label: <span className="">Lệnh sản xuất</span>,
-        key: 'production-command',
-        icon: <MdConveyorBelt />,
-      },
-    ],
-  },
-];
+  // Dashboard - available for all users
+  if (permissions.canAccess('Dashboard')) {
+    menuItems.push(getItem(<span className="">Trang chủ</span>, 'dashboard', <BarChartOutlined />));
+  }
+
+  // Thiết lập section
+  const configChildren: MenuItem[] = [];
+
+  // Danh mục sub-menu
+  const categoryChildren: MenuItem[] = [];
+  if (permissions.canAccess('CategoryProductPage')) {
+    categoryChildren.push(
+      getItem(<span className="">Sản phẩm</span>, 'category/product', <BoxPlotOutlined />)
+    );
+  }
+  if (permissions.canAccess('CategoryWarehousePage')) {
+    categoryChildren.push(
+      getItem(<span className="">Kho</span>, 'category/warehouse', <HomeOutlined />)
+    );
+  }
+  if (categoryChildren.length > 0) {
+    configChildren.push(
+      getItem(
+        <span className="">Danh mục</span>,
+        'category',
+        <AppstoreOutlined />,
+        categoryChildren
+      )
+    );
+  }
+
+  if (permissions.canAccess('AgencyPage')) {
+    configChildren.push(getItem(<span className="">Đại lý</span>, 'agency', <TeamOutlined />));
+  }
+
+  if (permissions.canAccess('MaterialSupplierPage')) {
+    configChildren.push(
+      getItem(<span className="">Nhà cung cấp NVL</span>, 'material-supplier', <CarOutlined />)
+    );
+  }
+
+  if (permissions.canAccess('SetupPage')) {
+    configChildren.push(
+      getItem(<span className="">Thiết lập thông số</span>, 'set-parameter', <SettingOutlined />)
+    );
+  }
+
+  if (configChildren.length > 0) {
+    menuItems.push(
+      getItem(<span className="">Thiết lập</span>, 'config', <InfoCircleOutlined />, configChildren)
+    );
+  }
+
+  // Kho section
+  const warehouseChildren: MenuItem[] = [];
+  if (permissions.canAccess('Warehouse')) {
+    warehouseChildren.push(
+      getItem(<span className="">Kho, bãi</span>, 'warehouse', <HomeOutlined />)
+    );
+  }
+  if (permissions.canAccess('GoodsReceiptPage')) {
+    warehouseChildren.push(
+      getItem(<span className="">Nhập kho</span>, 'goods-receipt', <ImportOutlined />)
+    );
+  }
+  if (permissions.canAccess('GoodsIssuePage')) {
+    warehouseChildren.push(
+      getItem(<span className="">Xuất kho</span>, 'goods-issue', <ExportOutlined />)
+    );
+  }
+  if (permissions.canAccess('InventoryPage')) {
+    warehouseChildren.push(
+      getItem(<span className="">Tồn kho</span>, 'inventory', <DatabaseOutlined />)
+    );
+  }
+
+  if (warehouseChildren.length > 0) {
+    menuItems.push(
+      getItem(
+        <span className="">Kho</span>,
+        'manage-warehouse',
+        <HomeOutlined />,
+        warehouseChildren
+      )
+    );
+  }
+
+  // Quản lý nhân sự section
+  const hrChildren: MenuItem[] = [];
+  if (permissions.canAccess('Employee')) {
+    hrChildren.push(getItem(<span className="">Nhân sự</span>, 'employee', <UserSwitchOutlined />));
+  }
+  if (permissions.canAccess('User')) {
+    hrChildren.push(getItem(<span className="">Tài khoản</span>, 'user', <UserOutlined />));
+  }
+  if (permissions.canAccess('DepartmentPage')) {
+    hrChildren.push(getItem(<span className="">Phòng ban</span>, 'department', <BankOutlined />));
+  }
+  if (permissions.canAccess('PositionPage')) {
+    hrChildren.push(getItem(<span className="">Chức vụ</span>, 'position', <SafetyOutlined />));
+  }
+
+  if (hrChildren.length > 0) {
+    menuItems.push(
+      getItem(
+        <span className="">Quản lý nhân sự</span>,
+        'user',
+        <UsergroupAddOutlined />,
+        hrChildren
+      )
+    );
+  }
+
+  // Sản xuất section
+  const productionChildren: MenuItem[] = [];
+  if (permissions.canAccess('ProductPage')) {
+    productionChildren.push(
+      getItem(<span className="">Sản phẩm</span>, 'product', <BoxPlotOutlined />)
+    );
+  }
+  if (permissions.canAccess('OrderPage')) {
+    productionChildren.push(
+      getItem(<span className="">Đơn hàng</span>, 'order', <FileTextOutlined />)
+    );
+  }
+  if (permissions.canAccess('ProductionCommandPage')) {
+    productionChildren.push(
+      getItem(<span className="">Lệnh sản xuất</span>, 'production-command', <ToolOutlined />)
+    );
+  }
+  if (permissions.canAccess('BomPage')) {
+    productionChildren.push(
+      getItem(<span className="">Định mức NVL</span>, 'bom', <DollarCircleOutlined />)
+    );
+  }
+
+  if (productionChildren.length > 0) {
+    menuItems.push(
+      getItem(
+        <span className="">Sản xuất</span>,
+        'production',
+        <BuildOutlined />,
+        productionChildren
+      )
+    );
+  }
+
+  // Lịch sử
+  if (permissions.canAccess('Activity')) {
+    menuItems.push(getItem(<span className="">Lịch Sử</span>, 'activity', <HistoryOutlined />));
+  }
+
+  return menuItems;
+};
 
 export interface HeaderV1Props {
   // collapsed: boolean;
   // setCollapsed: any;
 }
+
 export default function HeaderV1({}: HeaderV1Props) {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const userId = authStoreSelectors.use.userId() ?? '';
   const unreadNumber = notificationStoreSelectors.use.unreadNumber() ?? '';
   const name = authStoreSelectors.use.name();
+  const permissions = useUserPermissions();
+
   const [filter, setFilter] = useState<TBuilderQuery>({
     toPaging: {
       page: 1,
@@ -391,7 +236,9 @@ export default function HeaderV1({}: HeaderV1Props) {
     ],
   });
 
-  // const { data } = useGetUnReadCount();
+  // Generate menu items based on user permissions
+  const menuItems = useMemo(() => generateMenuItems(permissions), [permissions]);
+  console.log('menuItems', menuItems, permissions);
   const { getAllNotification, markAsRead } = useGetNotification(useBuilderQuery(filter));
 
   const [isOpenNotify, setIsOpenNotify] = useState<boolean>(false);
@@ -510,17 +357,7 @@ export default function HeaderV1({}: HeaderV1Props) {
         className="h-full w-autotext-center object-scale-down cursor-pointer px-4 py-3"
         onClick={() => navigate('/dashboard')}
       />
-      <ResponsiveMenu
-        items={
-          role?.toLocaleUpperCase() === WAREHOUSE_STAFF.toLocaleUpperCase()
-            ? Warehouse_staff
-            : role?.toLocaleUpperCase() === WAREHOUSE_PRODUCER.toLocaleUpperCase()
-            ? Warehouse_producer
-            : role?.toLocaleUpperCase() === SALESMAN.toLocaleUpperCase()
-            ? Salesman
-            : Admin
-        }
-      />
+      <ResponsiveMenu items={menuItems} />
 
       <Space className="flex justify-end w-full min-w-fit mr-2 md:mx-4 gap-2 sm:gap-2">
         <div

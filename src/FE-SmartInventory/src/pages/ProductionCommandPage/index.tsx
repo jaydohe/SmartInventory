@@ -23,8 +23,10 @@ import CreateProductionCommand from './Components/CreateProductionCommand';
 import UpdateProductionCommandProcess from './Components/UpdateProductionCommandProcess';
 import { useQueryProduct } from '../ProductPage/Hook/useQueryProduct';
 import { ProductTypes } from '@/Constant/ProductTypes';
+import { usePermissions } from '@/hook/usePermissions';
 
 export default function ProductionCommandPage() {
+  const permissions = usePermissions('ProductionCommandPage');
   const [activeTab, setActiveTab] = useState<string>('all'); // Tab "Tất cả" là tab mặc định
   const [isOpenCreateModal, setIsOpenCreateModal] = useState<boolean>(false);
   const [isOpenUpdateModal, setIsOpenUpdateModal] = useState<{
@@ -378,14 +380,16 @@ export default function ProductionCommandPage() {
             <ToolOutlined className="text-xl font-medium" />
             Quản lý lệnh sản xuất
           </h2>
+          {permissions.canCreate() && (
           <Button
             variant="solid"
             color="primary"
             onClick={handleOpenCreateModal}
             className="rounded-2xl w-full sm:w-fit"
           >
-            Tạo lệnh sản xuất mới
-          </Button>
+              Tạo lệnh sản xuất mới
+            </Button>
+          )}
         </div>
 
         <div className="w-full sm:w-1/3 justify-end">

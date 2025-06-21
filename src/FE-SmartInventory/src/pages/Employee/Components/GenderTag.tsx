@@ -1,6 +1,6 @@
 import { Tag } from 'antd';
 import { GenderTypes, genGenderTypes } from '@/Constant/EmployeeTypes';
-import { FaFemale, FaGenderless, FaMale } from "react-icons/fa";
+import { ManOutlined, WomanOutlined, UserOutlined } from '@ant-design/icons';
 import classNames from 'classnames';
 
 const GenderTag = ({
@@ -16,15 +16,15 @@ const GenderTag = ({
   let color;
   switch (gender) {
     case GenderTypes.MALE:
-      icon = <FaMale />;
+      icon = <ManOutlined />;
       color = 'blue';
       break;
     case GenderTypes.FEMALE:
-      icon = <FaFemale />;
+      icon = <WomanOutlined />;
       color = 'pink';
       break;
     case GenderTypes.OTHER:
-      icon = <FaGenderless />;
+      icon = <UserOutlined />;
       color = 'green';
       break;
     default:
@@ -32,7 +32,11 @@ const GenderTag = ({
       color = 'default';
   }
   return (
-    <Tag className={classNames('text-sm font-medium mx-0 w-fit  truncate', className)} icon={icon} color={color}>
+    <Tag
+      className={classNames('text-sm font-medium mx-0 w-fit  truncate', className)}
+      icon={icon}
+      color={color}
+    >
       {genderName ? (
         <span className="">
           {genderName} ({genGenderTypes[gender] || gender})

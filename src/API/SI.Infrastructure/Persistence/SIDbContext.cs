@@ -114,7 +114,8 @@ public class SIDbContext : DbContext
     {
         // dev
         var connectionForMigration = "Server=mydb-instance.cvqkwyaoayqq.ap-southeast-1.rds.amazonaws.com;Database=si_dev;User=root;Password=Devbyjelly123;Connect Timeout=60;Default Command Timeout=120;";
-
+        //local
+        //var connectionForMigration = "Server=localhost;Database=si_dev;User=root;Password=Devbyjelly123;Connect Timeout=60;Default Command Timeout=120;";
         if (!optionsBuilder.IsConfigured)
         {
             optionsBuilder.UseMySql(connectionForMigration, ServerVersion.AutoDetect(connectionForMigration));

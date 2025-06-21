@@ -20,8 +20,8 @@ export const goodsIssueApi = {
     const res = await axiosClient.post(url, data);
     return res.data;
   },
-  updateGoodsIssueStatus: async (id: string, data: TUpdateGoodsIssueStatus) => {
-    const url = `/api/v1/goods-issue/update/${id}`;
+  updateGoodsIssueStatus: async (code: string, data: TUpdateGoodsIssueStatus) => {
+    const url = `/api/v1/goods-issue/update/${code}`;
     const res = await axiosClient.patch(url, data);
     return res.data;
   },

@@ -36,9 +36,15 @@ const GoodsIssueTable = ({
       render: (text) => <span className="font-medium text-blue-600">{text}</span>,
     },
     {
-      title: 'Đại lý/Khách hàng',
-      dataIndex: 'receiverName',
-      key: 'receiverName',
+      title: 'Mã đơn hàng',
+      dataIndex: 'orderId',
+      key: 'orderId',
+      width: '15%',
+    },
+    {
+      title: 'Kho xuất',
+      dataIndex: 'warehouseId',
+      key: 'warehouseId',
       width: '15%',
     },
     {
@@ -67,36 +73,43 @@ const GoodsIssueTable = ({
     {
       title: 'Thao tác',
       key: 'action',
-      width: '15%',
+      width: 250,
+      align: 'center',
       render: (_, record) => (
-        <div className="flex gap-2">
-          <Tooltip title="Xem chi tiết">
+        <div className="flex gap-2 justify-center">
+          <Tooltip title="Xem chi tiết phiếu xuất">
             <Button
-              type="text"
+              color="cyan"
+              variant="solid"
+              shape="round"
               icon={<EyeOutlined />}
               onClick={() => onViewDetail(record)}
-              className="text-blue-600 hover:text-blue-800"
-            />
+              className={'font-medium'}
+            ></Button>
           </Tooltip>
-          <Tooltip title="Sửa">
+          <Tooltip title="Cập nhật phiếu xuất">
             <Button
-              type="text"
+              color="gold"
+              variant="solid"
+              shape="round"
               icon={<EditOutlined />}
               onClick={() => onEditGoodsIssue(record)}
               disabled={
                 record.status === GoodsStatus.SUCCESS || record.status === GoodsStatus.CANCELLED
               }
-              className="text-green-600 hover:text-green-800"
-            />
+              className={'font-medium'}
+            ></Button>
           </Tooltip>
-          <Tooltip title="Xóa">
+          <Tooltip title="Xoá phiếu xuất">
             <Button
-              type="text"
+              color="red"
+              variant="solid"
+              shape="round"
               icon={<DeleteOutlined />}
               onClick={() => onDeleteGoodsIssue(record)}
               disabled={record.status === GoodsStatus.SUCCESS}
-              className="text-red-600 hover:text-red-800"
-            />
+              className={'font-medium'}
+            ></Button>
           </Tooltip>
         </div>
       ),
@@ -116,7 +129,7 @@ const GoodsIssueTable = ({
         showSizeChanger: true,
         showTotal: (total, range) => `${range[0]}-${range[1]} của ${total} phiếu xuất`,
       }}
-      scroll={{ x: 800 }}
+      scroll={{ x: 900 }}
       bordered
     />
   );

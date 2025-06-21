@@ -29,26 +29,67 @@ public class GetDemandForecastQueryHandler(
         if (listDemands.Count == 0)
             return CTBaseResult.UnProcess("Không tìm thấy dự báo nhu cầu nào thỏa mãn.");
 
-        var result = listDemands
+        if (request.FromPeriod == request.ToPeriod)
+        {
+            var resultSingle = listDemands
             .OrderBy(f => f.Period)
             .Select(f => new DemandForecastResponse()
-        {
-            ProductId = f.ProductId ?? string.Empty,
-            ProductName = f.Product?.Name ?? string.Empty,
-            ProductUnit = f.Product?.Unit ?? string.Empty,
-            WarehouseId = f.WarehouseId,
-            WarehouseName = f.Warehouse?.Name ?? string.Empty,
-            Period = f.Period ?? string.Empty,
-            ForecastValue = f.ForecastValue ?? 0,
-            Method = f.Method ?? string.Empty,
-            Trend = f.Trend ?? 0,
-            Seasonal = f.Seasonal ?? 0,
-            SeasonalityPeriod = f.SeasonalityPeriod ?? 0,
-            LowerBound = f.LowerBound ?? 0,
-            UpperBound = f.UpperBound ?? 0,
-            CreatedAt = f.CreatedAt
-        }).ToList();
+            {
+                ProductId = f.ProductId ?? string.Empty,
+                ProductName = f.Product?.Name ?? string.Empty,
+                ProductUnit = f.Product?.Unit ?? string.Empty,
+                WarehouseId = f.WarehouseId,
+                WarehouseName = f.Warehouse?.Name ?? string.Empty,
+                FromPeriod = f.Period ?? string.Empty,
+                ToPeriod = f.Period ?? string.Empty, // Cùng khoảng thời gian
+                ForecastValue = Math.Round(f.ForecastValue ?? 0, 0),
+                Method = f.Method ?? string.Empty,
+                Trend = Math.Round(f.Trend ?? 0, 2),
+                Seasonal = Math.Round(f.Seasonal ?? 0, 2),
+                SeasonalityPeriod = f.SeasonalityPeriod ?? 0,
+                LowerBound = Math.Round(f.LowerBound ?? 0, 0),
+                UpperBound = Math.Round(f.UpperBound ?? 0, 0),
+                CreatedAt = f.CreatedAt
+            }).ToList();
 
-        return result;
+            return resultSingle;
+        }
+        else
+        {
+            var resultMultiMonth = listDemands
+            .GroupBy(f => new { f.ProductId, f.WarehouseId })
+            .Select(group =>
+            {
+                var anyItem = group.First();
+
+                double avgForecast = group.Average(f => (f.ForecastValue ?? 0));
+                double avgTrend = group.Average(f => (f.Trend ?? 0));
+                double avgSeasonal = group.Average(f => (f.Seasonal ?? 0));
+                double avgLowerBound = group.Average(f => (f.LowerBound ?? 0));
+                double avgUpperBound = group.Average(f => (f.UpperBound ?? 0));
+
+                return new DemandForecastResponse()
+                {
+                    ProductId = anyItem.ProductId ?? string.Empty,
+                    ProductName = anyItem.Product?.Name ?? string.Empty,
+                    ProductUnit = anyItem.Product?.Unit ?? string.Empty,
+                    WarehouseId = anyItem.WarehouseId,
+                    WarehouseName = anyItem.Warehouse?.Name ?? string.Empty,
+                    FromPeriod = request.FromPeriod,
+                    ToPeriod = request.ToPeriod,
+                    ForecastValue = Math.Round(avgForecast, 0),
+                    Method = anyItem.Method ?? string.Empty,
+                    Trend = Math.Round(avgTrend, 2),
+                    Seasonal = Math.Round(avgSeasonal, 2),
+                    SeasonalityPeriod = (int)group.Average(f => f.SeasonalityPeriod),
+                    LowerBound = Math.Round(avgLowerBound, 0),
+                    UpperBound = Math.Round(avgUpperBound, 0),
+                    CreatedAt = anyItem.CreatedAt // hoặc lấy max(createdAt) tuỳ mục đích
+                };
+            })
+            .ToList();
+
+            return resultMultiMonth;
+        }
     }
 }

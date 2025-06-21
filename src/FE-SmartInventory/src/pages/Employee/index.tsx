@@ -7,7 +7,7 @@ import {
   UnorderedListOutlined,
   UserOutlined,
 } from '@ant-design/icons';
-import { Button, Modal, Space, Table, Tag, Typography } from 'antd';
+import { Button, Modal, Space, Table, Tag, Typography, Tooltip } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { useEffect, useState } from 'react';
 
@@ -18,6 +18,8 @@ import CreateEmployee from './Components/CreateEmployee';
 import SearchInput from '@/Components/SearchInput';
 import { GenderTypes, genGenderTypes } from '@/Constant/EmployeeTypes';
 import dayjs from 'dayjs';
+
+import { usePermissions } from '@/hook/usePermissions';
 
 // Giả lập danh sách phòng ban, chức vụ và kho
 // Trong thực tế, bạn cần lấy từ API
@@ -40,6 +42,8 @@ const mockWarehouses = [
 ];
 
 export default function EmployeePage() {
+  const permissions = usePermissions('Employee');
+
   const [isOpenCreateModal, setIsOpenCreateModal] = useState<boolean>(false);
   const [isOpenEditModal, setIsOpenEditModal] = useState<{
     isOpen: boolean;
@@ -267,30 +271,37 @@ export default function EmployeePage() {
       title: 'Thao tác',
       key: 'action',
       align: 'center',
+      width: 200,
       render: (_, record) => (
         <Space size="middle">
-          <Button
-            color="gold"
-            variant="solid"
-            shape="round"
-            icon={<EditOutlined />}
-            onClick={() => handleEditEmployee(record)}
-            className={'font-medium'}
-          >
-            Cập nhật
-          </Button>
-          <Button
-            color="red"
-            variant="solid"
-            shape="round"
-            icon={<DeleteOutlined />}
-            onClick={() =>
-              showConfirmNotify('Xóa nhân viên', 'Bạn có muốn xóa nhân viên này?', record)
-            }
-            className={'font-medium'}
-          >
-            Xoá
-          </Button>
+
+          {permissions.canUpdate() && (
+            <Tooltip title="Cập nhật nhân viên">
+              <Button
+                color="gold"
+                variant="solid"
+                shape="round"
+                icon={<EditOutlined />}
+                onClick={() => handleEditEmployee(record)}
+                className={'font-medium'}
+              ></Button>
+            </Tooltip>
+          )}
+          {permissions.canDelete() && (
+            <Tooltip title="Xoá nhân viên">
+              <Button
+                color="red"
+                variant="solid"
+                shape="round"
+                icon={<DeleteOutlined />}
+                onClick={() =>
+                  showConfirmNotify('Xóa nhân viên', 'Bạn có muốn xóa nhân viên này?', record)
+                }
+                className={'font-medium'}
+              ></Button>
+            </Tooltip>
+          )}
+
         </Space>
       ),
     },
@@ -304,14 +315,16 @@ export default function EmployeePage() {
             <UserOutlined className="text-xl font-medium" />
             Danh sách nhân viên
           </h2>
-          <Button
-            variant="solid"
-            color="primary"
-            onClick={() => handleOpenCreateModal()}
-            className="rounded-2xl w-full sm:w-fit"
-          >
-            Thêm nhân viên
-          </Button>
+          {permissions.canCreate() && (
+            <Button
+              variant="solid"
+              color="primary"
+              onClick={() => handleOpenCreateModal()}
+              className="rounded-2xl w-full sm:w-fit"
+            >
+              Thêm nhân viên
+            </Button>
+          )}
         </div>
 
         <div className="w-full sm:w-1/3 justify-end">

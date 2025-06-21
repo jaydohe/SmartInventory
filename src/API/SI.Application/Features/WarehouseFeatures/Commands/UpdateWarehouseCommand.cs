@@ -56,12 +56,6 @@ public class UpdateWarehouseCommandHandler(
             .FirstOrDefaultAsync(x => x.Id == request.Id && x.DeletedOn == null, cancellationToken);
         if (checkWarehouse is null)
             return CTBaseResult.NotFound("Kho, bãi");
-        if (request.Arg.Name != null && checkWarehouse.Name == request.Arg.Name)
-            return CTBaseResult.UnProcess("Tên kho không có gì thay đổi.");
-        if (request.Arg.Address != null && checkWarehouse.Address == request.Arg.Address)
-            return CTBaseResult.UnProcess("Địa chỉ kho không có gì thay đổi.");
-        if (request.Arg.Capacity > 0 && checkWarehouse.Capacity == request.Arg.Capacity)
-            return CTBaseResult.UnProcess("Sức chứa không có gì thay đổi.");
 
         var checkMasterWarehouse = await warehouseRepos.BuildQuery
             .FirstOrDefaultAsync(x => x.Id == request.Arg.WarehouseId && x.DeletedOn == null, cancellationToken);

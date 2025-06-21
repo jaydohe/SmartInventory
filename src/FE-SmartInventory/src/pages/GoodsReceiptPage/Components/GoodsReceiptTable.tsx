@@ -14,6 +14,12 @@ interface GoodsReceiptTableProps {
   onEditGoodsReceipt: (goodsReceipt: TGoodsReceipt) => void;
   onDeleteGoodsReceipt: (goodsReceipt: TGoodsReceipt) => void;
   onViewDetail: (goodsReceipt: TGoodsReceipt) => void;
+  permissions?: {
+    canCreate: () => boolean;
+    canRead: () => boolean;
+    canUpdate: () => boolean;
+    canDelete: () => boolean;
+  };
 }
 
 const GoodsReceiptTable = ({
@@ -26,6 +32,7 @@ const GoodsReceiptTable = ({
   onEditGoodsReceipt,
   onDeleteGoodsReceipt,
   onViewDetail,
+  permissions,
 }: GoodsReceiptTableProps) => {
   const columns: TableProps<TGoodsReceipt>['columns'] = [
     {
@@ -90,37 +97,44 @@ const GoodsReceiptTable = ({
     {
       title: 'Thao tác',
       key: 'action',
-      width: '15%',
+      width: 250,
+      align: 'center',
       render: (_, record) => (
-        <div className="flex gap-2">
-          <Tooltip title="Xem chi tiết">
+        <div className="flex gap-2 justify-center">
+          <Tooltip title="Xem chi tiết phiếu nhập">
             <Button
-              type="text"
+              color="cyan"
+              variant="solid"
+              shape="round"
               icon={<EyeOutlined />}
               onClick={() => onViewDetail(record)}
-              className="text-blue-600 hover:text-blue-800"
-            />
+              className={'font-medium'}
+            ></Button>
           </Tooltip>
-          <Tooltip title="Sửa">
-            <Button
-              type="text"
-              icon={<EditOutlined />}
-              onClick={() => onEditGoodsReceipt(record)}
-              disabled={
-                record.status === GoodsStatus.SUCCESS || record.status === GoodsStatus.CANCELLED
-              }
-              className="text-green-600 hover:text-green-800"
-            />
-          </Tooltip>
-          <Tooltip title="Xóa">
-            <Button
-              type="text"
-              icon={<DeleteOutlined />}
-              onClick={() => onDeleteGoodsReceipt(record)}
-              disabled={record.status === GoodsStatus.SUCCESS}
-              className="text-red-600 hover:text-red-800"
-            />
-          </Tooltip>
+          {permissions?.canUpdate() && (
+            <Tooltip title="Sửa">
+              <Button
+                type="text"
+                icon={<EditOutlined />}
+                onClick={() => onEditGoodsReceipt(record)}
+                disabled={
+                  record.status === GoodsStatus.SUCCESS || record.status === GoodsStatus.CANCELLED
+                }
+                className="text-green-600 hover:text-green-800"
+              />
+            </Tooltip>
+          )}
+          {permissions?.canDelete() && (
+            <Tooltip title="Xóa">
+              <Button
+                type="text"
+                icon={<DeleteOutlined />}
+                onClick={() => onDeleteGoodsReceipt(record)}
+                disabled={record.status === GoodsStatus.SUCCESS}
+                className="text-red-600 hover:text-red-800"
+              />
+            </Tooltip>
+          )}
         </div>
       ),
     },

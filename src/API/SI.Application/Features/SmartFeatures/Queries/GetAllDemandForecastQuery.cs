@@ -52,7 +52,7 @@ public class GetAllDemandForecastQueryHandler(
         if (queryContext.Populate.Any(e => e.Count(s => s == '.') >= 3))
             executeQuery = demandForecastQuery.AsSplitQuery();
 
-        var data = await executeQuery.ProjectDynamic<DemandForecastResponse>
+        var data = await executeQuery.ProjectDynamic<AllDemandForecastResponse>
             (mapper, new(request.QueryContext.Populate), request.QueryContext.ToCacheKey())
             .ToArrayAsync(cancellationToken);
 

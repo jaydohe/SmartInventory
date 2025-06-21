@@ -104,10 +104,21 @@ public class CreateGoodsIssueCommandHandler(
             var inventory = await inventoryRepos.BuildQuery
                 .FirstOrDefaultAsync(x => x.ProductId == checkOrderDetail.ProductId && x.WarehouseId == warehouseId, cancellationToken);
             if (inventory is null)
-                return CTBaseResult.UnProcess("Hàng hóa chưa có tồn kho");
-
-            inventory.Quantity -= item.QuantityIssued;
-            inventory.ModifiedOn = DateTimeOffset.UtcNow;
+            {
+                var newInventory = new Inventory
+                {
+                    ProductId = checkOrderDetail.ProductId,
+                    WarehouseId = warehouseId,
+                    Quantity = item.QuantityIssued,
+                    CreatedAt = DateTimeOffset.UtcNow
+                };
+                inventoryRepos.Add(newInventory);
+            }
+            else
+            {
+                inventory.Quantity -= item.QuantityIssued;
+                inventory.ModifiedOn = DateTimeOffset.UtcNow;
+            }
         }
 
         var ret = await unitOfWork.SaveChangeAsync(cancellationToken);

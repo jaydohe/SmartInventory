@@ -21,7 +21,7 @@ public class WarehouseEndpoint : IEndpoint
             .WithApiVersionSet(version)
             .HasApiVersion(1);
 
-        warehouseGR.MapGet("/get-all", GetAllWarehouseAsync).RequireAuthorization(APIPolicies.SALESFULL);
+        warehouseGR.MapGet("/get-all", GetAllWarehouseAsync).RequireAuthorization(APIPolicies.STAFF_SALESMAN);
         warehouseGR.MapGet("/get-by-id/{id}", GetWarehouseAsync).RequireAuthorization(APIPolicies.STAFFFULL);
         warehouseGR.MapPost("/create", CreateWarehouseAsync).RequireAuthorization(APIPolicies.ADMIN);
         warehouseGR.MapPatch("/update/{id}", UpdateWarehouseAsync).RequireAuthorization(APIPolicies.STAFFFULL);

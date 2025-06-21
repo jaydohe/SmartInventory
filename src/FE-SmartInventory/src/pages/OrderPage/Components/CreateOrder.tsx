@@ -3,26 +3,32 @@ import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { TCreateOrder } from '@/interface/TOder';
 import { TProduct } from '@/interface/TProduct';
 import { genProductTypes, ProductTypes } from '@/Constant/ProductTypes';
+import { TWarehouse } from '@/interface/TWarehouse';
 
 interface CreateOrderProps {
   handleCreateOrder: (data: TCreateOrder) => void;
   agencies: { id: string; name: string }[];
   products: TProduct[];
+  warehouses: TWarehouse[];
   isLoadingProducts: boolean;
   isLoadingAgencies: boolean;
+  isLoadingWarehouses: boolean;
 }
 
 const CreateOrder = ({
   handleCreateOrder,
   agencies,
   products,
+  warehouses,
   isLoadingProducts,
   isLoadingAgencies,
+  isLoadingWarehouses,
 }: CreateOrderProps) => {
   const [form] = Form.useForm();
 
   const onFinish = (values: any) => {
     const formattedData: TCreateOrder = {
+      warehouseId: values.warehouseId,
       agencyId: values.agencyId,
       isRefund: values.isRefund || false,
       vat: values.vat || 0,
@@ -59,6 +65,25 @@ const CreateOrder = ({
       }}
     >
       <Form.Item
+        name="warehouseId"
+        label="Kho"
+        rules={[{ required: true, message: 'Vui lòng chọn kho' }]}
+      >
+        <Select
+          showSearch
+          placeholder="Chọn kho"
+          optionFilterProp="children"
+          loading={isLoadingWarehouses}
+          options={warehouses.map((warehouse) => ({
+            label: warehouse.name,
+            value: warehouse.id,
+          }))}
+          filterOption={(input, option) =>
+            (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+          }
+        />
+      </Form.Item>
+      <Form.Item
         name="agencyId"
         label="Đại lý"
         rules={[{ required: true, message: 'Vui lòng chọn đại lý' }]}
@@ -72,6 +97,9 @@ const CreateOrder = ({
             label: agency.name,
             value: agency.id,
           }))}
+          filterOption={(input, option) =>
+            (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+          }
         />
       </Form.Item>
 
@@ -122,6 +150,9 @@ const CreateOrder = ({
                       label: `${product.name} - ${genProductTypes[product.productType]}`,
                       value: product.id,
                     }))}
+                    filterOption={(input, option) =>
+                      (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                    }
                   />
                 </Form.Item>
                 <Form.Item
@@ -141,7 +172,10 @@ const CreateOrder = ({
                     }}
                   />
                 </Form.Item>
-                <MinusCircleOutlined className="mb-6 text-errorColor" onClick={() => remove(name)} />
+                <MinusCircleOutlined
+                  className="mb-6 text-errorColor"
+                  onClick={() => remove(name)}
+                />
               </div>
             ))}
             <Form.Item>

@@ -26,6 +26,11 @@ import ProductionCommandPage from '@/pages/ProductionCommandPage';
 import GoodsIssuePage from '@/pages/GoodsIssuePage';
 import GoodsReceiptPage from '@/pages/GoodsReceiptPage';
 import InventoryPage from '@/pages/InventoryPage';
+
+import BomPage from '@/pages/BomPage';
+import Dashboard from '@/pages/Dashboard';
+import SetupPage from '@/pages/SetupPage';
+
 export const DefaultRouter = () => {
   return (
     <Suspense fallback={<SkeletonComponent />}>
@@ -33,7 +38,7 @@ export const DefaultRouter = () => {
         <Route path="/login" element={<LoginNew />} />
 
         <Route path="/" element={<AdminLayout />}>
-          {/* <Route path="/dashboard" element={<DashboardRouter />} /> */}
+          <Route path="/dashboard" element={<Dashboard />} />
 
           <Route
             element={
@@ -44,26 +49,22 @@ export const DefaultRouter = () => {
               </Suspense>
             }
           >
+            <Route path="/production-command" element={<ProductionCommandPage />}></Route>
+            <Route path="/order" element={<OrderPage />}></Route>
+            <Route path="/agency" element={<AgencyPage />}></Route>
+            <Route path="/inventory" element={<InventoryPage />}></Route>
             <Route path="/self" element={<SelfRouter />}></Route>
-            <Route path="/position" element={<PositionPage />}></Route>
-            <Route path="/department" element={<DepartmentPage />}></Route>
-            <Route path="/category/*" element={<CategoryRouter />}></Route>
-            <Route path="/product" element={<ProductPage />}></Route>
           </Route>
 
           <Route
             element={
               <Suspense fallback={<SkeletonComponent />}>
-                <PrivateRouters roleList={[DEV, ADMIN]} />
+                <PrivateRouters roleList={[DEV, ADMIN, WAREHOUSE_STAFF, WAREHOUSE_PRODUCER]} />
               </Suspense>
             }
           >
-            <Route path="/warehouse" element={<WarehousePage />}></Route>
-            <Route path="/activity/*" element={<ActivityRouter />}></Route>
-            <Route path="/user/*" element={<UserRouter />}></Route>
-            <Route path="/employee/*" element={<EmployeePage />}></Route>
+            <Route path="/bom" element={<BomPage />}></Route>
           </Route>
-
           <Route
             element={
               <Suspense fallback={<SkeletonComponent />}>
@@ -71,14 +72,27 @@ export const DefaultRouter = () => {
               </Suspense>
             }
           >
-            <Route path="/inventory" element={<InventoryPage />}></Route>
+            <Route path="/category/*" element={<CategoryRouter />}></Route>
             <Route path="/goods-issue" element={<GoodsIssuePage />}></Route>
             <Route path="/goods-receipt" element={<GoodsReceiptPage />}></Route>
-            <Route path="/agency" element={<AgencyPage />}></Route>
-            <Route path="/order" element={<OrderPage />}></Route>
-            <Route path="/production-command" element={<ProductionCommandPage />}></Route>
             <Route path="/material-supplier" element={<MaterialSupplierPage />}></Route>
             <Route path="/activity/*" element={<ActivityRouter />}></Route>
+            <Route path="/warehouse" element={<WarehousePage />}></Route>
+            <Route path="/product" element={<ProductPage />}></Route>{' '}
+            <Route path="/employee/*" element={<EmployeePage />}></Route>
+          </Route>
+          <Route
+            element={
+              <Suspense fallback={<SkeletonComponent />}>
+                <PrivateRouters roleList={[DEV, ADMIN]} />
+              </Suspense>
+            }
+          >
+            <Route path="/set-parameter" element={<SetupPage />}></Route>
+            <Route path="/activity/*" element={<ActivityRouter />}></Route>
+            <Route path="/user/*" element={<UserRouter />}></Route>{' '}
+            <Route path="/department" element={<DepartmentPage />}></Route>
+            <Route path="/position" element={<PositionPage />}></Route>
           </Route>
         </Route>
 
